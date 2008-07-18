@@ -1,4 +1,3 @@
-require 'mini_magick'
 
 module HasImage
   
@@ -7,6 +6,7 @@ module HasImage
     attr_accessor :storage
     
     def create_thumbnail(size)
+      require 'mini_magick'
       copy_temp_from_storage
       @image = MiniMagick::Image.from_file(@temp_file)
       @image.combine_options do |commands|
@@ -22,6 +22,8 @@ module HasImage
         commands = commands + "repage"
       end
     end
+    
+    protected
     
     def copy_temp_from_storage
       @temp_file = Tempfile.new "has_image_processor_#{geometry}"
