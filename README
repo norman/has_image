@@ -1,4 +1,4 @@
-HasImage
+Has_Image
 ========
 
 Has image was created as a smaller, simpler, lighter alternative to
@@ -29,16 +29,18 @@ Why not just add this functionality to attachment_fu?
 I find attachment_fu not very fun to hack on. Also... laziness, impatience
 and most of all, hubris.
 
-Example
+Examples
 =======
 
-Simplest use case:
+Point-and-drool use case:
 
 class Photo < ActiveRecord::Base
 	has_image
 end
 
-More complex use case:
+This will resize the uploaded image down to an 800x800 max (whichever axis is
+larger), and make a ton of thumbnails you might (but probably don't) need.
+Basically, it does this:
 
 class Photo < ActiveRecord::Base
 	has_image :resize_to => "800x800",
@@ -51,6 +53,9 @@ class Photo < ActiveRecord::Base
 		:max_size => 3.megabytes,
 		:min_size => 4.kilobytes
 end
+
+Hacking
+=======
 
 Don't like the way it makes images? Want to pipe the images through some crazy
 seam carving library written in OCaml, or watermark them with your corporate
