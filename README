@@ -8,7 +8,10 @@ attachment_fu:
 
 * creates a separate database record for each thumbnail, then never uses them
 	for anything.
-* is large - designed for attachments in general, not images
+* recreates all the thumbnails every time you save your model - even if you 
+	only edited the database fields.
+* is big - designed for attachments in general, not specialized for images,
+	and has a gazillion options for storage and processors
 * provides no facility out-of-the box for making square thumbnails without
 	distortion.
 * is hard to make work with a Javascript-based thumbnail cropper (like on digg
@@ -18,8 +21,9 @@ attachment_fu:
 By contrast, has_image:
 
 * creates one record per image, no matter how many thumbnails you make.
-* is specialized. Has_image has extremely humble aspirations - it only does
-  images, only uses local storage and only uses MiniMagick...
+* is specialized, opinionated and perhaps even a little bit dumb. Has_image
+  has extremely humble aspirations - it only does images, only uses local
+  storage and only uses MiniMagick...
 * ...BUT is easy to hack if you want to change it to work with AWS or another
 	image processing library
 * provides cropping methods so you can create an image cropper if you want.
