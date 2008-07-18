@@ -1,13 +1,83 @@
 HasImage
 ========
 
-Introduction goes here.
+Has image was created as a smaller, simpler, lighter alternative to
+attachment_fu for applications that need to handle uploaded images.
 
+* Creates a separate database record for each thumbnail, then never uses them
+	for anything.
+* Large - designed for attachments in general, not images
+* Provides no facility out-of-the box for making square thumbnails without
+	distortion.
+* Hard to make it to work with a Javascript-based thumbnail cropper (like on
+  digg or mypictr.com)
+* Not fun to hack
+
+By contrast, has_image:
+
+* Creates one record per image, no matter how many thumbnails you make.
+* Specialized - has_image has extremely humble aspirations - it only does
+  images, only uses local storage and only uses MiniMagick...
+* ...BUT is easy to hack if you want to change it to work with AWS or another
+image processing library
+* Provides cropping methods so you can create an image cropper if you want.
+
+Why not just add this to attachment_fu?
+
+I find attachment_fu not very fun to hack on. Also... laziness, impatience
+and most of all, hubris.
 
 Example
 =======
 
-Example goes here.
+Simplest use case:
+
+class Photo < ActiveRecord::Base
+	has_image
+end
+
+More complex use case:
+
+class Photo < ActiveRecord::Base
+	has_image :resize_to => "800x800",
+		:thumbnails => {
+		  :square => "75x75",
+		  :thumb  => "100x75",
+		  :small  => "240x180",
+		  :medium => "500x375",
+		},
+		:max_size => 3.megabytes,
+		:min_size => 4.kilobytes
+end
+
+Don't like the way it makes images? Want to pipe the images through some crazy
+seam carving library written in OCaml, or watermark them with your corporate
+logo? You're just a monkey-patch away:
+
+module HasImage
+	class Processor
+		def create_thumbnail(size)
+			# my new-and-improved thumbnailer code goes here.
+		end
+	end
+end
+
+Has image is designed to work with Rails 2.1 and is installed via Ruby Gems;
+no need for a plugin. To use it in your app, install the gem:
+
+gem install norman-has_image --source http://gems.github.com
+
+and add 
+
+require 'has_image'
+
+to your environment.rb file.
+
+Git repository: 
+
+http://github.com/norman/has_image
 
 
-Copyright (c) 2008 [name of plugin creator], released under the MIT license
+
+Copyright (c) 2008 Norman Clarke <norman@randomba.org>, released under the MIT
+license
