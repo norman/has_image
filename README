@@ -4,25 +4,27 @@ HasImage
 Has image was created as a smaller, simpler, lighter alternative to
 attachment_fu for applications that need to handle uploaded images.
 
-* Creates a separate database record for each thumbnail, then never uses them
+attachment_fu:
+
+* creates a separate database record for each thumbnail, then never uses them
 	for anything.
-* Large - designed for attachments in general, not images
-* Provides no facility out-of-the box for making square thumbnails without
+* is large - designed for attachments in general, not images
+* provides no facility out-of-the box for making square thumbnails without
 	distortion.
-* Hard to make it to work with a Javascript-based thumbnail cropper (like on
-  digg or mypictr.com)
-* Not fun to hack
+* is hard to make work with a Javascript-based thumbnail cropper (like on digg
+  or mypictr.com)
+* is not fun to hack
 
 By contrast, has_image:
 
-* Creates one record per image, no matter how many thumbnails you make.
-* Specialized - has_image has extremely humble aspirations - it only does
+* creates one record per image, no matter how many thumbnails you make.
+* is specialized. Has_image has extremely humble aspirations - it only does
   images, only uses local storage and only uses MiniMagick...
 * ...BUT is easy to hack if you want to change it to work with AWS or another
-image processing library
-* Provides cropping methods so you can create an image cropper if you want.
+	image processing library
+* provides cropping methods so you can create an image cropper if you want.
 
-Why not just add this to attachment_fu?
+Why not just add this functionality to attachment_fu?
 
 I find attachment_fu not very fun to hack on. Also... laziness, impatience
 and most of all, hubris.
@@ -52,7 +54,7 @@ end
 
 Don't like the way it makes images? Want to pipe the images through some crazy
 seam carving library written in OCaml, or watermark them with your corporate
-logo? You're just a monkey-patch away:
+logo? Happiness is just a monkey-patch away:
 
 module HasImage
 	class Processor
