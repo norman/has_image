@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'has_image/storage'
+require File.dirname(__FILE__) + '/../lib/has_image/storage'
 
 class StorageTest < Test::Unit::TestCase
   
@@ -13,14 +13,26 @@ class StorageTest < Test::Unit::TestCase
   def test_random_file_name
     assert HasImage::Storage.random_file_name
   end
-  
-  def test_initialize_with_string_io
+
+  def test_set_data_from_file
     @storage = HasImage::Storage.new
-    @storage.data = StringIO.new(IO.read(File.dirname(__FILE__) + "/fixtures/image.jpg"))
-    @storage.temp_file.open
+    @file = File.new(File.dirname(__FILE__) + "/fixtures/image.jpg", "r")
+    @storage.data = @file
     assert @storage.temp_file.size > 0
   ensure
     @storage.temp_file.close!
   end
+  
+  def test_set_data_from_tempfile
+    @storage = HasImage::Storage.new
+    @file = File.new(File.dirname(__FILE__) + "/fixtures/image.jpg", "r")
+    @temp_file = Tempfile.new("test")
+    @temp_file.write(@file.read)
+    @storage.data = @temp_file
+    assert_equal @storage.temp_file.read, @temp_file.read
+  ensure
+    @temp_file.close!
+  end
+
   
 end
