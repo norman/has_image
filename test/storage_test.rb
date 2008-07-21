@@ -19,6 +19,7 @@ class StorageTest < Test::Unit::TestCase
     @file = File.new(File.dirname(__FILE__) + "/fixtures/image.jpg", "r")
     @storage.data = @file
     assert @storage.temp_file.size > 0
+    assert_equal Zlib.crc32(@file.read), Zlib.crc32(@storage.temp_file.read)
   ensure
     @storage.temp_file.close!
   end
@@ -29,7 +30,8 @@ class StorageTest < Test::Unit::TestCase
     @temp_file = Tempfile.new("test")
     @temp_file.write(@file.read)
     @storage.data = @temp_file
-    assert_equal @storage.temp_file.read, @temp_file.read
+    assert @storage.temp_file.size > 0
+    assert_equal Zlib.crc32(@storage.temp_file.read), Zlib.crc32(@temp_file.read)
   ensure
     @temp_file.close!
   end
