@@ -19,8 +19,8 @@ module HasImage
       
       attr_accessible :uploaded_data
       
-      after_save :store_image
-      after_destroy :remove_image
+      after_create :store_images
+      after_destroy :remove_images
       
       include ModelInstanceMethods
       extend  ModelClassMethods
@@ -30,14 +30,12 @@ module HasImage
     def default_has_image_options
       {
         :resize_to => "800x800",
-        :thumbnails => {
-          :square => "75x75",
-          :thumb  => "100x75",
-          :small  => "240x180",
-          :medium => "500x375",
-        },
+        :thumbnails => {},
         :max_size => 3.megabytes,
-        :min_size => 4.kilobytes
+        :min_size => 4.kilobytes,
+        :path_prefix => table_name,
+        :base_path => File.join(RAILS_ROOT, 'public'),
+        :convert_to => "jpg"
       }
     end
 
@@ -46,16 +44,23 @@ module HasImage
   module ModelInstanceMethods
     
     def uploaded_data=(data)
-      @storage = HasFile::Storage.new
-      @storage.data = data
+      storage.data = data
     end
     
-    def store_image
-      @processor = HasFile::Processor.new
-      @processor.storage = @storage
+    def public_path(thumbnail = nil)
+      storage.public_path_for(self, thumbnail)
     end
     
-    def remove_image
+    def remove_images
+      storage.remove_images(self.id)
+    end
+
+    def store_images
+      storage.store_images(self.id)
+    end
+    
+    def storage
+      @storage ||= HasFile::Storage.new(self.has_image_options)
     end
     
   end
