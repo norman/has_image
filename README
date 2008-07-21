@@ -36,27 +36,36 @@ Also... laziness, impatience and most of all, hubris.
 Examples
 ========
 
-Point-and-drool use case:
+Point-and-drool use case. Probably not what you want but hey, it pretty much
+works.
 
 class Photo < ActiveRecord::Base
 	has_image
 end
 
-This will resize the uploaded image down to an 800x800 max (whichever axis is
-larger), and make a ton of thumbnails you might (but probably don't) need.
-Basically, it does this:
+Single image, no thumbnails, with some size limits:
 
 class Photo < ActiveRecord::Base
-	has_image :resize_to => "800x800",
+	has_image :resize_to => "200x200",
+		:max_size => 3.megabytes,
+		:min_size => 4.kilobytes
+end
+
+Image with some thumbnails:
+
+class Photo < ActiveRecord::Base
+	has_image :resize_to => "640x480",
 		:thumbnails => {
-		  :square => "75x75",
-		  :thumb  => "100x75",
-		  :small  => "240x180",
-		  :medium => "500x375",
+			:square => "200x200",
+			:medium => "320x240"
 		},
 		:max_size => 3.megabytes,
 		:min_size => 4.kilobytes
 end
+
+More documentation will be added once this thing has a version number that
+doesn't begin with 0.0.0.0.0.0. For now, it's so changing so often you'd be
+crazy to use this thing unless reading the source is enough for you.
 
 Getting it
 ==========
@@ -85,8 +94,8 @@ logo? Happiness is just a monkey-patch away:
 
 module HasImage
 	class Processor
-		def create_thumbnail(size)
-			# my new-and-improved thumbnailer code goes here.
+		def resize(size)
+			# your new-and-improved thumbnailer code goes here.
 		end
 	end
 end

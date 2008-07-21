@@ -31,7 +31,7 @@ module HasImage
       {
         :resize_to => "800x800",
         :thumbnails => {},
-        :max_size => 3.megabytes,
+        :max_size => 12.megabytes,
         :min_size => 4.kilobytes,
         :path_prefix => table_name,
         :base_path => File.join(RAILS_ROOT, 'public'),
