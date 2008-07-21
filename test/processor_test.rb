@@ -12,17 +12,15 @@ class StorageTest < Test::Unit::TestCase
     @temp_file.close if @temp_file
   end
   
-  def stub_storage
+  def temp_file
     @temp_file = Tempfile.new('test')
     @temp_file.write(File.new(File.dirname(__FILE__) + "/fixtures/image.jpg", "r").read)
-    stub(:temp_file => @temp_file)
+    return @temp_file
   end
   
-  def test_create_thumbnail
-    @processor = HasImage::Processor.new
-    @processor.storage = stub_storage
-    @image = @processor.create_thumbnail("400x200")
-    assert @image
+  def test_resize
+    @processor = HasImage::Processor.new({})
+    assert @processor.resize(:size => "100x100", :temp_file => temp_file)
   end
   
 end
