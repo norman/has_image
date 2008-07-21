@@ -1,22 +1,22 @@
 Has_Image
-========
+=========
 
 Has image was created as a smaller, simpler, lighter alternative to
 attachment_fu for applications that need to handle uploaded images.
 
+While attachment_fu is easy to use and gets the job done in some cases, it
+has some aspects that I find make it frustrating to work with:
+
 attachment_fu:
 
-* creates a separate database record for each thumbnail, then never uses them
-	for anything.
+* creates a separate database record for each thumbnail, then never really
+  uses them for anything.
 * recreates all the thumbnails every time you save your model - even if you 
 	only edited the database fields.
-* is big - designed for attachments in general, not specialized for images,
-	and has a gazillion options for storage and processors
 * provides no facility out-of-the box for making square thumbnails without
 	distortion.
 * is hard to make work with a Javascript-based thumbnail cropper (like on digg
   or mypictr.com)
-* is not fun to hack
 
 By contrast, has_image:
 
@@ -30,11 +30,11 @@ By contrast, has_image:
 
 Why not just add this functionality to attachment_fu?
 
-I find attachment_fu not very fun to hack on. Also... laziness, impatience
-and most of all, hubris.
+I wanted to create something leaner and more fun for people to hack on.
+Also... laziness, impatience and most of all, hubris.
 
 Examples
-=======
+========
 
 Point-and-drool use case:
 
@@ -58,20 +58,8 @@ class Photo < ActiveRecord::Base
 		:min_size => 4.kilobytes
 end
 
-Hacking
-=======
-
-Don't like the way it makes images? Want to pipe the images through some crazy
-seam carving library written in OCaml, or watermark them with your corporate
-logo? Happiness is just a monkey-patch away:
-
-module HasImage
-	class Processor
-		def create_thumbnail(size)
-			# my new-and-improved thumbnailer code goes here.
-		end
-	end
-end
+Getting it
+==========
 
 Has image is designed to work with Rails 2.1 and is installed via Ruby Gems;
 no need for a plugin. To use it in your app, install the gem:
@@ -88,7 +76,27 @@ Git repository:
 
 http://github.com/norman/has_image
 
+Hacking
+=======
 
+Don't like the way it makes images? Want to pipe the images through some crazy
+seam carving library written in OCaml, or watermark them with your corporate
+logo? Happiness is just a monkey-patch away:
+
+module HasImage
+	class Processor
+		def create_thumbnail(size)
+			# my new-and-improved thumbnailer code goes here.
+		end
+	end
+end
+
+Has_image follows a philosophy of "skinny model, fat plugin." This means that
+it tries to pollute your ActiveRecord model with as little functionality as
+possible, so that in a sense, the model is acts like a "controller" and the
+plugin like a "model" as regards the image handling functionality. This makes
+it easier to test, hack, and port to other frameworks, because the storage and
+processing functionality is largely independent of your model.
 
 Copyright (c) 2008 Norman Clarke <norman@randomba.org>, released under the MIT
 license
