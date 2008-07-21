@@ -287,3 +287,398 @@
 [0m
   [4;35;1mSQL (0.000073)[0m   [0mSELECT version FROM "schema_migrations"[0m
   [4;36;1mSQL (0.000068)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000210)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000110)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000238)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000117)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000176)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000130)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000164)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000068)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000071)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000212)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000111)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000239)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000115)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000686)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000133)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000164)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000090)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000072)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000211)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000110)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000274)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000113)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000128)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000125)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000141)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000055)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000062)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000213)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000112)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000253)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000298)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000189)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000135)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000456)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000071)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000073)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000258)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000111)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000238)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000124)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000147)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000130)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000163)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000067)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000071)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000249)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000109)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000239)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000114)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000507)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000142)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000165)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000060)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000068)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000211)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000109)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000283)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000344)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000174)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000127)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000159)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000069)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000068)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000208)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000111)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000301)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000119)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000207)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000136)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000249)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000072)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000076)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000212)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000110)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000257)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000121)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000196)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000130)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000162)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000059)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000072)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000272)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000113)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000240)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000117)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000174)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000132)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000166)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000120)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000073)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000211)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000109)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000238)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000327)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000175)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000132)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000163)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000067)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000146)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+  [4;36;1mSQL (0.000216)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000112)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000240)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000271)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000197)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000129)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000189)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000081)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000075)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;36;1mSQL (0.000211)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000110)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000238)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000116)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000846)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000147)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000211)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000085)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000078)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;36;1mSQL (0.000261)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000108)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000240)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000109)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000126)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000125)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000141)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000055)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000061)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;36;1mSQL (0.000243)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000112)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000241)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000114)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000139)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000154)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000157)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000074)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000071)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;35;1mPic Create (0.000172)[0m   [0mINSERT INTO "pics" ("updated_at", "file_name", "created_at") VALUES('2008-07-21 21:44:34', NULL, '2008-07-21 21:44:34')[0m
+  [4;36;1mSQL (0.000209)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000110)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000254)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000115)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000141)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000153)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000173)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000063)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000646)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;35;1mPic Create (0.000127)[0m   [0mINSERT INTO "pics" ("updated_at", "file_name", "created_at") VALUES('2008-07-21 21:44:50', NULL, '2008-07-21 21:44:50')[0m
+  [4;36;1mSQL (0.000212)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000109)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000242)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000113)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000142)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000153)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000155)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000063)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000067)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;35;1mPic Create (0.000376)[0m   [0mINSERT INTO "pics" ("updated_at", "file_name", "created_at") VALUES('2008-07-21 21:45:46', NULL, '2008-07-21 21:45:46')[0m
+  [4;36;1mSQL (0.000211)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000109)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000239)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000114)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000580)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000144)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000164)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000061)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000142)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;35;1mPic Create (0.000133)[0m   [0mINSERT INTO "pics" ("updated_at", "file_name", "created_at") VALUES('2008-07-21 21:46:33', NULL, '2008-07-21 21:46:33')[0m
+  [4;36;1mSQL (0.000354)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000114)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000242)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000117)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000877)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000132)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000183)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000070)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000071)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;35;1mPic Create (0.000416)[0m   [0mINSERT INTO "pics" ("updated_at", "file_name", "created_at") VALUES('2008-07-21 21:49:17', NULL, '2008-07-21 21:49:17')[0m
+  [4;36;1mSQL (0.000216)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000110)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000240)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000112)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000140)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000158)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000152)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000062)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000102)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;35;1mPic Create (0.000171)[0m   [0mINSERT INTO "pics" ("updated_at", "file_name", "created_at") VALUES('2008-07-21 21:49:32', NULL, '2008-07-21 21:49:32')[0m
+  [4;36;1mSQL (0.000212)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.000110)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000239)[0m   [0;1mCREATE TABLE "pics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "file_name" varchar(255) DEFAULT NULL NULL, "created_at" datetime DEFAULT NULL NULL, "updated_at" datetime DEFAULT NULL NULL) [0m
+  [4;35;1mSQL (0.000336)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.000177)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.000168)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.000163)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.000059)[0m   [0mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.000067)[0m   [0;1mINSERT INTO "schema_migrations" (version) VALUES ('1')[0m
+WARNING: Can't mass-assign these protected attributes: name
+  [4;35;1mPic Create (0.000136)[0m   [0mINSERT INTO "pics" ("updated_at", "file_name", "created_at") VALUES('2008-07-21 21:49:50', NULL, '2008-07-21 21:49:50')[0m

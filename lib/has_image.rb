@@ -1,3 +1,6 @@
+require 'has_image/storage'
+require 'has_image/processor'
+
 module HasImage
   
   def self.included(base) # :nodoc:
@@ -17,9 +20,9 @@ module HasImage
       write_inheritable_attribute(:has_image_options, options)
       class_inheritable_reader :has_image_options
       
-      attr_accessible :uploaded_data
+      attr_accessible :image_data
       
-      after_create :store_images
+      after_create :install_images
       after_destroy :remove_images
       
       include ModelInstanceMethods
@@ -29,7 +32,7 @@ module HasImage
 
     def default_has_image_options
       {
-        :resize_to => "800x800",
+        :resize_to => "640x480",
         :thumbnails => {},
         :max_size => 12.megabytes,
         :min_size => 4.kilobytes,
@@ -43,7 +46,7 @@ module HasImage
 
   module ModelInstanceMethods
     
-    def uploaded_data=(data)
+    def image_data=(data)
       storage.data = data
     end
     
@@ -55,12 +58,12 @@ module HasImage
       storage.remove_images(self.id)
     end
 
-    def store_images
-      storage.store_images(self.id)
+    def install_images
+      storage.install_images(self.id)
     end
     
     def storage
-      @storage ||= HasFile::Storage.new(self.has_image_options)
+      @storage ||= HasImage::Storage.new(self.has_image_options)
     end
     
   end
