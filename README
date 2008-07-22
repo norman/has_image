@@ -1,11 +1,8 @@
-Has_Image
-=========
+= HasImage -- Image attachment plugin/gem for Ruby on Rails
 
-Has image was created as a smaller, simpler, lighter alternative to
-attachment_fu for applications that need to handle uploaded images.
-
-While attachment_fu is easy to use and gets the job done in some cases, it
-has some aspects that I find make it frustrating to work with:
+HasImage was created as a smaller, simpler, lighter alternative to
+attachment_fu[http://github.com/technoweenie/attachment_fu] for applications
+that need to handle uploaded images.
 
 attachment_fu:
 

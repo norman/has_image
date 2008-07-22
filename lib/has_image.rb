@@ -42,7 +42,8 @@ module HasImage
         :base_path => File.join(RAILS_ROOT, 'public'),
         :convert_to => "JPEG",
         :output_quality => "85",
-        :invalid_image_message => "Can't process the uploaded image."
+        :invalid_image_message => "Can't process the uploaded image.",
+        :file_name_column => :file_name
       }
     end
 
@@ -50,8 +51,8 @@ module HasImage
 
   module ModelInstanceMethods
     
-    def image_data=(data)
-      storage.data = data
+    def image_data=(image_data)
+      storage.image_data = image_data
     end
     
     def image_data_valid?
@@ -69,7 +70,7 @@ module HasImage
     end
 
     def install_images
-      storage.install_images(self.id)
+      update_attribute(has_image_options[:file_name_column], storage.install_images(self.id))
     end
     
     def storage

@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "has_image"
-  s.version = "0.0.1"
+  s.version = "0.1.0"
   s.date = "2008-07-21"
   s.summary = "Lets you attach images with thumbnails to active record models."
   s.email = 'norman@randomba.org'
