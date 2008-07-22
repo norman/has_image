@@ -9,7 +9,7 @@ module HasImage
   
   class Storage
     
-    attr_accessor :data, :options, :temp_file
+    attr_accessor :image_data, :options, :temp_file
 
     def initialize(options)
       @options = options
@@ -25,14 +25,14 @@ module HasImage
       Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36)
     end
     
-    def data=(data)
-      raise HasImage::FileDataError.new if data.blank?
-      if data.is_a?(Tempfile)
-        @temp_file = data
+    def image_data=(image_data)
+      raise HasImage::FileDataError.new if image_data.blank?
+      if image_data.is_a?(Tempfile)
+        @temp_file = image_data
       else
-        data.rewind
+        image_data.rewind
         @temp_file = Tempfile.new 'has_image_data_%s' % Storage.random_file_name
-        @temp_file.write(data.read)
+        @temp_file.write(image_data.read)
       end
     end
     
@@ -40,7 +40,7 @@ module HasImage
       random_name = Storage.random_file_name
       install_thumbnails(id, random_name) if !options[:thumbnails].empty?
       install_main_image(id, random_name)
-      return file_name_for(random_name)
+      return random_name
     end
     
     def public_path_for(object, thumbnail = nil)
@@ -56,6 +56,14 @@ module HasImage
     
     private
     
+    def extension
+      options[:convert_to].to_s.downcase.gsub("jpeg", "jpg")
+    end
+
+    def file_name_for(*args)
+      "%s.%s" % [args.compact.join("_"), extension]
+    end
+    
     def install_main_image(id, name)
       FileUtils.mkdir_p path_for(id)
       main = processor.resize(:temp_file => @temp_file, :size => @options[:resize_to])
@@ -70,10 +78,6 @@ module HasImage
       end
     end
     
-    def file_name_for(*args)
-      "%s.%s" % [args.compact.join("_"), options[:convert_to].to_s.downcase.gsub("jpeg", "jpg")]
-    end
-
     def path_for(id)
       File.join(options[:base_path], options[:path_prefix], Storage.partitioned_path(id))
     end
