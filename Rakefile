@@ -19,6 +19,20 @@ Rake::TestTask.new(:test_rails) do |t|
   t.verbose = true
 end
 
+desc "Run rcov"
+task :rcov do
+  rm_f "coverage"
+  rm_f "coverage.data"
+  if PLATFORM =~ /darwin/
+    exclude = '--exclude "gems"'
+  else
+    exclude = '--exclude "rubygems"'
+  end
+  rcov = "rcov --rails -Ilib:test --sort coverage --text-report #{exclude} --no-validator-links"
+  cmd = "#{rcov} #{Dir["test/**/*.rb"].join(" ")}"
+  sh cmd
+end
+
 desc 'Generate documentation for has_image.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'

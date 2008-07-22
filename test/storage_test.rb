@@ -1,12 +1,16 @@
 require 'rubygems'
-require 'test/unit'
 require 'mocha'
+require 'test/unit'
 require File.dirname(__FILE__) + '/../lib/has_image/storage'
 require File.dirname(__FILE__) + '/../lib/has_image/processor'
 
 class StorageTest < Test::Unit::TestCase
   
   def setup
+  end
+  
+  def teardown
+    FileUtils.rm_rf(File.dirname(__FILE__) + '/../tmp')
   end
   
   def default_options
@@ -19,7 +23,8 @@ class StorageTest < Test::Unit::TestCase
       :min_size => 4.kilobytes,
       :path_prefix => "tests",
       :base_path => File.join(File.dirname(__FILE__), '..', 'tmp'),
-      :convert_to => "JPG"
+      :convert_to => "JPG",
+      :output_quality => "85"
     }
   end
   

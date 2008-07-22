@@ -14,7 +14,8 @@ module HasImage
     def initialize(options)
       @options = options
     end
-
+    
+    # From Jamis Buck. http://www.37signals.com/svn/archives2/id_partitioning.php
     def self.partitioned_path(id, *args)
       ("%08d" % id).scan(/..../) + args
     end
@@ -70,7 +71,7 @@ module HasImage
     end
     
     def file_name_for(*args)
-      "%s.%s" % [args.compact.join("_"), options[:convert_to].to_s.downcase]
+      "%s.%s" % [args.compact.join("_"), options[:convert_to].to_s.downcase.gsub("jpeg", "jpg")]
     end
 
     def path_for(id)

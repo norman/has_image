@@ -25,6 +25,8 @@ module HasImage
       after_create :install_images
       after_destroy :remove_images
       
+      validate_on_create :image_data_valid?
+      
       include ModelInstanceMethods
       extend  ModelClassMethods
     
@@ -38,7 +40,9 @@ module HasImage
         :min_size => 4.kilobytes,
         :path_prefix => table_name,
         :base_path => File.join(RAILS_ROOT, 'public'),
-        :convert_to => "jpg"
+        :convert_to => "JPEG",
+        :output_quality => "85",
+        :invalid_image_message => "Can't process the uploaded image."
       }
     end
 
@@ -48,6 +52,12 @@ module HasImage
     
     def image_data=(data)
       storage.data = data
+    end
+    
+    def image_data_valid?
+      if !HasImage::Processor.valid?(storage.temp_file)
+        errors.add_to_base(self.class.has_image_options[:invalid_image_message])
+      end
     end
     
     def public_path(thumbnail = nil)
