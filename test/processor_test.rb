@@ -31,18 +31,18 @@ class StorageTest < Test::Unit::TestCase
   
   def test_resize
     @processor = HasImage::Processor.new({:convert_to => "JPEG", :output_quality => "85"})
-    assert @processor.resize(:size => "100x100", :temp_file => temp_file("image.jpg"))
+    assert @processor.resize(temp_file("image.jpg"), "100x100")
   end
 
   def test_resize_and_convert
     @processor = HasImage::Processor.new({:convert_to => "JPEG", :output_quality => "85"})
-    assert @processor.resize(:size => "100x100", :temp_file => temp_file("image.png"))
+    assert @processor.resize(temp_file("image.png"), "100x100")
   end
 
   def test_resize_should_fail_with_bad_image
     @processor = HasImage::Processor.new({:convert_to => "JPEG", :output_quality => "85"})
     assert_raises HasImage::ProcessorError do
-      @processor.resize(:size => "100x100", :temp_file => temp_file("bad_image.jpg"))
+      @processor.resize(temp_file("bad_image.jpg"), "100x100")
     end
   end
 

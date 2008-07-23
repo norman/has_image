@@ -35,24 +35,25 @@ module HasImage
       else
         image_data.rewind
         @temp_file = Tempfile.new 'has_image_data_%s' % Storage.random_file_name
-        @temp_file.write(image_data.read)
+        @temp_file.write(image_data.read)        
       end
     end
     
     def install_images(id)
       random_name = Storage.random_file_name
-      install_thumbnails(id, random_name) if !options[:thumbnails].empty?
       install_main_image(id, random_name)
+      install_thumbnails(id, random_name) if !options[:thumbnails].empty?
       return random_name
     ensure  
       @temp_file.close! if !@temp_file.closed?
     end
+
+    def filesystem_path_for(object, thumbnail = nil)
+      File.join(path_for(object.id), file_name_for(object.file_name, thumbnail))
+    end
     
     def public_path_for(object, thumbnail = nil)
-      File.join(
-        path_for(object.id).gsub(options[:base_path], ''),
-        file_name_for(object.file_name, thumbnail)
-      )
+      filesystem_path_for(object, thumbnail).gsub(options[:base_path], '')
     end
     
     def remove_images(id)
@@ -71,15 +72,16 @@ module HasImage
     
     def install_main_image(id, name)
       FileUtils.mkdir_p path_for(id)
-      main = processor.resize(:temp_file => @temp_file, :size => @options[:resize_to])
+      main = processor.resize(@temp_file, @options[:resize_to])
       main.write(File.join(path_for(id), file_name_for(name)))
       main.tempfile.close!
     end
     
     def install_thumbnails(id, name)
       FileUtils.mkdir_p path_for(id)
+      path = File.join(path_for(id), file_name_for(name))
       options[:thumbnails].each do |thumb_name, size|
-        thumb = processor.resize(:temp_file => @temp_file, :size => size)
+        thumb = processor.resize(path, size)
         thumb.write(File.join(path_for(id), file_name_for(name, thumb_name)))
         thumb.tempfile.close!
       end

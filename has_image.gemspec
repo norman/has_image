@@ -19,14 +19,15 @@ Gem::Specification.new do |s|
     "tasks/has_image_tasks.rake"
     ]
   s.test_files = [
-    "rails-test/database.yml",
-    "rails-test/fixtures/empty",
-    "rails-test/pic.rb",
-    "rails-test/pic_test.rb",
-    "rails-test/schema.rb",
-    "rails-test/test_helper.rb",
+    "test_rails/database.yml",
+    "test_rails/fixtures/empty",
+    "test_rails/pic.rb",
+    "test_rails/pic_test.rb",
+    "test_rails/schema.rb",
+    "test_rails/test_helper.rb",
+    "test/fixtures/bad_image.jpg",
     "test/fixtures/image.jpg",
-    "test/has_image_test.rb",
+    "test/fixtures/image.png",
     "test/processor_test.rb",
     "test/storage_test.rb",
   ]
