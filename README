@@ -1,108 +1,110 @@
-= HasImage -- Image attachment plugin/gem for Ruby on Rails
+= HasImage[http://github.com/norman/has_image] -- Image attachment gem/plugin for Ruby on Rails
 
-HasImage was created as a smaller, simpler, lighter alternative to
+HasImage[http://github.com/norman/has_image] was created as a smaller,
+simpler, lighter alternative to
 attachment_fu[http://github.com/technoweenie/attachment_fu] for applications
 that need to handle uploaded images.
 
-attachment_fu:
+It supports only filesystem storage, and uses only MiniMagick to process
+images. However, the codebase is very small, simple, readable, and hackable.
+So it should be pretty easy to modify or enhance its functionality.
 
-* creates a separate database record for each thumbnail, then never really
-  uses them for anything.
-* recreates all the thumbnails every time you save your model - even if you 
-	only edited the database fields.
-* provides no facility out-of-the box for making square thumbnails without
-	distortion.
-* is hard to make work with a Javascript-based thumbnail cropper (like on digg
-  or mypictr.com)
+It works best for websites that want to create photo galleries with
+fixed-dimension thumbnails.
 
-By contrast, has_image:
+It creates only one database record per image, requires only one column in
+your model, and creates great-looking fixed-dimension thumbnails by using
+{ImageMagick's}[http://www.imagemagick.org/]
+resize[http://www.imagemagick.org/script/command-line-options.php#resize],
+crop[http://www.imagemagick.org/script/command-line-options.php#crop] and
+gravity[http://www.imagemagick.org/script/command-line-options.php#gravity]
+functions.
 
-* creates one record per image, no matter how many thumbnails you make.
-* is specialized, opinionated and perhaps even a little bit dumb. Has_image
-  has extremely humble aspirations - it only does images, only uses local
-  storage and only uses MiniMagick...
-* ...BUT is easy to hack if you want to change it to work with AWS or another
-	image processing library
-* provides cropping methods so you can create an image cropper if you want.
+== Another image attachment library? Why?
 
-Why not just add this functionality to attachment_fu?
 
-I wanted to create something leaner and more fun for people to hack on.
-Also... laziness, impatience and most of all, hubris.
+Attachment_fu is too large and general for some of the places I want to use
+images. I sometimes found myself writing more code to hack attachment_fu than
+it took to create this gem. In fact, most of the code here has been plucked
+from my various projects that use attachment_fu.
 
-Examples
-========
+The other image attachment libraries I found fell short of my needs for
+various other reasons, so I decided to roll my own.
 
-Point-and-drool use case. Probably not what you want but hey, it pretty much
-works.
+== Examples
 
-class Photo < ActiveRecord::Base
-	has_image
-end
+Point-and-drool use case. Probably not what you want, but it may be useful for
+bootstrapping.
+
+  class Photo < ActiveRecord::Base
+    has_image
+  end
 
 Single image, no thumbnails, with some size limits:
 
-class Photo < ActiveRecord::Base
-	has_image :resize_to => "200x200",
-		:max_size => 3.megabytes,
-		:min_size => 4.kilobytes
-end
+  class Photo < ActiveRecord::Base
+    has_image :resize_to => "200x200",
+      :max_size => 3.megabytes,
+      :min_size => 4.kilobytes
+  end
 
 Image with some thumbnails:
 
-class Photo < ActiveRecord::Base
-	has_image :resize_to => "640x480",
-		:thumbnails => {
-			:square => "200x200",
-			:medium => "320x240"
-		},
-		:max_size => 3.megabytes,
-		:min_size => 4.kilobytes
-end
+  class Photo < ActiveRecord::Base
+    has_image :resize_to => "640x480",
+      :thumbnails => {
+        :square => "200x200",
+        :medium => "320x240"
+      },
+      :max_size => 3.megabytes,
+      :min_size => 4.kilobytes
+  end
 
-More documentation will be added once this thing has a version number that
-doesn't begin with 0.0.0.0.0.0. For now, it's so changing so often you'd be
-crazy to use this thing unless reading the source is enough for you.
-
-Getting it
-==========
+== Getting it
 
 Has image is designed to work with Rails 2.1 and is installed via Ruby Gems;
 no need for a plugin. To use it in your app, install the gem:
 
-gem install norman-has_image --source http://gems.github.com
+  gem install norman-has_image --source http://gems.github.com
 
 and add 
 
-require 'has_image'
+  require 'has_image'
 
 to your environment.rb file.
 
-Git repository: 
+Then, make sure the model you want to use it in has a column named "file_name."
 
-http://github.com/norman/has_image
+{Git repository}[http://github.com/norman/has_image]: 
 
-Hacking
-=======
+  http://github.com/norman/has_image
+
+
+== Hacking it
 
 Don't like the way it makes images? Want to pipe the images through some crazy
 seam carving library written in OCaml, or watermark them with your corporate
 logo? Happiness is just a monkey-patch away:
 
-module HasImage
-	class Processor
-		def resize(size)
-			# your new-and-improved thumbnailer code goes here.
-		end
-	end
-end
+  module HasImage
+    class Processor
+      def resize_image(size)
+        # your new-and-improved thumbnailer code goes here.
+      end
+    end
+  end
 
-Has_image follows a philosophy of "skinny model, fat plugin." This means that
-it tries to pollute your ActiveRecord model with as little functionality as
-possible, so that in a sense, the model is acts like a "controller" and the
-plugin like a "model" as regards the image handling functionality. This makes
-it easier to test, hack, and port to other frameworks, because the storage and
-processing functionality is largely independent of your model.
+HasImage[http://github.com/norman/has_image] follows a philosophy of "skinny
+model, fat plugin." This means that it tries to pollute your ActiveRecord
+model with as little functionality as possible, so that in a sense, the model
+is acts like a "controller" and the plugin like a "model" as regards the image
+handling functionality. This makes it easier to test, hack, and port to other
+frameworks, because the storage and processing functionality is largely
+independent of your model.
 
-Copyright (c) 2008 Norman Clarke <norman@randomba.org>, released under the MIT
-license
+At the time of writing (July 2008),
+HasImage[http://github.com/norman/has_image] is in its infancy. Your patches,
+bug reports and withering criticm is more than welcome.
+
+Copyright (c) 2008 {Norman Clarke}[mailto:norman@randomba.org], released under
+the MIT license
