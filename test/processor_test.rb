@@ -1,7 +1,4 @@
-require File.dirname(__FILE__) + '/../lib/has_image/processor'
-require 'mocha'
-require 'test/unit'
-require 'activesupport'
+require 'test_helper.rb'
 
 class StorageTest < Test::Unit::TestCase
   

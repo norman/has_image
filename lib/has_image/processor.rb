@@ -1,4 +1,4 @@
-require 'rubygems'
+# require 'rubygems'
 require 'mini_magick'
 
 module HasImage
@@ -8,21 +8,23 @@ module HasImage
   class Processor
     
     attr_accessor :options
+    
+    class << self
+      # Arg should be either a file, or a path. This runs ImageMagick's
+      # "identify" command and looks for an exit status indicating an error. If
+      # there is no error, then ImageMagick has identified the file as something
+      # it can work with and it will be converted to the desired output format.
+      def valid?(arg)
+        arg.close if arg.respond_to?(:close) && !arg.closed?
+        silence_stderr do
+          `identify #{arg.respond_to?(:path) ? arg.path : arg.to_s}`
+          $? == 0
+        end
+      end    
+    end
 
     def initialize(options)
       @options = options
-    end
-    
-    # Arg should be either a file, or a path. This runs ImageMagick's
-    # "identify" command and looks for an exit status indicating an error. If
-    # there is no error, then ImageMagick has identified the file as something
-    # it can work with and it will be converted to the desired output format.
-    def self.valid?(arg)
-      arg.close if arg.respond_to?(:close) && !arg.closed?
-      silence_stderr do
-        `identify #{arg.respond_to?(:path) ? arg.path : arg.to_s}`
-        $? == 0
-      end
     end
     
     # Create the resized image, and transform it to the desired output format,
@@ -31,7 +33,7 @@ module HasImage
       silence_stderr do
         my_options[:temp_file].close if !my_options[:temp_file].closed?
         @image = MiniMagick::Image.from_file(my_options[:temp_file].path)
-        @image.format(options[:convert_to]) if @image[:format] !=~ /#{options[:convert_to]}/
+        convert_image
         @image.combine_options do |commands|
           # Will work on some images, if EXIF data supports it.
           commands.send("auto-orient".to_sym)
@@ -45,7 +47,14 @@ module HasImage
         return @image
       end
     rescue MiniMagick::MiniMagickError
-      raise HasImage::ProcessorError.new("That doesn't look like an image file.")
+      raise ProcessorError.new("That doesn't look like an image file.")
+    end
+    
+    private
+    
+    def convert_image
+      return if @image[:format] == options[:convert_to]
+      @image.format(options[:convert_to])
     end
     
   end

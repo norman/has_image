@@ -51,3 +51,4 @@ class Test::Unit::TestCase #:nodoc:
   self.use_instantiated_fixtures  = false
   
 end
+require 'pic'

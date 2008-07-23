@@ -8,6 +8,7 @@ task :default => :test
 desc 'Test the non-Rails part of has_image.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
+  t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
@@ -15,7 +16,8 @@ end
 desc 'Test the Rails part of has_image.'
 Rake::TestTask.new(:test_rails) do |t|
   t.libs << 'lib'
-  t.pattern = 'rails-test/**/*_test.rb'
+  t.libs << 'test_rails'
+  t.pattern = 'test_rails/**/*_test.rb'
   t.verbose = true
 end
 
