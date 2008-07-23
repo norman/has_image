@@ -1,6 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
-require File.dirname(__FILE__) + '/pic'
-
+require 'test_helper'
 
 class PicTest < Test::Unit::TestCase
   

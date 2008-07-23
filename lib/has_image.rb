@@ -1,5 +1,5 @@
-require 'has_image/storage'
 require 'has_image/processor'
+require 'has_image/storage'
 
 module HasImage
   
@@ -15,7 +15,9 @@ module HasImage
   module ClassMethods
 
     def has_image(options = {})
-      options.assert_valid_keys(:resize_to, :thumbnails, :max_size, :min_size)
+      options.assert_valid_keys(:resize_to, :thumbnails, :max_size, :min_size,
+        :path_prefix, :base_path, :convert_to, :output_quality,
+        :invalid_image_message, :file_name_column)
       options = default_has_image_options.merge(options)
       write_inheritable_attribute(:has_image_options, options)
       class_inheritable_reader :has_image_options

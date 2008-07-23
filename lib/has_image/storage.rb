@@ -1,32 +1,35 @@
-require 'rubygems'
 require 'active_support'
 require 'stringio'
 require 'fileutils'
 
 module HasImage  
   
-  class FileDataError < StandardError ; end
+  class StorageError < StandardError ; end
   
   class Storage
     
     attr_accessor :image_data, :options, :temp_file
 
+    class << self
+      
+      # From Jamis Buck. http://www.37signals.com/svn/archives2/id_partitioning.php
+      def partitioned_path(id, *args)
+        ("%08d" % id).scan(/..../) + args
+      end
+
+      def random_file_name
+        require 'zlib'
+        Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36)
+      end
+          
+    end
+
     def initialize(options)
       @options = options
     end
-    
-    # From Jamis Buck. http://www.37signals.com/svn/archives2/id_partitioning.php
-    def self.partitioned_path(id, *args)
-      ("%08d" % id).scan(/..../) + args
-    end
 
-    def self.random_file_name
-      require 'zlib'
-      Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36)
-    end
-    
     def image_data=(image_data)
-      raise HasImage::FileDataError.new if image_data.blank?
+      raise StorageError.new if image_data.blank?
       if image_data.is_a?(Tempfile)
         @temp_file = image_data
       else
@@ -41,6 +44,8 @@ module HasImage
       install_thumbnails(id, random_name) if !options[:thumbnails].empty?
       install_main_image(id, random_name)
       return random_name
+    ensure  
+      @temp_file.close! if !@temp_file.closed?
     end
     
     def public_path_for(object, thumbnail = nil)
@@ -68,6 +73,7 @@ module HasImage
       FileUtils.mkdir_p path_for(id)
       main = processor.resize(:temp_file => @temp_file, :size => @options[:resize_to])
       main.write(File.join(path_for(id), file_name_for(name)))
+      main.tempfile.close!
     end
     
     def install_thumbnails(id, name)
@@ -75,6 +81,7 @@ module HasImage
       options[:thumbnails].each do |thumb_name, size|
         thumb = processor.resize(:temp_file => @temp_file, :size => size)
         thumb.write(File.join(path_for(id), file_name_for(name, thumb_name)))
+        thumb.tempfile.close!
       end
     end
     
@@ -83,7 +90,7 @@ module HasImage
     end
     
     def processor
-      @processor ||= HasImage::Processor.new(options)
+      @processor ||= Processor.new(options)
     end
     
   end

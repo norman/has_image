@@ -1,8 +1,4 @@
-require 'rubygems'
-require 'mocha'
-require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/has_image/storage'
-require File.dirname(__FILE__) + '/../lib/has_image/processor'
+require 'test_helper.rb'
 
 class StorageTest < Test::Unit::TestCase
   
@@ -23,7 +19,7 @@ class StorageTest < Test::Unit::TestCase
       :min_size => 4.kilobytes,
       :path_prefix => "tests",
       :base_path => File.join(File.dirname(__FILE__), '..', 'tmp'),
-      :convert_to => "JPG",
+      :convert_to => "JPEG",
       :output_quality => "85"
     }
   end

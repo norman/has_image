@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
     "lib/has_image.rb",
     "lib/has_image/processor.rb",
     "lib/has_image/storage.rb",
-    "rails/init.rb",
     "Rakefile",
     "tasks/has_image_tasks.rake"
     ]
