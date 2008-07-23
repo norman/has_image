@@ -1,10 +1,8 @@
-# require 'rubygems'
 require 'mini_magick'
 
 module HasImage
   
-  class ProcessorError < StandardError ; end
-  
+  # Image processing functionality for the HasImage gem.
   class Processor
     
     attr_accessor :options
@@ -27,30 +25,38 @@ module HasImage
       @options = options
     end
     
-    # Create the resized image, and transform it to the desired output format,
-    # if necessary.
+    # Create the resized image, and transforms it to the desired output
+    # format if necessary.
     def resize(file, size)
       silence_stderr do
         path = file.respond_to?(:path) ? file.path : file
         file.close if file.respond_to?(:close) && !file.closed?
         @image = MiniMagick::Image.from_file(path)
-        convert_image        
-        @image.combine_options do |commands|
-          commands.send("auto-orient".to_sym)
-          commands.strip
-          commands.resize "#{size}^"
-          commands.gravity "center"
-          commands.extent size
-          commands.quality options[:output_quality]
-        end
+        convert_image
+        resize_image(size)   
         return @image
       end
     rescue MiniMagick::MiniMagickError
       raise ProcessorError.new("That doesn't look like an image file.")
     end
     
+    # Image resizing is placed in a separate method for easy monkey-patching.
+    # This is intended to be invoked from resize, rather than directly.
+    def resize_image(size)
+      @image.combine_options do |commands|
+        commands.send("auto-orient".to_sym)
+        commands.strip
+        commands.resize "#{size}^"
+        commands.gravity "center"
+        commands.extent size
+        commands.quality options[:output_quality]
+      end
+    end
+
     private
     
+    # This was placed in a separate method largely to facilitate debugging
+    # and profiling.
     def convert_image
       return if @image[:format] == options[:convert_to]
       @image.format(options[:convert_to])
