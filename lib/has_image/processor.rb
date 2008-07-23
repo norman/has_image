@@ -29,19 +29,18 @@ module HasImage
     
     # Create the resized image, and transform it to the desired output format,
     # if necessary.
-    def resize(my_options)
+    def resize(file, size)
       silence_stderr do
-        my_options[:temp_file].close if !my_options[:temp_file].closed?
-        @image = MiniMagick::Image.from_file(my_options[:temp_file].path)
-        convert_image
+        path = file.respond_to?(:path) ? file.path : file
+        file.close if file.respond_to?(:close) && !file.closed?
+        @image = MiniMagick::Image.from_file(path)
+        convert_image        
         @image.combine_options do |commands|
-          # Will work on some images, if EXIF data supports it.
           commands.send("auto-orient".to_sym)
-          # Remove EXIF data, this can be up to 32k.
           commands.strip
-          commands.resize "#{my_options[:size]}^"
-          commands.gravity @image[:width] < @image[:height] ? "north" : "center"
-          commands.extent "#{my_options[:size]}"
+          commands.resize "#{size}^"
+          commands.gravity "center"
+          commands.extent size
           commands.quality options[:output_quality]
         end
         return @image
