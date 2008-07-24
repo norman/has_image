@@ -154,9 +154,8 @@ module HasImage
       class_inheritable_accessor :has_image_options
       write_inheritable_attribute(:has_image_options, options)
       
-      attr_accessible :image_data
-      
       after_create :install_images
+      after_save :update_images
       after_destroy :remove_images
       
       validate_on_create :image_data_valid?
@@ -171,6 +170,7 @@ module HasImage
   module ModelInstanceMethods
     
     def image_data=(image_data)
+      return if image_data.blank?
       storage.image_data = image_data
     end
     
@@ -194,6 +194,13 @@ module HasImage
       storage.remove_images(self.id)
     rescue Errno::ENOENT
       logger.warn("Could not delete files for #{self.class.to_s} #{to_param}") 
+    end
+    
+    def update_images
+      return if storage.temp_file.blank?
+      storage.remove_images(self.id)
+      # update_attribute(:has_image_file, storage.install_images(self.id))
+      update_attribute(:has_image_file, storage.install_images(self.id))      
     end
 
     def install_images

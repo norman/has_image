@@ -38,6 +38,13 @@ class PicTest < Test::Unit::TestCase
     assert @pic.save!
   end
 
+  def test_update
+    @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+    @pic.save!
+    @pic.image_data = fixture_file_upload("/image.png", "image/png")
+    assert @pic.save!
+  end
+
   def test_create_model_without_setting_image_data
     assert Pic.new.save!
   end
