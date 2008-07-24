@@ -1,4 +1,4 @@
-$:.unshift(File.dirname(__FILE__) + '/../../lib')
+$:.unshift(File.dirname(__FILE__) + '/../lib')
 
 ENV['RAILS_ENV'] = 'test'
 
@@ -52,3 +52,4 @@ class Test::Unit::TestCase #:nodoc:
   
 end
 require 'pic'
+require 'person'

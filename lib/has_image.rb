@@ -176,6 +176,7 @@ module HasImage
     end
     
     def image_data_valid?
+      return if !storage.temp_file
       if storage.image_too_big?
         errors.add_to_base(self.class.has_image_options[:image_too_big_message])
       elsif storage.image_too_small?
@@ -190,10 +191,14 @@ module HasImage
     end
     
     def remove_images
+      return if send(has_image_options[:file_name_column]).blank?
       storage.remove_images(self.id)
+    rescue Errno::ENOENT
+      logger.warn("Could not delete files for #{self.class.to_s} #{to_param}") 
     end
 
     def install_images
+      return if !storage.temp_file
       update_attribute(has_image_options[:file_name_column], storage.install_images(self.id))
     end
     
