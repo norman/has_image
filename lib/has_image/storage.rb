@@ -76,6 +76,7 @@ module HasImage
       return random_name
     ensure  
       @temp_file.close! if !@temp_file.closed?
+      @temp_file = nil
     end
     
     # Gets the full local filesystem path for an image. For example:
