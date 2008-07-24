@@ -4,21 +4,24 @@ require 'has_image/storage'
 # = HasImage
 #
 # HasImage allows Ruby on Rails applications to have attached images. It is very
-# small and lightweight: it only requires only one column (by default,
-# "file_name") in your model to store the uploaded image's file name.
+# small and lightweight: it only requires one column (by default, "file_name")
+# in your model to store the uploaded image's file name.
 # 
 # HasImage is, by design, very simplistic: It only supports using a filesystem
 # for storage, and only supports
 # MiniMagick[http://github.com/probablycorey/mini_magick] as an image processor.
 # However, its code is very small, clean and hackable, so adding support for
-# other backends or processors should be possible.
+# other backends or processors should be fairly easy.
 # 
 # HasImage works best for sites that want to show image galleries with
-# fixed-size thumbnails. It uses ImageMagick's crop and center gravity functions
-# to produce thumbnails that generally look acceptable, unless the image is a
-# panorama, or the subject matter is close to one of the margins, etc. For most
-# sites where people upload pictures of themselves or their pets the generated
-# thumbnails will look good almost all the time.
+# fixed-size thumbnails. It uses ImageMagick's
+# crop[http://www.imagemagick.org/script/command-line-options.php#crop] and
+# {center
+# gravity}[http://www.imagemagick.org/script/command-line-options.php#gravity]
+# functions to produce thumbnails that generally look acceptable, unless the
+# image is a panorama, or the subject matter is close to one of the margins,
+# etc. For most sites where people upload pictures of themselves or their pets
+# the generated thumbnails will look good almost all the time.
 # 
 # It's pretty easy to change the image processing / resizing code; you can just
 # override HasImage::Processor#resize_image to do what you wish:
@@ -61,6 +64,8 @@ module HasImage
 
   class ProcessorError < StandardError ; end
   class StorageError < StandardError ; end  
+  class FileTooBigError < StorageError ; end  
+  class FileTooSmallError < StorageError ; end  
   
   class << self
     def included(base) # :nodoc:
@@ -69,37 +74,86 @@ module HasImage
 
     # Enables has_image functionality. You probably don't need to ever invoke
     # this.
-    def enable
+    def enable # :nodoc:
       return if ActiveRecord::Base.respond_to? :has_image
       ActiveRecord::Base.send(:include, HasImage)    
     end
+
+    # If you're invoking this method, you need to pass in the class for which
+    # you want to get default options; this is used to determine the path where
+    # the images will be stored in the file system. Take a look at
+    # HasImage::ClassMethods#has_image to see examples of how to set the options
+    # in your model.
+    #
+    # This method is called by your model when you call has_image. It's
+    # placed here rather than in the model's class methods to make it easier
+    # to access for testing. Unless you're working on the code, it's unlikely
+    # you'll ever need to invoke this method.
+    #
+    # * :resize_to => "200x200",
+    # * :thumbnails => {},
+    # * :max_size => 12.megabytes,
+    # * :min_size => 4.kilobytes,
+    # * :path_prefix => klass.to_s.tableize,
+    # * :base_path => File.join(RAILS_ROOT, 'public'),
+    # * :convert_to => "JPEG",
+    # * :output_quality => "85",
+    # * :invalid_image_message => "Can't process the image.",
+    # * :image_too_small_message => "The image is too small.",
+    # * :image_too_big_message => "The image is too big.",
+    # * :file_name_column => :file_name
+    def default_options_for(klass)
+      {
+        :resize_to => "200x200",
+        :thumbnails => {},
+        :max_size => 12.megabytes,
+        :min_size => 4.kilobytes,
+        :path_prefix => klass.to_s.tableize,
+        :base_path => File.join(RAILS_ROOT, 'public'),
+        :convert_to => "JPEG",
+        :output_quality => "85",
+        :invalid_image_message => "Can't process the image.",
+        :image_too_small_message => "The image is too small.",
+        :image_too_big_message => "The image is too big.",
+        :file_name_column => :file_name
+      }
+    end
+    
   end
 
   module ClassMethods
-    
+    # To use HasImage with a Rails model, you must make sure you have a column
+    # for storing the attached file's name. This defaults to "file_name,"
+    # but can be overridden by setting the option described below. This is the
+    # only column you need to add to your model. You might want to take a look
+    # at the default options specified in HasImage#default_options_for.
+    #
     # Options:
-    # *  <tt>:resize_to</tt> - Dimensions to resize to. This should be an ImageMagick geometry string. Fixed sizes are recommended.
-    # *  <tt>:thumbnails</tt> - A hash of thumbnail names and sizes. The sizes should be ImageMagick geometry strings. Fixed sized are recommended.
-    # *  <tt>:min_size</tt> - Minimum size allowed.
-    # *  <tt>:max_size</tt> - Maximum size allowed.
+    # *  <tt>:resize_to</tt> - Dimensions to resize to. This should be an ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sizes are recommended.
+    # *  <tt>:thumbnails</tt> - A hash of thumbnail names and dimensions. The dimensions should be ImageMagick {geometry strings}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sized are recommended.
+    # *  <tt>:min_size</tt> - Minimum file size allowed. It's recommended that you set this size in kilobytes.
+    # *  <tt>:max_size</tt> - Maximum file size allowed. It's recommended that you set this size in megabytes.
     # *  <tt>:base_path</tt> - Where to install the images. You should probably leave this alone, except for tests.
     # *  <tt>:path_prefix</tt> - Where to install the images, relative to basepath. You should probably leave this alone.
     # *  <tt>:convert_to</tt> - An ImageMagick format to convert images to. Recommended formats: JPEG, PNG, GIF.
     # *  <tt>:output_quality</tt> - Image output quality passed to ImageMagick.
-    # *  <tt>:invalid_image_message</tt> - The message that will be shown on validation errors.
+    # *  <tt>:invalid_image_message</tt> - The message that will be shown when the image data can't be processed.
+    # *  <tt>:image_too_small_message</tt> - The message that will be shown when the image file is too small. You should ideally set this to something that tells the user what the minimum is.
+    # *  <tt>:image_too_big_message</tt> - The message that will be shown when the image file is too big. You should ideally set this to something that tells the user what the maximum is.
     # *  <tt>:file_name_column</tt> - The column that the file name will be saved in.
     #
     # Examples:
-    #   has_image
+    #   has_image # uses all default options
     #   has_image :resize_to "800x800", :thumbnails => {:square => "150x150"}
     #   has_image :resize_to "100x150", :max_size => 500.kilobytes, :file_name_column => "avatar"
+    #   has_image :invalid_image_message => "No se puede procesar la imagen."
     def has_image(options = {})
       options.assert_valid_keys(:resize_to, :thumbnails, :max_size, :min_size,
         :path_prefix, :base_path, :convert_to, :output_quality,
         :invalid_image_message, :file_name_column)
-      options = default_has_image_options.merge(options)
+      options = HasImage.default_options_for(self).merge(options)
+      class_inheritable_accessor :has_image_options
       write_inheritable_attribute(:has_image_options, options)
-      class_inheritable_reader :has_image_options
       
       attr_accessible :image_data
       
@@ -113,31 +167,6 @@ module HasImage
     
     end
     
-    # * <tt>:resize_to</tt> - 200x200
-    # * <tt>:thumbnails</tt> - {}
-    # * <tt>:max_size</tt> - 12.megabytes
-    # * <tt>:min_size</tt> - 4.kilobytes
-    # * <tt>:path_prefix</tt> - #{table_name}
-    # * <tt>:base_path</tt> - #{RAILS_ROOT}/public
-    # * <tt>:convert_to</tt> - JPEG
-    # * <tt>:output_quality</tt> - 85
-    # * <tt>:invalid_image_message</tt> - "Can't process the uploaded image."
-    # * <tt>:file_name_column</tt> - :file_name
-    def default_has_image_options
-      {
-        :resize_to => "200x200",
-        :thumbnails => {},
-        :max_size => 12.megabytes,
-        :min_size => 4.kilobytes,
-        :path_prefix => table_name,
-        :base_path => File.join(RAILS_ROOT, 'public'),
-        :convert_to => "JPEG",
-        :output_quality => "85",
-        :invalid_image_message => "Can't process the uploaded image.",
-        :file_name_column => :file_name
-      }
-    end
-
   end
 
   module ModelInstanceMethods
@@ -147,7 +176,11 @@ module HasImage
     end
     
     def image_data_valid?
-      if !HasImage::Processor.valid?(storage.temp_file)
+      if storage.image_too_big?
+        errors.add_to_base(self.class.has_image_options[:image_too_big_message])
+      elsif storage.image_too_small?
+        errors.add_to_base(self.class.has_image_options[:image_too_small_message])
+      elsif !HasImage::Processor.valid?(storage.temp_file)
         errors.add_to_base(self.class.has_image_options[:invalid_image_message])
       end
     end
@@ -165,7 +198,7 @@ module HasImage
     end
     
     def storage
-      @storage ||= HasImage::Storage.new(self.has_image_options)
+      @storage ||= HasImage::Storage.new(has_image_options)
     end
     
   end
