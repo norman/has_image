@@ -38,6 +38,23 @@ class PicTest < Test::Unit::TestCase
     assert @pic.save!
   end
 
+  def test_create_model_without_setting_image_data
+    assert Pic.new.save!
+  end
+
+  def test_destroy_model_without_no_images
+    @pic = Pic.new
+    @pic.save!
+    assert @pic.destroy
+  end
+
+  def test_destroy_model_with_images_already_deleted_from_filesystem
+    @pic = Pic.new
+    @pic.save!
+    @pic.update_attribute(:file_name, "test")
+    assert @pic.destroy
+  end
+
   def test_create_with_png
     Pic.has_image_options[:min_size] = 1
     @pic = Pic.new(:image_data => fixture_file_upload("/image.png", "image/png"))
