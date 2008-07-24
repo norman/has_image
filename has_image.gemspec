@@ -33,6 +33,6 @@ Gem::Specification.new do |s|
     "test/storage_test.rb",
   ]
   s.rdoc_options = ["--main", "README"]
-  s.extra_rdoc_files = ["README"]
+  s.extra_rdoc_files = ["README", "FAQ"]
 
 end
