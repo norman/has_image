@@ -5,13 +5,6 @@ simpler, lighter alternative to
 attachment_fu[http://github.com/technoweenie/attachment_fu] for applications
 that need to handle uploaded images.
 
-It supports only filesystem storage, and uses only MiniMagick to process
-images. However, the codebase is very small, simple, readable, and hackable.
-So it should be pretty easy to modify or enhance its functionality.
-
-It works best for websites that want to create photo galleries with
-fixed-dimension thumbnails.
-
 It creates only one database record per image, requires only one column in
 your model, and creates great-looking fixed-dimension thumbnails by using
 {ImageMagick's}[http://www.imagemagick.org/]
@@ -20,8 +13,18 @@ crop[http://www.imagemagick.org/script/command-line-options.php#crop] and
 gravity[http://www.imagemagick.org/script/command-line-options.php#gravity]
 functions.
 
+Some typical use cases are: websites that want to create photo galleries with
+fixed-dimension thumbnails, or that want to store user profile pictures
+without creating a separate model for the images.
+
+It supports only filesystem storage, and uses only MiniMagick to process
+images. However, the codebase is very small, simple, readable, and hackable.
+So it should be easy to modify or enhance its functionality with different
+storage or processor options.
+
 == Another image attachment library? Why?
 
+<em>The three chief virtues of a programmer are: Laziness, Impatience and Hubris.</em> - {Larry Wall}[http://en.wikipedia.org/wiki/Larry_Wall]
 
 Attachment_fu is too large and general for some of the places I want to use
 images. I sometimes found myself writing more code to hack attachment_fu than
@@ -33,16 +36,16 @@ various other reasons, so I decided to roll my own.
 
 == Examples
 
-Point-and-drool use case. Probably not what you want, but it may be useful for
-bootstrapping.
+Point-and-drool use case. It's probably not what you want, but it may be
+useful for bootstrapping.
 
-  class Photo < ActiveRecord::Base
+  class Member < ActiveRecord::Base
     has_image
   end
 
 Single image, no thumbnails, with some size limits:
 
-  class Photo < ActiveRecord::Base
+  class Picture < ActiveRecord::Base
     has_image :resize_to => "200x200",
       :max_size => 3.megabytes,
       :min_size => 4.kilobytes
@@ -62,8 +65,8 @@ Image with some thumbnails:
 
 == Getting it
 
-Has image is designed to work with Rails 2.1 and is installed via Ruby Gems;
-no need for a plugin. To use it in your app, install the gem:
+Has image is designed to work with Rails 2.1 and is installed via Ruby Gems,
+not as a plugin. To use it in your application, install the gem:
 
   gem install norman-has_image --source http://gems.github.com
 
@@ -77,7 +80,7 @@ Then, make sure the model you want to use it in has a column named "file_name."
 
 {Git repository}[http://github.com/norman/has_image]: 
 
-  http://github.com/norman/has_image
+  git://github.com/norman/has_image.git
 
 
 == Hacking it
@@ -94,17 +97,23 @@ logo? Happiness is just a monkey-patch away:
     end
   end
 
-HasImage[http://github.com/norman/has_image] follows a philosophy of "skinny
-model, fat plugin." This means that it tries to pollute your ActiveRecord
-model with as little functionality as possible, so that in a sense, the model
-is acts like a "controller" and the plugin like a "model" as regards the image
-handling functionality. This makes it easier to test, hack, and port to other
-frameworks, because the storage and processing functionality is largely
-independent of your model.
+HasImage[http://github.com/norman/has_image] follows a philosophy of "{skinny
+model, fat plugin}[http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model]."
+This means that it tries to pollute your ActiveRecord model with as little
+functionality as possible, so that in a sense, the model is acts like a
+"controller" and the plugin like a "model" as regards the image handling
+functionality. This makes it easier to test, hack, and reuse, because the
+storage and processing functionality is largely independent of your model, and
+of Rails.
+
+My goal for HasImage[http://github.com/norman/has_image] is to keep it very
+small. If you need a lot of functionality that's not here, you will likely be
+better off using attachment_fu[http://github.com/technoweenie/attachment_fu],
+which is much more powerful, but also more complex.
 
 At the time of writing (July 2008),
 HasImage[http://github.com/norman/has_image] is in its infancy. Your patches,
-bug reports and withering criticm is more than welcome.
+bug reports and withering criticism are more than welcome.
 
 Copyright (c) 2008 {Norman Clarke}[mailto:norman@randomba.org], released under
 the MIT license

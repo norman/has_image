@@ -1,16 +1,17 @@
 Gem::Specification.new do |s|
   s.name = "has_image"
   s.version = "0.1.0"
-  s.date = "2008-07-21"
+  s.date = "2008-07-23"
   s.summary = "Lets you attach images with thumbnails to active record models."
   s.email = 'norman@randomba.org'
   s.homepage = 'http://randomba.org'
-  s.description = 'HasImage is a gem/plugin for Rails for attached images, like a super-lightweight attachment_fu for images only.'
+  s.description = 'HasImage is a Ruby on Rails gem/plugin that allows you to attach images to ActiveRecord models.'
   s.has_rdoc = true
   s.authors = ['Norman Clarke']
   s.files = [
     "MIT-LICENSE",
     "README",
+    "FAQ",
     "init.rb",
     "lib/has_image.rb",
     "lib/has_image/processor.rb",

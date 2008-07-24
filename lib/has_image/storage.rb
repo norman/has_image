@@ -18,7 +18,7 @@ module HasImage
         ("%08d" % id).scan(/..../) + args
       end
 
-      # Generates an 8-character random file name to use for the image and its
+      # Generates an 6-character random file name to use for the image and its
       # thumbnails. This is done to avoid having files with unfortunate names.
       # On one of my sites users frequently upload images with Arabic names,
       # and they end up being hard to manipulate on the command line.
@@ -30,7 +30,8 @@ module HasImage
           
     end
 
-    def initialize(options)
+    # The constuctor should be invoked with the options set by has_image.
+    def initialize(options) # :nodoc:
       @options = options
     end
 
@@ -46,6 +47,18 @@ module HasImage
         @temp_file = Tempfile.new 'has_image_data_%s' % Storage.random_file_name
         @temp_file.write(image_data.read)        
       end
+    end
+
+    # Is uploaded file smaller than the allowed minimum?
+    def image_too_small?
+      @temp_file.open if @temp_file.closed?
+      @temp_file.size < options[:min_size]
+    end
+    
+    # Is uploaded file larger than the allowed maximum?
+    def image_too_big?
+      @temp_file.open if @temp_file.closed?
+      @temp_file.size > options[:max_size]
     end
     
     # A tip of the hat to attachment_fu.
@@ -66,13 +79,15 @@ module HasImage
     end
     
     # Gets the full local filesystem path for an image. For example:
-    # /var/sites/example.com/production/public/photos/0000/0001/3eRdh0zs.jpg
+    #
+    #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
     def filesystem_path_for(object, thumbnail = nil)
       File.join(path_for(object.id), file_name_for(object.file_name, thumbnail))
     end
     
     # Gets the "web" path for an image. For example:
-    # /photos/0000/0001/3eRdh0zs.jpg
+    #
+    #   /photos/0000/0001/3er0zs.jpg
     def public_path_for(object, thumbnail = nil)
       filesystem_path_for(object, thumbnail).gsub(options[:base_path], '')
     end
@@ -81,17 +96,34 @@ module HasImage
     def remove_images(id)
       FileUtils.rm_r path_for(id)
     end
+
+    # Is the uploaded file within the min and max allowed sizes?
+    def valid?
+      !(image_too_small? || image_too_big?)
+    end
     
     private
     
+    # Gets the extension to append to the image. Transforms "jpeg" to "jpg."
     def extension
       options[:convert_to].to_s.downcase.gsub("jpeg", "jpg")
     end
 
+    # File name, plus thumbnail suffix, plus extension. For example:
+    #
+    #   file_name_for("abc123", :thumb)
+    #
+    # gives you:
+    #
+    #   "abc123_thumb.jpg"
+    #   
+    #
     def file_name_for(*args)
       "%s.%s" % [args.compact.join("_"), extension]
     end
     
+    # Write the main image to the install directory - probably somewhere under
+    # RAILS_ROOT/public.
     def install_main_image(id, name)
       FileUtils.mkdir_p path_for(id)
       main = processor.resize(@temp_file, @options[:resize_to])
@@ -99,6 +131,8 @@ module HasImage
       main.tempfile.close!
     end
     
+    # Write the thumbnails to the install directory - probably somewhere under
+    # RAILS_ROOT/public.
     def install_thumbnails(id, name)
       FileUtils.mkdir_p path_for(id)
       path = File.join(path_for(id), file_name_for(name))
@@ -109,10 +143,16 @@ module HasImage
       end
     end
     
+    # Get the full path for the id. For example:
+    #
+    #  /var/sites/example.org/production/public/photos/0000/0001
     def path_for(id)
       File.join(options[:base_path], options[:path_prefix], Storage.partitioned_path(id))
     end
     
+    # Instantiates the processor using the options set in my contructor (if
+    # not already instantiated), stores it in an instance variable, and
+    # returns it.
     def processor
       @processor ||= Processor.new(options)
     end

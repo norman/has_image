@@ -21,12 +21,14 @@ module HasImage
       end    
     end
 
-    def initialize(options)
+    # The constuctor should be invoked with the options set by has_image.
+    def initialize(options) # :nodoc:
       @options = options
     end
     
     # Create the resized image, and transforms it to the desired output
-    # format if necessary.
+    # format if necessary. The size should be a valid ImageMagick {geometry
+    # string}[http://www.imagemagick.org/script/command-line-options.php#resize].
     def resize(file, size)
       silence_stderr do
         path = file.respond_to?(:path) ? file.path : file
@@ -42,6 +44,13 @@ module HasImage
     
     # Image resizing is placed in a separate method for easy monkey-patching.
     # This is intended to be invoked from resize, rather than directly.
+    # By default, the following ImageMagick functionality is invoked:
+    # * auto-orient[http://www.imagemagick.org/script/command-line-options.php#auto-orient]
+    # * strip[http://www.imagemagick.org/script/command-line-options.php#strip]
+    # * resize[http://www.imagemagick.org/script/command-line-options.php#resize]
+    # * gravity[http://www.imagemagick.org/script/command-line-options.php#gravity]
+    # * extent[http://www.imagemagick.org/script/command-line-options.php#extent]
+    # * quality[http://www.imagemagick.org/script/command-line-options.php#quality]
     def resize_image(size)
       @image.combine_options do |commands|
         commands.send("auto-orient".to_sym)
