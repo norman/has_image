@@ -42,7 +42,7 @@ class StorageTest < Test::Unit::TestCase
 
   def test_set_data_from_file
     @storage = HasImage::Storage.new(default_options)
-    @file = File.new(File.dirname(__FILE__) + "/fixtures/image.jpg", "r")
+    @file = File.new(File.dirname(__FILE__) + "/../test_rails/fixtures/image.jpg", "r")
     @storage.image_data = @file
     assert @storage.temp_file.size > 0
     assert_equal Zlib.crc32(@file.read), Zlib.crc32(@storage.temp_file.read)
@@ -89,7 +89,7 @@ class StorageTest < Test::Unit::TestCase
   private
   
   def temp_file(fixture)
-    file = File.new(File.dirname(__FILE__) + "/fixtures/#{fixture}", "r")
+    file = File.new(File.dirname(__FILE__) + "/../test_rails/fixtures/#{fixture}", "r")
     @temp_file = Tempfile.new("test")
     @temp_file.write(file.read)
     return @temp_file
