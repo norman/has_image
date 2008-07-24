@@ -5,8 +5,8 @@ require 'has_image/view_helpers'
 # = HasImage
 #
 # HasImage allows Ruby on Rails applications to have attached images. It is very
-# small and lightweight: it only requires one column (by default, "file_name")
-# in your model to store the uploaded image's file name.
+# small and lightweight: it only requires one column ("has_image_file") in your
+# model to store the uploaded image's file name.
 # 
 # HasImage is, by design, very simplistic: It only supports using a filesystem
 # for storage, and only supports
@@ -104,7 +104,6 @@ module HasImage
     # * :invalid_image_message => "Can't process the image.",
     # * :image_too_small_message => "The image is too small.",
     # * :image_too_big_message => "The image is too big.",
-    # * :file_name_column => :file_name
     def default_options_for(klass)
       {
         :resize_to => "200x200",
@@ -117,20 +116,18 @@ module HasImage
         :output_quality => "85",
         :invalid_image_message => "Can't process the image.",
         :image_too_small_message => "The image is too small.",
-        :image_too_big_message => "The image is too big.",
-        :file_name_column => :file_name
+        :image_too_big_message => "The image is too big."
       }
     end
     
   end
 
   module ClassMethods
-    # To use HasImage with a Rails model, you must make sure you have a column
-    # for storing the attached file's name. This defaults to "file_name,"
-    # but can be overridden by setting the option described below. This is the
-    # only column you need to add to your model. You might want to take a look
-    # at the default options specified in HasImage#default_options_for.
-    #
+    # To use HasImage with a Rails model, all you have to do is add a column
+    # named "has_image_file." For configuration defaults, you might want to take
+    # a look at the default options specified in HasImage#default_options_for.
+    # The different setting options are described below.
+    # 
     # Options:
     # *  <tt>:resize_to</tt> - Dimensions to resize to. This should be an ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sizes are recommended.
     # *  <tt>:thumbnails</tt> - A hash of thumbnail names and dimensions. The dimensions should be ImageMagick {geometry strings}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sized are recommended.
@@ -143,17 +140,16 @@ module HasImage
     # *  <tt>:invalid_image_message</tt> - The message that will be shown when the image data can't be processed.
     # *  <tt>:image_too_small_message</tt> - The message that will be shown when the image file is too small. You should ideally set this to something that tells the user what the minimum is.
     # *  <tt>:image_too_big_message</tt> - The message that will be shown when the image file is too big. You should ideally set this to something that tells the user what the maximum is.
-    # *  <tt>:file_name_column</tt> - The column that the file name will be saved in.
     #
     # Examples:
     #   has_image # uses all default options
     #   has_image :resize_to "800x800", :thumbnails => {:square => "150x150"}
-    #   has_image :resize_to "100x150", :max_size => 500.kilobytes, :file_name_column => "avatar"
+    #   has_image :resize_to "100x150", :max_size => 500.kilobytes
     #   has_image :invalid_image_message => "No se puede procesar la imagen."
     def has_image(options = {})
       options.assert_valid_keys(:resize_to, :thumbnails, :max_size, :min_size,
         :path_prefix, :base_path, :convert_to, :output_quality,
-        :invalid_image_message, :file_name_column)
+        :invalid_image_message)
       options = HasImage.default_options_for(self).merge(options)
       class_inheritable_accessor :has_image_options
       write_inheritable_attribute(:has_image_options, options)
@@ -194,7 +190,7 @@ module HasImage
     end
     
     def remove_images
-      return if send(has_image_options[:file_name_column]).blank?
+      return if has_image_file.blank?
       storage.remove_images(self.id)
     rescue Errno::ENOENT
       logger.warn("Could not delete files for #{self.class.to_s} #{to_param}") 
@@ -202,7 +198,7 @@ module HasImage
 
     def install_images
       return if !storage.temp_file
-      update_attribute(has_image_options[:file_name_column], storage.install_images(self.id))
+      update_attribute(:has_image_file, storage.install_images(self.id))
     end
     
     def storage

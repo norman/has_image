@@ -82,7 +82,7 @@ module HasImage
     #
     #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
     def filesystem_path_for(object, thumbnail = nil)
-      File.join(path_for(object.id), file_name_for(object.file_name, thumbnail))
+      File.join(path_for(object.id), file_name_for(object.has_image_file, thumbnail))
     end
     
     # Gets the "web" path for an image. For example:

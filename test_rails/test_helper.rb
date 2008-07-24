@@ -52,4 +52,3 @@ class Test::Unit::TestCase #:nodoc:
   
 end
 require 'pic'
-require 'person'

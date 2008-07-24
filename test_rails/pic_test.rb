@@ -51,7 +51,7 @@ class PicTest < Test::Unit::TestCase
   def test_destroy_model_with_images_already_deleted_from_filesystem
     @pic = Pic.new
     @pic.save!
-    @pic.update_attribute(:file_name, "test")
+    @pic.update_attribute(:has_image_file, "test")
     assert @pic.destroy
   end
 
