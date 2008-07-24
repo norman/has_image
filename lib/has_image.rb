@@ -1,5 +1,6 @@
 require 'has_image/processor'
 require 'has_image/storage'
+require 'has_image/view_helpers'
 
 # = HasImage
 #
@@ -76,7 +77,9 @@ module HasImage
     # this.
     def enable # :nodoc:
       return if ActiveRecord::Base.respond_to? :has_image
-      ActiveRecord::Base.send(:include, HasImage)    
+      ActiveRecord::Base.send(:include, HasImage)
+      return if ActionView::Base.respond_to? :image_tag_for
+      ActionView::Base.send(:include, ViewHelpers)
     end
 
     # If you're invoking this method, you need to pass in the class for which
