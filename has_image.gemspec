@@ -9,9 +9,10 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.authors = ['Norman Clarke']
   s.files = [
+    "CHANGELOG",
+    "FAQ",
     "MIT-LICENSE",
     "README",
-    "FAQ",
     "init.rb",
     "lib/has_image.rb",
     "lib/has_image/processor.rb",
@@ -32,6 +33,6 @@ Gem::Specification.new do |s|
     "test/storage_test.rb",
   ]
   s.rdoc_options = ["--main", "README", "--inline-source", "--line-numbers"]
-  s.extra_rdoc_files = ["README", "FAQ"]
+  s.extra_rdoc_files = ["README", "CHANGELOG", "FAQ"]
 
 end
