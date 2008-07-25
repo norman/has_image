@@ -8,6 +8,14 @@ module HasImage
     attr_accessor :options
     
     class << self
+      
+      # Given a geometry string, return the maxium possible output dimensions.
+      # For example:
+      #   area("50x50>") == 2500 
+      def area(dimensions)
+        dimensions.split("x")[0].to_i * dimensions.split("x")[1].to_i 
+      end
+      
       # Arg should be either a file, or a path. This runs ImageMagick's
       # "identify" command and looks for an exit status indicating an error. If
       # there is no error, then ImageMagick has identified the file as something

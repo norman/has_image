@@ -105,6 +105,17 @@ module HasImage
       options[:convert_to].to_s.downcase.gsub("jpeg", "jpg")
     end
     
+    # Returns the options[:thumbnails] hash, coverted to an array and sorted
+    # by thumbnail area. For example:
+    #
+    #   options[:thumbnails] == {:a => "20x20", :b => "2x2", :c => "100x100"}
+    #   sorted_thumbnails == [[:c, "100x100"], [:a, "20x20"], [:b, "2x2"]]
+    def sorted_thumbnails
+      options[:thumbnails].to_a.sort do |b,a| 
+        Processor.area(a[1]) <=> Processor.area(b[1])
+      end
+    end
+
     private
     
     # File name, plus thumbnail suffix, plus extension. For example:
