@@ -85,10 +85,10 @@ Alternatively, you can install it as a Rails plugin:
   ./script plugin install git://github.com/norman/has_image.git
   
 Rails versions before 2.1 do not support plugin installation using Git, so if
-you're on 2.0, (or earlier), then please install the gem rather than the
+you're on 2.0 (or earlier), then please install the gem rather than the
 plugin.
   
-Then, make sure the model you want to use it in has a column named "file_name."
+Then, make sure the model has a column named "has_image_file."
 
 {Git repository}[http://github.com/norman/has_image]: 
 
