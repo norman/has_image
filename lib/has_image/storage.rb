@@ -3,7 +3,6 @@ require 'stringio'
 require 'fileutils'
 require 'zlib'
 
-
 module HasImage  
   
   # Filesystem storage for the HasImage gem. The methods that HasImage inserts
