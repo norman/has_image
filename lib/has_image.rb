@@ -208,7 +208,6 @@ module HasImage
     def update_images
       return if storage.temp_file.blank?
       storage.remove_images(self.id)
-      # update_attribute(:has_image_file, storage.install_images(self.id))
       update_attribute(:has_image_file, storage.install_images(self.id))      
     end
 
