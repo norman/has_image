@@ -69,8 +69,8 @@ It also provides a view helper to make displaying the images extremely simple:
 
 == Getting it
 
-Has image is designed to work with Rails 2.1 and is installed via Ruby Gems,
-not as a plugin. To use it in your application, install the gem:
+Has image can be installed as a gem, or as a Rails plugin. Gem installation
+is easiest, and recommended:
 
   gem install norman-has_image --source http://gems.github.com
 
@@ -80,6 +80,13 @@ and add
 
 to your environment.rb file.
 
+Alternatively, you can install it as a Rails plugin:
+
+  ./script plugin install git://github.com/norman/has_image.git
+  
+Rails 2.1 does not support plugin installation using Git, so if you're on 2.0,
+or earlier, then please install via gem.
+  
 Then, make sure the model you want to use it in has a column named "file_name."
 
 {Git repository}[http://github.com/norman/has_image]: 
