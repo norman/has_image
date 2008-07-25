@@ -6,7 +6,10 @@ require 'zlib'
 
 module HasImage  
   
-  # Filesystem storage for the HasImage gem.
+  # Filesystem storage for the HasImage gem. The methods that HasImage inserts
+  # into ActiveRecord models only depend on the public methods in this class, so
+  # it should be reasonably straightforward to implement a different storage
+  # mechanism for Amazon AWS, Photobucket, DBFile, SFTP, or whatever you want.  
   class Storage
     
     attr_accessor :image_data, :options, :temp_file
@@ -18,12 +21,12 @@ module HasImage
         ("%08d" % id).scan(/..../) + args
       end
 
-      # Generates an 6-character random file name to use for the image and its
+      # Generates a 4-6 character random file name to use for the image and its
       # thumbnails. This is done to avoid having files with unfortunate names.
-      # On one of my sites users frequently upload images with Arabic names,
-      # and they end up being hard to manipulate on the command line.
-      # This also helps prevent a possibly undesirable sitation where the
-      # uploaded images have offensive names.
+      # On one of my sites users frequently upload images with Arabic names, and
+      # they end up being hard to manipulate on the command line. This also
+      # helps prevent a possibly undesirable sitation where the uploaded images
+      # have offensive names.
       def random_file_name
         Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36)
       end
@@ -79,13 +82,6 @@ module HasImage
       @temp_file = nil
     end
     
-    # Gets the full local filesystem path for an image. For example:
-    #
-    #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
-    def filesystem_path_for(object, thumbnail = nil)
-      File.join(path_for(object.id), file_name_for(object.has_image_file, thumbnail))
-    end
-    
     # Gets the "web" path for an image. For example:
     #
     #   /photos/0000/0001/3er0zs.jpg
@@ -102,14 +98,16 @@ module HasImage
     def valid?
       !(image_too_small? || image_too_big?)
     end
-    
-    private
-    
+
+    protected
+
     # Gets the extension to append to the image. Transforms "jpeg" to "jpg."
     def extension
       options[:convert_to].to_s.downcase.gsub("jpeg", "jpg")
     end
-
+    
+    private
+    
     # File name, plus thumbnail suffix, plus extension. For example:
     #
     #   file_name_for("abc123", :thumb)
@@ -121,6 +119,13 @@ module HasImage
     #
     def file_name_for(*args)
       "%s.%s" % [args.compact.join("_"), extension]
+    end
+
+    # Gets the full local filesystem path for an image. For example:
+    #
+    #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
+    def filesystem_path_for(object, thumbnail = nil)
+      File.join(path_for(object.id), file_name_for(object.has_image_file, thumbnail))
     end
     
     # Write the main image to the install directory - probably somewhere under
