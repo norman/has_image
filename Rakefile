@@ -42,5 +42,6 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.options << '--line-numbers' << '--inline-source' << '-c UTF-8'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('FAQ')
+  rdoc.rdoc_files.include('CHANGELOG')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
