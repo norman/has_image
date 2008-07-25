@@ -150,7 +150,7 @@ module HasImage
     def has_image(options = {})
       options.assert_valid_keys(:resize_to, :thumbnails, :max_size, :min_size,
         :path_prefix, :base_path, :convert_to, :output_quality,
-        :invalid_image_message)
+        :invalid_image_message, :image_too_big_message, :image_too_small_message)
       options = HasImage.default_options_for(self).merge(options)
       class_inheritable_accessor :has_image_options
       write_inheritable_attribute(:has_image_options, options)
