@@ -18,22 +18,20 @@ Gem::Specification.new do |s|
     "lib/has_image/storage.rb",
     "lib/has_image/view_helpers.rb",
     "Rakefile",
-    "tasks/has_image_tasks.rake"
     ]
   s.test_files = [
     "test_rails/database.yml",
-    "test_rails/fixtures/empty",
+    "test_rails/fixtures/bad_image.jpg",
+    "test_rails/fixtures/image.jpg",
+    "test_rails/fixtures/image.png",
     "test_rails/pic.rb",
     "test_rails/pic_test.rb",
     "test_rails/schema.rb",
     "test_rails/test_helper.rb",
-    "test/fixtures/bad_image.jpg",
-    "test/fixtures/image.jpg",
-    "test/fixtures/image.png",
     "test/processor_test.rb",
     "test/storage_test.rb",
   ]
-  s.rdoc_options = ["--main", "README"]
+  s.rdoc_options = ["--main", "README", "--inline-source", "--line-numbers"]
   s.extra_rdoc_files = ["README", "FAQ"]
 
 end
