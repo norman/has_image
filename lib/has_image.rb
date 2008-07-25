@@ -69,6 +69,7 @@ module HasImage
   class FileTooSmallError < StorageError ; end  
   
   class << self
+    
     def included(base) # :nodoc:
       base.extend(ClassMethods)
     end
