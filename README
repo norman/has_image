@@ -17,7 +17,7 @@ Some typical use cases are: websites that want to create photo galleries with
 fixed-dimension thumbnails, or that want to store user profile pictures
 without creating a separate model for the images.
 
-It supports only filesystem storage, and uses only MiniMagick to process
+It supports only filesystem storage, and uses only MiniMagick[http://github.com/probablycorey/mini_magick] to process
 images. However, the codebase is very small, simple, readable, and hackable.
 So it should be easy to modify or enhance its functionality with different
 storage or processor options.
@@ -62,6 +62,10 @@ Image with some thumbnails:
       :max_size => 3.megabytes,
       :min_size => 4.kilobytes
   end
+  
+It also provides a view helper to make displaying the images extremely simple:
+
+  <%= image_tag_for(@photo, :thumb => :square) %>
 
 == Getting it
 
@@ -85,9 +89,10 @@ Then, make sure the model you want to use it in has a column named "file_name."
 
 == Hacking it
 
-Don't like the way it makes images? Want to pipe the images through some crazy
-seam carving library written in OCaml, or watermark them with your corporate
-logo? Happiness is just a monkey-patch away:
+Don't like the way it makes images? Want to pipe the images through some
+{crazy fast seam carving library written in
+OCaml}[http://eigenclass.org/hiki/seam-carving-in-ocaml], or watermark them
+with your corporate logo? Happiness is just a monkey-patch[http://en.wikipedia.org/wiki/Monkey_patch] away:
 
   module HasImage
     class Processor
@@ -107,9 +112,10 @@ storage and processing functionality is largely independent of your model, and
 of Rails.
 
 My goal for HasImage[http://github.com/norman/has_image] is to keep it very
-small. If you need a lot of functionality that's not here, you will likely be
-better off using attachment_fu[http://github.com/technoweenie/attachment_fu],
-which is much more powerful, but also more complex.
+small. If you need <strong>a lot</strong> of functionality that's not here, instead of patching
+this code, you will likely be better off using
+attachment_fu[http://github.com/technoweenie/attachment_fu], which is much
+more powerful, but also more complex.
 
 At the time of writing (July 2008),
 HasImage[http://github.com/norman/has_image] is in its infancy. Your patches,

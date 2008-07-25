@@ -56,7 +56,7 @@ require 'has_image/view_helpers'
 # * Doesn't save image dimensions. However, if you're using fixed-sized images,
 #   this is not a problem because you can just read the size from MyModel.thumbnails[:my_size]
 # * No support for AWS or DBFile storage, only filesystem.
-# * Only supports MiniMagick as an image processor, no RMagick, GD, CoreImage,
+# * Only supports MiniMagick[http://github.com/probablycorey/mini_magick/tree] as an image processor, no RMagick, GD, CoreImage,
 #   etc.
 # * No support for anything other than image attachments.
 # * Not as popular as attachment_fu, which means fewer bug reports, and
@@ -169,11 +169,15 @@ module HasImage
 
   module ModelInstanceMethods
     
+    # Sets the uploaded image data. Image data can be an instance of Tempfile,
+    # or an instance of any class than inherits from IO.
     def image_data=(image_data)
       return if image_data.blank?
       storage.image_data = image_data
     end
     
+    # Is the image data a file that ImageMagick can process, and is it within
+    # the allowed minimum and maximum sizes?
     def image_data_valid?
       return if !storage.temp_file
       if storage.image_too_big?
@@ -185,10 +189,12 @@ module HasImage
       end
     end
     
+    # Gets the "web path" for the image, or optionally, its thumbnail.
     def public_path(thumbnail = nil)
       storage.public_path_for(self, thumbnail)
     end
     
+    # Deletes the image from the storage.
     def remove_images
       return if has_image_file.blank?
       storage.remove_images(self.id)
@@ -196,6 +202,8 @@ module HasImage
       logger.warn("Could not delete files for #{self.class.to_s} #{to_param}") 
     end
     
+    # Creates new images and removes the old ones when image_data has been
+    # set.
     def update_images
       return if storage.temp_file.blank?
       storage.remove_images(self.id)
@@ -203,11 +211,14 @@ module HasImage
       update_attribute(:has_image_file, storage.install_images(self.id))      
     end
 
+    # Processes and installs the image and its thumbnails.
     def install_images
       return if !storage.temp_file
       update_attribute(:has_image_file, storage.install_images(self.id))
     end
     
+    # Gets an instance of the underlying storage functionality. See
+    # HasImage::Storage.
     def storage
       @storage ||= HasImage::Storage.new(has_image_options)
     end
@@ -216,6 +227,8 @@ module HasImage
 
   module ModelClassMethods
 
+    # Get the hash of thumbnails set by the options specified when invoking
+    # HasImage::ClassMethods#has_image.
     def thumbnails
       has_image_options[:thumbnails]
     end
