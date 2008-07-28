@@ -1,3 +1,7 @@
+2008-07-28 Norman Clarke <norman@randomba.org>
+
+  * Added dependencies and Rubyforge project to gemspec, updated docs.
+  
 2008-07-25 Norman Clarke <norman@randomba.org>
 
 	* First public release.	
