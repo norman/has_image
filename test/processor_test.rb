@@ -32,10 +32,22 @@ class StorageTest < Test::Unit::TestCase
   def test_detect_invalid_image_from_tmp_file
     assert !HasImage::Processor.valid?(temp_file("bad_image.jpg"))
   end
+
+  def test_resize_with_invalid_geometry
+    @processor = HasImage::Processor.new({:convert_to => "JPEG", :output_quality => "85"})
+    assert_raises HasImage::InvalidGeometryError do
+      @processor.resize(temp_file("image.jpg"), "bad_geometry")
+    end
+  end
   
-  def test_resize
+  def test_resize_fixed
     @processor = HasImage::Processor.new({:convert_to => "JPEG", :output_quality => "85"})
     assert @processor.resize(temp_file("image.jpg"), "100x100")
+  end
+
+  def test_resize_unfixed
+    @processor = HasImage::Processor.new({:convert_to => "JPEG", :output_quality => "85"})
+    assert @processor.resize(temp_file("image.jpg"), "1024x768>")
   end
 
   def test_resize_and_convert

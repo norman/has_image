@@ -16,11 +16,11 @@ class StorageTest < Test::Unit::TestCase
     )
   end
   
-  def test_sorted_thumbs
+  def test_sorted_thumbnails
     thumbs = {:a => "20x20", :b => "2x2", :c => "100x100"}
     sorted = [[:c, "100x100"], [:a, "20x20"], [:b, "2x2"]]
     @storage = HasImage::Storage.new(default_options.merge(:thumbnails => thumbs))
-    assert_equal sorted, @storage.send(:sorted_thumbs) 
+    assert_equal sorted, @storage.send(:sorted_thumbnails) 
   end
   
   def test_partitioned_path
