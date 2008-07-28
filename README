@@ -72,7 +72,7 @@ It also provides a view helper to make displaying the images extremely simple:
 Has image can be installed as a gem, or as a Rails plugin. Gem installation
 is easiest, and recommended:
 
-  gem install norman-has_image --source http://gems.github.com
+  gem install has_image
 
 and add 
 
@@ -93,7 +93,6 @@ Then, make sure the model has a column named "has_image_file."
 {Git repository}[http://github.com/norman/has_image]: 
 
   git://github.com/norman/has_image.git
-
 
 == Hacking it
 
@@ -120,7 +119,7 @@ storage and processing functionality is largely independent of your model, and
 of Rails.
 
 My goal for HasImage[http://github.com/norman/has_image] is to keep it very
-small. If you need <strong>a lot</strong> of functionality that's not here, instead of patching
+small. If you need *a lot* of functionality that's not here, instead of patching
 this code, you will likely be better off using
 attachment_fu[http://github.com/technoweenie/attachment_fu], which is much
 more powerful, but also more complex.
@@ -133,7 +132,12 @@ At the time of writing (July 2008),
 HasImage[http://github.com/norman/has_image] is in its infancy. Your patches,
 bug reports and withering criticism are more than welcome.
 
+== Links
 
+* {HasImage RDocs}[http://randomba.org/projects/has_image] (regenerated nightly)
+* {HasImage on GitHub}[http://github.com/norman/has_image]
+* {HasImage on Rubyforge}[http://rubyforge.org/projects/has-image/]
+* {HasImage on Lighthouse}[http://randomba.lighthouseapp.com/projects/14674-has_image]
 
 Copyright (c) 2008 {Norman Clarke}[mailto:norman@randomba.org], released under
 the MIT license
