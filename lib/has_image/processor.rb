@@ -15,6 +15,13 @@ module HasImage
       def area(dimensions)
         dimensions.split("x")[0].to_i * dimensions.split("x")[1].to_i 
       end
+
+      # "The form of an {extended geometry
+      # string}[http://www.imagemagick.org/script/command-line-options.php?#resize] is
+      # <width>x<height>{+-}<xoffset>{+-}<yoffset>{%}{!}{<}{>}"
+      def geometry_string_valid?(string)
+        string =~ /\A[\d]*x[\d]*([+-][0-9][+-][0-9])?[%@!<>^]?\Z/
+      end
       
       # Arg should be either a file, or a path. This runs ImageMagick's
       # "identify" command and looks for an exit status indicating an error. If
@@ -38,6 +45,7 @@ module HasImage
     # format if necessary. The size should be a valid ImageMagick {geometry
     # string}[http://www.imagemagick.org/script/command-line-options.php#resize].
     def resize(file, size)
+      raise InvalidGeometryError.new unless Processor.geometry_string_valid?(size)
       silence_stderr do
         path = file.respond_to?(:path) ? file.path : file
         file.close if file.respond_to?(:close) && !file.closed?
@@ -63,9 +71,15 @@ module HasImage
       @image.combine_options do |commands|
         commands.send("auto-orient".to_sym)
         commands.strip
-        commands.resize "#{size}^"
-        commands.gravity "center"
-        commands.extent size
+        # Fixed-dimension images
+        if size =~ /\A[\d]*x[\d]*!?\Z/
+          commands.resize "#{size}^"
+          commands.gravity "center"
+          commands.extent size
+        # Non-fixed-dimension images
+        else
+          commands.resize "#{size}"
+        end
         commands.quality options[:output_quality]
       end
     end

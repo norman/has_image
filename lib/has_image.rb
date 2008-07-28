@@ -64,9 +64,10 @@ require 'has_image/view_helpers'
 module HasImage
 
   class ProcessorError < StandardError ; end
-  class StorageError < StandardError ; end  
-  class FileTooBigError < StorageError ; end  
-  class FileTooSmallError < StorageError ; end  
+  class StorageError < StandardError ; end
+  class FileTooBigError < StorageError ; end
+  class FileTooSmallError < StorageError ; end
+  class InvalidGeometryError < ProcessorError ; end
   
   class << self
     
