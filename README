@@ -71,7 +71,7 @@ Setting up forms for has_image is simple, too:
 
   <% form_for(@photo, :html => {:multipart => true}) do |f| %>
     <p>
-      <%= f.label :image_data
+      <%= f.label :image_data %>
       <%= f.file_field :image_data %>
     </p>
     <p>
