@@ -1,3 +1,8 @@
+2008-07-29 Norman Clarke <norman@randomba.org>
+
+  * Reverted thumbnail sorting feature - it's fast but makes terrible quality
+    thumbnails. It's just not worth it.
+
 2008-07-28 Norman Clarke <norman@randomba.org>
 
   * Added sorted thumbnail processing. This improves thumbnail generation

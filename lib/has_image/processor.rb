@@ -9,13 +9,6 @@ module HasImage
     
     class << self
       
-      # Given a geometry string, return the maxium possible output dimensions.
-      # For example:
-      #   area("50x50>") == 2500 
-      def area(dimensions)
-        dimensions.split("x")[0].to_i * dimensions.split("x")[1].to_i 
-      end
-
       # "The form of an {extended geometry
       # string}[http://www.imagemagick.org/script/command-line-options.php?#resize] is
       # <width>x<height>{+-}<xoffset>{+-}<yoffset>{%}{!}{<}{>}"
