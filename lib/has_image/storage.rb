@@ -27,7 +27,7 @@ module HasImage
       # helps prevent a possibly undesirable sitation where the uploaded images
       # have offensive names.
       def random_file_name
-        Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36)
+        Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36).downcase
       end
           
     end
