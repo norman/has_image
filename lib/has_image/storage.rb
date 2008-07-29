@@ -105,26 +105,6 @@ module HasImage
       options[:convert_to].to_s.downcase.gsub("jpeg", "jpg")
     end
     
-    # Returns the options[:thumbnails] hash, coverted to an array and sorted
-    # by thumbnail area, highest to lowest. For example:
-    #
-    #   options[:thumbnails] == {:a => "20x20", :b => "2x2", :c => "100x100"}
-    #   sorted_thumbnails == [[:c, "100x100"], [:a, "20x20"], [:b, "2x2"]]
-    #
-    # This is done to speed up processing images with several thumbnails. Rather
-    # than create the thumbnail starting from the highest quality version each
-    # time, the next biggest thumbnail is used as the base image for its
-    # immediately smaller variant. For example, given an image with 3 thumbnails
-    # HasImage will use the 800x800 as the basis of the 500x500, and then the
-    # 500x500 as the basis of the 200x200, etc. My benchmarks showed that this
-    # will speed up processing by up to around 25% for a 4.5 meg JPEG with 5
-    # thumbnails.
-    def sorted_thumbnails
-      options[:thumbnails].to_a.sort do |b,a| 
-        Processor.area(a[1]) <=> Processor.area(b[1])
-      end
-    end
-
     private
     
     # File name, plus thumbnail suffix, plus extension. For example:
@@ -161,10 +141,9 @@ module HasImage
     def install_thumbnails(id, name)
       FileUtils.mkdir_p path_for(id)
       path = File.join(path_for(id), file_name_for(name))
-      sorted_thumbnails.each do |t|
-        thumb = processor.resize(path, t[1])
-        path = File.join(path_for(id), file_name_for(name, t[0]))
-        thumb.write(path)
+      options[:thumbnails].each do |thumb_name, size|
+        thumb = processor.resize(path, thumb_name)
+        thumb.write(File.join(path_for(id), file_name_for(name, size)))
         thumb.tempfile.close!
       end
     end

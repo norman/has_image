@@ -13,10 +13,6 @@ class StorageTest < Test::Unit::TestCase
     return @temp_file
   end
   
-  def test_area
-    assert_equal 2500, HasImage::Processor.area("50x50>")
-  end
-  
   def test_detect_valid_image
     assert HasImage::Processor.valid?(File.dirname(__FILE__) + "/../test_rails/fixtures/image.jpg")
   end
