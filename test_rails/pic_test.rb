@@ -36,6 +36,8 @@ class PicTest < Test::Unit::TestCase
   def test_create
     @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
     assert @pic.save!
+    assert_not_nil @pic.public_path
+    assert_not_nil @pic.absolute_path
   end
 
   def test_update
