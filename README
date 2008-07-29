@@ -66,6 +66,18 @@ Image with some thumbnails:
 It also provides a view helper to make displaying the images extremely simple:
 
   <%= image_tag_for(@photo, :thumb => :square) %>
+  
+Setting up forms for has_image is simple, too:
+
+  <% form_for(@photo, :html => {:multipart => true}) do |f| %>
+    <p>
+      <%= f.label :image_data
+      <%= f.file_field :image_data %>
+    </p>
+    <p>
+      <%= f.submit %>
+    </p>
+  <% end %>
 
 == Getting it
 
