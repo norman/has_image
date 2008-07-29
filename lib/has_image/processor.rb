@@ -38,7 +38,9 @@ module HasImage
     # format if necessary. The size should be a valid ImageMagick {geometry
     # string}[http://www.imagemagick.org/script/command-line-options.php#resize].
     def resize(file, size)
-      raise InvalidGeometryError.new unless Processor.geometry_string_valid?(size)
+      unless Processor.geometry_string_valid?(size)
+        raise InvalidGeometryError.new('"%s" is not a valid ImageMagick geometry string' % size)
+      end
       silence_stderr do
         path = file.respond_to?(:path) ? file.path : file
         file.close if file.respond_to?(:close) && !file.closed?

@@ -142,8 +142,8 @@ module HasImage
       FileUtils.mkdir_p path_for(id)
       path = File.join(path_for(id), file_name_for(name))
       options[:thumbnails].each do |thumb_name, size|
-        thumb = processor.resize(path, thumb_name)
-        thumb.write(File.join(path_for(id), file_name_for(name, size)))
+        thumb = processor.resize(path, size)
+        thumb.write(File.join(path_for(id), file_name_for(name, thumb_name)))
         thumb.tempfile.close!
       end
     end
