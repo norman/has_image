@@ -1,5 +1,6 @@
 2008-07-29 Norman Clarke <norman@randomba.org>
 
+  * Added "absolute path" method to model instances.
   * Made image deletion nullify the "has_image_file" field.
   * Added "has_image?" method to model instances.
   * Fixed ENONENT error with record update when there are no images yet.

@@ -200,6 +200,12 @@ module HasImage
     def public_path(thumbnail = nil)
       storage.public_path_for(self, thumbnail)
     end
+
+    # Gets the absolute filesystem path for the image, or optionally, its
+    # thumbnail.
+    def absolute_path(thumbnail = nil)
+      storage.filesystem_path_for(self, thumbnail)
+    end
     
     # Deletes the image from the storage.
     def remove_images
