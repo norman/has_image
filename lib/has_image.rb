@@ -171,6 +171,11 @@ module HasImage
 
   module ModelInstanceMethods
     
+    # Does the object have an image?
+    def has_image?
+      !has_image_file.blank?
+    end
+    
     # Sets the uploaded image data. Image data can be an instance of Tempfile,
     # or an instance of any class than inherits from IO.
     def image_data=(image_data)
@@ -200,6 +205,7 @@ module HasImage
     def remove_images
       return if has_image_file.blank?
       storage.remove_images(self.id)
+      update_attribute(:has_image_file, nil)
     rescue Errno::ENOENT
       logger.warn("Could not delete files for #{self.class.to_s} #{to_param}") 
     end

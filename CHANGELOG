@@ -1,5 +1,7 @@
 2008-07-29 Norman Clarke <norman@randomba.org>
 
+  * Made image deletion nullify the "has_image_file" field.
+  * Added "has_image?" method to model instances.
   * Fixed ENONENT error with record update when there are no images yet.
   * Reverted thumbnail sorting feature - it's fast but makes terrible quality
     thumbnails. It's just not worth it.

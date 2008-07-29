@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "has_image"
-  s.version = "0.1.4"
+  s.version = "0.1.5"
   s.date = "2008-07-29"
   s.add_dependency('mini_magick', '>= 1.2.3')
   s.rubyforge_project = 'has-image'  
