@@ -210,10 +210,17 @@ module HasImage
     # Deletes the image from the storage.
     def remove_images
       return if has_image_file.blank?
-      storage.remove_images(self.id)
-      update_attribute(:has_image_file, nil)
-    rescue Errno::ENOENT
-      logger.warn("Could not delete files for #{self.class.to_s} #{to_param}") 
+      self.class.transaction do
+        begin
+          # Resorting to SQL here to avoid triggering callbacks. There must be
+          # a better way to do this.
+          self.connection.execute("UPDATE #{self.class.table_name} SET has_image_file = NULL WHERE id = #{id}")
+          self.has_image_file = nil
+          storage.remove_images(self.id)
+        rescue Errno::ENOENT
+          logger.warn("Could not delete files for #{self.class.to_s} #{to_param}")
+        end
+      end
     end
     
     # Creates new images and removes the old ones when image_data has been
