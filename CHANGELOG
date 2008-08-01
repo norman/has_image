@@ -1,3 +1,8 @@
+2008-08-1 Norman Clarke <norman@randomba.org>
+  
+  * Fixed a bug where overwriting a previous image triggered callbacks more
+    than once, causing errors.
+
 2008-07-29 Norman Clarke <norman@randomba.org>
 
   * Downcased generated file names to avoid potential issues on
