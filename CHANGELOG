@@ -1,5 +1,8 @@
+2008-08-1 Adrian Mugnolo <adrian@randomba.org>
+  * Improved partitioned path handling to avoid collisions when the id is
+    very high, which can happen if you use db:fixtures:load.
+
 2008-08-1 Norman Clarke <norman@randomba.org>
-  
   * Fixed a bug where overwriting a previous image triggered callbacks more
     than once, causing errors.
 
