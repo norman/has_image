@@ -20,6 +20,11 @@ class StorageTest < Test::Unit::TestCase
     assert_equal(["0001", "2345"], HasImage::Storage.partitioned_path("12345"))
   end
   
+  def test_partitioned_path_doesnt_collide_with_high_ids
+    assert_not_equal HasImage::Storage.partitioned_path(867792732),
+      HasImage::Storage.partitioned_path(867792731)
+  end
+  
   def test_random_file_name
     assert_match(/[a-z0-9]{4,6}/i, HasImage::Storage.random_file_name)
   end

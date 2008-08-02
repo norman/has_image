@@ -6,26 +6,31 @@ require 'zlib'
 module HasImage  
   
   # Filesystem storage for the HasImage gem. The methods that HasImage inserts
-  # into ActiveRecord models only depend on the public methods in this class, so
-  # it should be reasonably straightforward to implement a different storage
-  # mechanism for Amazon AWS, Photobucket, DBFile, SFTP, or whatever you want.  
+  # into ActiveRecord models only depend on the public methods in this class,
+  # so it should be reasonably straightforward to implement a different
+  # storage mechanism for Amazon AWS, Photobucket, DBFile, SFTP, or whatever
+  # you want.  
   class Storage
     
     attr_accessor :image_data, :options, :temp_file
 
     class << self
       
-      # Stolen from {Jamis Buck}[http://www.37signals.com/svn/archives2/id_partitioning.php].
+      # {Jamis Buck's well known
+      # solution}[http://www.37signals.com/svn/archives2/id_partitioning.php]
+      # to this problem fails with high ids, such as those created by
+      # db:fixture:load. This version scales to large ids more gracefully.
+      # Thanks to Adrian Mugnolo for the fix.
       def partitioned_path(id, *args)
-        ("%08d" % id).scan(/..../) + args
+        ["%04d" % ((id.to_i / 1e4) % 1e4), "%04d" % (id.to_i % 1e4)].concat(args)
       end
 
-      # Generates a 4-6 character random file name to use for the image and its
-      # thumbnails. This is done to avoid having files with unfortunate names.
-      # On one of my sites users frequently upload images with Arabic names, and
-      # they end up being hard to manipulate on the command line. This also
-      # helps prevent a possibly undesirable sitation where the uploaded images
-      # have offensive names.
+      # Generates a 4-6 character random file name to use for the image and
+      # its thumbnails. This is done to avoid having files with unfortunate
+      # names. On one of my sites users frequently upload images with Arabic
+      # names, and they end up being hard to manipulate on the command line.
+      # This also helps prevent a possibly undesirable sitation where the
+      # uploaded images have offensive names.
       def random_file_name
         Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36).downcase
       end
