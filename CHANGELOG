@@ -1,3 +1,6 @@
+2008-08-18 Norman Clarke <norman@randomba.org>
+  * Fixed ability to set the path for storing image files.
+
 2008-08-1 Adrian Mugnolo <adrian@randomba.org>
   * Improved partitioned path handling to avoid collisions when the id is
     very high, which can happen if you use db:fixtures:load.
