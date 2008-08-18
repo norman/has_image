@@ -90,7 +90,7 @@ module HasImage
     #
     #   /photos/0000/0001/3er0zs.jpg
     def public_path_for(object, thumbnail = nil)
-      filesystem_path_for(object, thumbnail).gsub(options[:base_path], '')
+      filesystem_path_for(object, thumbnail).gsub(/\A.*public/, '')
     end
     
     # Deletes the images and directory that contains them.
