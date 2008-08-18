@@ -35,7 +35,7 @@ class StorageTest < Test::Unit::TestCase
   end
   
   def test_public_path_for
-    @storage = HasImage::Storage.new(default_options)
+    @storage = HasImage::Storage.new(default_options.merge(:base_path => '/public'))
     pic = stub(:has_image_file => "mypic", :id => 1)
     assert_equal "/tests/0000/0001/mypic_square.jpg", @storage.public_path_for(pic, :square)
   end
