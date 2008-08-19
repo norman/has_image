@@ -25,8 +25,8 @@ class StorageTest < Test::Unit::TestCase
       HasImage::Storage.partitioned_path(867792731)
   end
   
-  def test_random_file_name
-    assert_match(/[a-z0-9]{4,6}/i, HasImage::Storage.random_file_name)
+  def test_generated_file_name
+    assert_match(/[a-z0-9]{4,6}/i, HasImage::Storage.generated_file_name)
   end
   
   def test_path_for
@@ -61,7 +61,8 @@ class StorageTest < Test::Unit::TestCase
   end
   
   def test_install_and_remove_images
-    @storage = HasImage::Storage.new(default_options)
+    @storage = HasImage::Storage.new(default_options.merge(:thumbnails => {
+      :one => "100x100", :two => "200x200"}))
     @storage.image_data = temp_file("image.jpg")
     assert @storage.install_images(1)
     assert @storage.remove_images(1)    

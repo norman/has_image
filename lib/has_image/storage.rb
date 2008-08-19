@@ -31,7 +31,7 @@ module HasImage
       # names, and they end up being hard to manipulate on the command line.
       # This also helps prevent a possibly undesirable sitation where the
       # uploaded images have offensive names.
-      def random_file_name
+      def generated_file_name
         Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36).downcase
       end
           
@@ -51,7 +51,7 @@ module HasImage
         @temp_file = image_data
       else
         image_data.rewind
-        @temp_file = Tempfile.new 'has_image_data_%s' % Storage.random_file_name
+        @temp_file = Tempfile.new 'has_image_data_%s' % Storage.generated_file_name
         @temp_file.write(image_data.read)        
       end
     end
@@ -77,10 +77,10 @@ module HasImage
     # Invokes the processor to resize the image(s) and the installs them to
     # the appropriate directory.
     def install_images(id)
-      random_name = Storage.random_file_name
-      install_main_image(id, random_name)
-      install_thumbnails(id, random_name) if !options[:thumbnails].empty?
-      return random_name
+      generated_name = Storage.generated_file_name
+      install_main_image(id, generated_name)
+      install_thumbnails(id, generated_name) if !options[:thumbnails].empty?
+      return generated_name
     ensure  
       @temp_file.close! if !@temp_file.closed?
       @temp_file = nil
@@ -137,7 +137,10 @@ module HasImage
     def install_main_image(id, name)
       FileUtils.mkdir_p path_for(id)
       main = processor.resize(@temp_file, @options[:resize_to])
-      main.write(File.join(path_for(id), file_name_for(name)))
+      main.tempfile.close
+      file = File.open(File.join(path_for(id), file_name_for(name)), "w")
+      file.write(IO.read(main.tempfile.path))
+      file.close
       main.tempfile.close!
     end
     
@@ -148,7 +151,10 @@ module HasImage
       path = File.join(path_for(id), file_name_for(name))
       options[:thumbnails].each do |thumb_name, size|
         thumb = processor.resize(path, size)
-        thumb.write(File.join(path_for(id), file_name_for(name, thumb_name)))
+        thumb.tempfile.close
+        file = File.open(File.join(path_for(id), file_name_for(name, thumb_name)), "w")
+        file.write(IO.read(thumb.tempfile.path))
+        file.close
         thumb.tempfile.close!
       end
     end
