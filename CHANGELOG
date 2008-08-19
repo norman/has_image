@@ -1,3 +1,6 @@
+2008-08-19 Norman Clarke <norman@randomba.org>
+  * Made storage work more correctly with tempfiles.
+  
 2008-08-18 Norman Clarke <norman@randomba.org>
   * Fixed ability to set the path for storing image files.
 
