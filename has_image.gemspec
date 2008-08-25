@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "has_image"
-  s.version = "0.1.9"
-  s.date = "2008-08-19"
+  s.version = "0.1.10"
+  s.date = "2008-08-25"
   s.add_dependency('mini_magick', '>= 1.2.3')
   s.rubyforge_project = 'has-image'  
   s.summary = "Lets you attach images with thumbnails to active record models."

@@ -1,3 +1,6 @@
+2008-08-25 Norman Clarke <norman@randomba.org>
+  * Fixed bad call to resize_to in view helper.
+
 2008-08-19 Norman Clarke <norman@randomba.org>
   * Made storage work more correctly with tempfiles.
   

@@ -27,7 +27,7 @@ module HasImage
           size = object.class.thumbnails[thumb.to_sym]
           options[:size] = size if size =~ /\A[\d]*x[\d]*\Z/
         else
-          size = object.class.resize_to
+          size = object.class.has_image_options[:resize_to]
           options[:size] = size if size =~ /\A[\d]*x[\d]*\Z/
         end
       end
