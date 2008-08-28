@@ -1,3 +1,6 @@
+2008-08-28 Norman Clarke <norman@randomba.org>
+  * Added ability to regenerate a model's thumbnails.
+
 2008-08-25 Norman Clarke <norman@randomba.org>
   * Fixed bad call to resize_to in view helper.
 

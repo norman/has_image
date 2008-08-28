@@ -207,6 +207,11 @@ module HasImage
       storage.filesystem_path_for(self, thumbnail)
     end
     
+    # Regenerates the thumbails from the main image.
+    def regenerate_thumbnails
+      storage.regenerate_thumbnails(id, has_image_file)
+    end
+    
     # Deletes the image from the storage.
     def remove_images
       return if has_image_file.blank?
