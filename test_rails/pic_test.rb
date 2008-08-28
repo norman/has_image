@@ -47,6 +47,15 @@ class PicTest < Test::Unit::TestCase
     assert @pic.save!
   end
 
+  def test_regenerate_thumbnails
+    Pic.has_image_options = HasImage.default_options_for(Pic).merge(
+      :thumbnails => {:small => "100x100", :tiny => "16x16"})
+    @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+    @pic.save!
+    assert @pic.regenerate_thumbnails
+  end
+
+
   def test_create_model_without_setting_image_data
     assert Pic.new.save!
   end

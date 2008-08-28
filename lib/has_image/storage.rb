@@ -102,6 +102,10 @@ module HasImage
     def valid?
       !(image_too_small? || image_too_big?)
     end
+    
+    def regenerate_thumbnails(id, name)
+      install_thumbnails(id, name)
+    end
 
     protected
 
