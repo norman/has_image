@@ -1,5 +1,12 @@
 2008-08-28 Norman Clarke <norman@randomba.org>
   * Added ability to regenerate a model's thumbnails.
+  * Changed a few methods in storage to accept the model rather than the id.
+    This makes storage more hackable as regards generating paths and file names.
+  * Added "has_image_id" method to model instance methods to facilitate
+    grouping the images under a directory structure based on a related model's
+    ids.
+  * Made the generated file name simply by the image object's id - this
+    is better adherance to the principle of least surprise.
 
 2008-08-25 Norman Clarke <norman@randomba.org>
   * Fixed bad call to resize_to in view helper.
