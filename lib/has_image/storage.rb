@@ -25,14 +25,11 @@ module HasImage
         ["%04d" % ((id.to_i / 1e4) % 1e4), "%04d" % (id.to_i % 1e4)].concat(args)
       end
 
-      # Generates a 4-6 character random file name to use for the image and
-      # its thumbnails. This is done to avoid having files with unfortunate
-      # names. On one of my sites users frequently upload images with Arabic
-      # names, and they end up being hard to manipulate on the command line.
-      # This also helps prevent a possibly undesirable sitation where the
-      # uploaded images have offensive names.
-      def generated_file_name
-        Zlib.crc32(Time.now.to_s + rand(10e10).to_s).to_s(36).downcase
+      # By default, simply accepts and returns the id of the object. This is
+      # here to allow you to monkey patch this method, for example, if you
+      # wish instead to generate and return a UUID.
+      def generated_file_name(*args)
+        return args.first.to_param.to_s
       end
           
     end
@@ -76,10 +73,10 @@ module HasImage
     
     # Invokes the processor to resize the image(s) and the installs them to
     # the appropriate directory.
-    def install_images(id)
-      generated_name = Storage.generated_file_name
-      install_main_image(id, generated_name)
-      install_thumbnails(id, generated_name) if !options[:thumbnails].empty?
+    def install_images(object)
+      generated_name = Storage.generated_file_name(object)
+      install_main_image(object.has_image_id, generated_name)
+      install_thumbnails(object.has_image_id, generated_name) if !options[:thumbnails].empty?
       return generated_name
     ensure  
       @temp_file.close! if !@temp_file.closed?
@@ -94,8 +91,10 @@ module HasImage
     end
     
     # Deletes the images and directory that contains them.
-    def remove_images(id)
-      FileUtils.rm_r path_for(id)
+    def remove_images(object, name)
+      FileUtils.rm Dir.glob(File.join(path_for(object.has_image_id), name + '*'))
+      Dir.rmdir path_for(object.has_image_id)
+    rescue SystemCallError 
     end
 
     # Is the uploaded file within the min and max allowed sizes?
@@ -133,7 +132,7 @@ module HasImage
     #
     #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
     def filesystem_path_for(object, thumbnail = nil)
-      File.join(path_for(object.id), file_name_for(object.has_image_file, thumbnail))
+      File.join(path_for(object.has_image_id), file_name_for(object.has_image_file, thumbnail))
     end
     
     # Write the main image to the install directory - probably somewhere under
