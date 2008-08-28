@@ -26,7 +26,7 @@ class StorageTest < Test::Unit::TestCase
   end
   
   def test_generated_file_name
-    assert_match(/[a-z0-9]{4,6}/i, HasImage::Storage.generated_file_name)
+    assert_equal("1", HasImage::Storage.generated_file_name(stub(:to_param => 1)))
   end
   
   def test_path_for
@@ -36,7 +36,7 @@ class StorageTest < Test::Unit::TestCase
   
   def test_public_path_for
     @storage = HasImage::Storage.new(default_options.merge(:base_path => '/public'))
-    pic = stub(:has_image_file => "mypic", :id => 1)
+    pic = stub(:has_image_file => "mypic", :has_image_id => 1)
     assert_equal "/tests/0000/0001/mypic_square.jpg", @storage.public_path_for(pic, :square)
   end
   
@@ -64,8 +64,8 @@ class StorageTest < Test::Unit::TestCase
     @storage = HasImage::Storage.new(default_options.merge(:thumbnails => {
       :one => "100x100", :two => "200x200"}))
     @storage.image_data = temp_file("image.jpg")
-    assert @storage.install_images(1)
-    assert @storage.remove_images(1)    
+    @name = @storage.install_images(stub(:has_image_id => 1))
+    assert @storage.remove_images(stub(:has_image_id => 1), @name)    
   end
 
   def test_image_not_too_small

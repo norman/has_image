@@ -209,7 +209,7 @@ module HasImage
     
     # Regenerates the thumbails from the main image.
     def regenerate_thumbnails
-      storage.regenerate_thumbnails(id, has_image_file)
+      storage.regenerate_thumbnails(has_image_id, has_image_file)
     end
     
     # Deletes the image from the storage.
@@ -217,11 +217,14 @@ module HasImage
       return if has_image_file.blank?
       self.class.transaction do
         begin
-          # Resorting to SQL here to avoid triggering callbacks. There must be
-          # a better way to do this.
-          self.connection.execute("UPDATE #{self.class.table_name} SET has_image_file = NULL WHERE id = #{id}")
-          self.has_image_file = nil
-          storage.remove_images(self.id)
+          storage.remove_images(self, has_image_file)
+          # The record will be frozen if we're being called after destroy.
+          unless frozen?
+            # Resorting to SQL here to avoid triggering callbacks. There must be
+            # a better way to do this.
+            self.connection.execute("UPDATE #{self.class.table_name} SET has_image_file = NULL WHERE id = #{id}")          
+            self.has_image_file = nil
+          end
         rescue Errno::ENOENT
           logger.warn("Could not delete files for #{self.class.to_s} #{to_param}")
         end
@@ -233,19 +236,28 @@ module HasImage
     def update_images
       return if storage.temp_file.blank?
       remove_images
-      update_attribute(:has_image_file, storage.install_images(self.id))      
+      update_attribute(:has_image_file, storage.install_images(has_image_id))      
     end
 
     # Processes and installs the image and its thumbnails.
     def install_images
       return if !storage.temp_file
-      update_attribute(:has_image_file, storage.install_images(self.id))
+      update_attribute(:has_image_file, storage.install_images(self))
     end
     
     # Gets an instance of the underlying storage functionality. See
     # HasImage::Storage.
     def storage
       @storage ||= HasImage::Storage.new(has_image_options)
+    end
+    
+    # By default, just returns the model's id. Since this id is used to divide
+    # the images up in directories, you can override this to return a related
+    # model's id if you want the images to be grouped differently. For example,
+    # if a "member" has_many "photos" you can override this to return
+    # member.id to group images by member.
+    def has_image_id
+      id
     end
     
   end
