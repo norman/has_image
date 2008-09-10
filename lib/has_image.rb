@@ -236,7 +236,7 @@ module HasImage
     def update_images
       return if storage.temp_file.blank?
       remove_images
-      update_attribute(:has_image_file, storage.install_images(has_image_id))      
+      update_attribute(:has_image_file, storage.install_images(self))      
     end
 
     # Processes and installs the image and its thumbnails.

@@ -140,9 +140,8 @@ module HasImage
     def install_main_image(id, name)
       FileUtils.mkdir_p path_for(id)
       main = processor.resize(@temp_file, @options[:resize_to])
-      main.tempfile.close
       file = File.open(File.join(path_for(id), file_name_for(name)), "w")
-      file.write(IO.read(main.tempfile.path))
+      file.write(IO.read(main.path))
       file.close
       main.tempfile.close!
     end
