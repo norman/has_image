@@ -1,3 +1,9 @@
+2008-09-10 Norman Clarke <norman@randomba.org>
+  * Fixed images not being converted to target format.
+  
+2008-08-29 Norman Clarke <norman@randomba.org>
+  * Fixed bad call to has_image_file
+  
 2008-08-28 Norman Clarke <norman@randomba.org>
   * Added ability to regenerate a model's thumbnails.
   * Changed a few methods in storage to accept the model rather than the id.
