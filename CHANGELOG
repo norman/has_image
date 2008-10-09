@@ -1,3 +1,8 @@
+2008-10-09 Dima Sabanin <sdmitry@gmail.com>
+  * Fixed display of images with special symbols in the name,
+    like '2777-nipple-+-apple-napple.jpg'. + is reserved by HTTP.
+    Now escaping filenames before giving them back in #public_path()
+
 2008-09-10 Norman Clarke <norman@randomba.org>
   * Fixed images not being converted to target format.
   

@@ -40,6 +40,24 @@ class StorageTest < Test::Unit::TestCase
     assert_equal "/tests/0000/0001/mypic_square.jpg", @storage.public_path_for(pic, :square)
   end
   
+  def test_public_path_for_image_with_html_special_symbols_in_name
+    @storage = HasImage::Storage.new(default_options.merge(:base_path => '/public'))
+    pic = stub(:has_image_file => "my+pic", :has_image_id => 1)
+    assert_equal "/tests/0000/0001/my%2Bpic_square.jpg", @storage.public_path_for(pic, :square)
+  end
+
+  def test_escape_file_name_for_http
+    @storage = HasImage::Storage.new(default_options.merge(:base_path => '/public'))
+    real = @storage.escape_file_name_for_http("/tests/0000/0001/mypic+square?something.jpg")
+    assert_equal "/tests/0000/0001/mypic%2Bsquare%3Fsomething.jpg", real
+  end
+
+  def test_escape_file_name_for_http_escapes_only_filename
+    @storage = HasImage::Storage.new(default_options.merge(:base_path => '/public'))
+    real = @storage.escape_file_name_for_http("/tests/00+00/0001/mypic+square?something.jpg")
+    assert_equal "/tests/00+00/0001/mypic%2Bsquare%3Fsomething.jpg", real
+  end
+  
   def test_filename_for
     @storage = HasImage::Storage.new(default_options)
     assert_equal "test.jpg", @storage.send(:file_name_for, "test")

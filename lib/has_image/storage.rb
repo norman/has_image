@@ -87,7 +87,13 @@ module HasImage
     #
     #   /photos/0000/0001/3er0zs.jpg
     def public_path_for(object, thumbnail = nil)
-      filesystem_path_for(object, thumbnail).gsub(/\A.*public/, '')
+      webpath = filesystem_path_for(object, thumbnail).gsub(/\A.*public/, '')
+      escape_file_name_for_http(webpath)
+    end
+    
+    def escape_file_name_for_http(webpath)
+      dir, file = File.split(webpath)
+      File.join(dir, CGI.escape(file))
     end
     
     # Deletes the images and directory that contains them.
