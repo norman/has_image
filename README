@@ -1,9 +1,31 @@
 = HasImage[http://github.com/norman/has_image] -- Image attachment gem/plugin for Ruby on Rails
 
-HasImage[http://github.com/norman/has_image] was created as a smaller,
-simpler, lighter alternative to
+HasImage allows Ruby on Rails applications to have attached images. It is very
+small and lightweight: it only requires one column ("has_image_file") in your
+model to store the uploaded image's file name.
+
+HasImage was created as a smaller, simpler, lighter alternative to
 attachment_fu[http://github.com/technoweenie/attachment_fu] for applications
 that need to handle uploaded images.
+
+It is, by design, very simplistic: It only supports using a filesystem
+for storage, and only supports
+MiniMagick[http://github.com/probablycorey/mini_magick] as an image processor.
+However, its code is very small, clean and hackable, so adding support for
+other backends or processors should be fairly easy.
+
+Some typical use cases are: websites that want to create photo galleries with
+fixed-dimension thumbnails, or that want to store user profile pictures
+without creating a separate model for the images.
+
+It uses ImageMagick's
+crop[http://www.imagemagick.org/script/command-line-options.php#crop] and
+{center
+gravity}[http://www.imagemagick.org/script/command-line-options.php#gravity]
+functions to produce thumbnails that generally look acceptable, unless the
+image is a panorama, or the subject matter is close to one of the margins,
+etc. For most sites where people upload pictures of themselves or their pets
+the generated thumbnails will look good almost all the time.
 
 It creates only one database record per image, requires only one column in
 your model, and creates great-looking fixed-dimension thumbnails by using
@@ -13,9 +35,6 @@ crop[http://www.imagemagick.org/script/command-line-options.php#crop] and
 gravity[http://www.imagemagick.org/script/command-line-options.php#gravity]
 functions.
 
-Some typical use cases are: websites that want to create photo galleries with
-fixed-dimension thumbnails, or that want to store user profile pictures
-without creating a separate model for the images.
 
 It supports only filesystem storage, and uses only MiniMagick[http://github.com/probablycorey/mini_magick] to process
 images. However, the codebase is very small, simple, readable, and hackable.
@@ -33,6 +52,31 @@ from my various projects that use attachment_fu.
 
 The other image attachment libraries I found fell short of my needs for
 various other reasons, so I decided to roll my own.
+
+Compared to attachment_fu, HasImage has advantages and disadvantages.
+
+=== Advantages:
+
+  * Simpler, smaller, more easily hackable codebase - and specialized for
+    images only.
+  * Installable via Ruby Gems. This makes version dependencies easy when using
+    Rails 2.1.
+  * Creates only one database record per image.
+  * Has built-in facilities for making distortion-free, fixed-size thumbnails.
+  * Doesn't regenerate the thumbnails every time you save your model. This means
+    you can easily use it, for example, inside a Member model to store member
+    avatars.
+
+=== Disadvantages:
+
+  * Doesn't save image dimensions. However, if you're using fixed-sized images,
+    this is not a problem because you can just read the size from MyModel.thumbnails[:my_size]
+  * No support for AWS or DBFile storage, only filesystem.
+  * Only supports MiniMagick[http://github.com/probablycorey/mini_magick/tree] as an image processor, no RMagick, GD, CoreImage,
+    etc.
+  * No support for anything other than image attachments.
+  * Not as popular as attachment_fu, which means fewer bug reports, and
+    probably more bugs. Use at your own risk!
 
 == Examples
 

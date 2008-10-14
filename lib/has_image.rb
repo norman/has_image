@@ -2,65 +2,6 @@ require 'has_image/processor'
 require 'has_image/storage'
 require 'has_image/view_helpers'
 
-# = HasImage
-#
-# HasImage allows Ruby on Rails applications to have attached images. It is very
-# small and lightweight: it only requires one column ("has_image_file") in your
-# model to store the uploaded image's file name.
-# 
-# HasImage is, by design, very simplistic: It only supports using a filesystem
-# for storage, and only supports
-# MiniMagick[http://github.com/probablycorey/mini_magick] as an image processor.
-# However, its code is very small, clean and hackable, so adding support for
-# other backends or processors should be fairly easy.
-# 
-# HasImage works best for sites that want to show image galleries with
-# fixed-size thumbnails. It uses ImageMagick's
-# crop[http://www.imagemagick.org/script/command-line-options.php#crop] and
-# {center
-# gravity}[http://www.imagemagick.org/script/command-line-options.php#gravity]
-# functions to produce thumbnails that generally look acceptable, unless the
-# image is a panorama, or the subject matter is close to one of the margins,
-# etc. For most sites where people upload pictures of themselves or their pets
-# the generated thumbnails will look good almost all the time.
-# 
-# It's pretty easy to change the image processing / resizing code; you can just
-# override HasImage::Processor#resize_image to do what you wish:
-# 
-#   module HasImage::
-#     class Processor
-#       def resize_image(size)
-#         @image.combine_options do |commands|
-#           commands.my_custom_resizing_goes_here
-#         end
-#       end
-#     end
-#   end
-# 	
-# Compared to attachment_fu, HasImage has advantages and disadvantages.
-# 
-# = Advantages:
-# 
-# * Simpler, smaller, more easily hackable codebase - and specialized for
-#   images only.
-# * Installable via Ruby Gems. This makes version dependencies easy when using
-#   Rails 2.1.
-# * Creates only one database record per image.
-# * Has built-in facilities for making distortion-free, fixed-size thumbnails.
-# * Doesn't regenerate the thumbnails every time you save your model. This means
-#   you can easily use it, for example, inside a Member model to store member
-#   avatars.
-# 
-# = Disadvantages:
-# 
-# * Doesn't save image dimensions. However, if you're using fixed-sized images,
-#   this is not a problem because you can just read the size from MyModel.thumbnails[:my_size]
-# * No support for AWS or DBFile storage, only filesystem.
-# * Only supports MiniMagick[http://github.com/probablycorey/mini_magick/tree] as an image processor, no RMagick, GD, CoreImage,
-#   etc.
-# * No support for anything other than image attachments.
-# * Not as popular as attachment_fu, which means fewer bug reports, and
-#   probably more bugs. Use at your own risk!
 module HasImage
 
   class ProcessorError < StandardError ; end
