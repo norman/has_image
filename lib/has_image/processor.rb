@@ -37,7 +37,7 @@ module HasImage
     # Create the resized image, and transforms it to the desired output
     # format if necessary. The size should be a valid ImageMagick {geometry
     # string}[http://www.imagemagick.org/script/command-line-options.php#resize].
-    def resize(file, size)
+    def resize_and_convert_file(file, size)
       unless Processor.geometry_string_valid?(size)
         raise InvalidGeometryError.new('"%s" is not a valid ImageMagick geometry string' % size)
       end
@@ -52,6 +52,7 @@ module HasImage
     rescue MiniMagick::MiniMagickError
       raise ProcessorError.new("That doesn't look like an image file.")
     end
+    alias_method :resize, :resize_and_convert_file #Back-compatibility
     
     # Image resizing is placed in a separate method for easy monkey-patching.
     # This is intended to be invoked from resize, rather than directly.
