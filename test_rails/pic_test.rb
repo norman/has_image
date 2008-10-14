@@ -96,5 +96,13 @@ class PicTest < Test::Unit::TestCase
     assert_equal '100x200', pic.image_size
   end
   
+  def test_image_isnt_resized_when_resize_to_set_to_nil
+    Pic.has_image_options[:resize_to] = nil
+    pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+
+    assert_equal 1916, pic.width
+    assert_equal 1990, pic.height
+  end
+  
 end
 

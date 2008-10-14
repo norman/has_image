@@ -145,11 +145,16 @@ module HasImage
     # RAILS_ROOT/public.
     def install_main_image(id, name)
       FileUtils.mkdir_p path_for(id)
-      main = processor.resize(@temp_file, @options[:resize_to])
-      file = File.open(File.join(path_for(id), file_name_for(name)), "w")
-      file.write(IO.read(main.path))
-      file.close
-      main.tempfile.close!
+      File.open(File.join(path_for(id), file_name_for(name)), "w") do |file|
+        if @options[:resize_to]
+          main = processor.resize(@temp_file, @options[:resize_to])
+          file.write IO.read(main.path)
+          main.tempfile.close!
+        else
+          @temp_file.open if @temp_file.closed?
+          file.write @temp_file.read
+        end
+      end
     end
     
     # Write the thumbnails to the install directory - probably somewhere under
