@@ -212,6 +212,25 @@ module HasImage
       storage.regenerate_thumbnails(has_image_id, has_image_file)
     end
     
+    def width
+      identify :w
+    end
+    
+    def height
+      identify :h
+    end
+    
+    def identify(attribute)
+      silence_stderr do
+        `identify -format "%#{attribute}" #{absolute_path}`.to_i
+      end
+    end
+    private :identify
+    
+    def image_size
+      [width, height] * 'x'
+    end
+    
     # Deletes the image from the storage.
     def remove_images
       return if has_image_file.blank?
