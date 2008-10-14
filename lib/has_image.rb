@@ -125,10 +125,10 @@ module HasImage
       storage.image_data = image_data
     end
     alias_method :uploaded_data=, :image_data=
-    
+    # nil placeholder in case this field is used in a form.
     # Aliased as uploaded_data for compatibility with attachment_fu
     def image_data
-      storage.image_data
+      nil
     end
     alias_method :uploaded_data, :image_data
     
