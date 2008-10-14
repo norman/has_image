@@ -154,12 +154,17 @@ module HasImage
     end
     
     def width
-      MiniMagick::Image.from_file(absolute_path)[:width]
+      minimagick[:width]
     end
     
     def height
-      MiniMagick::Image.from_file(absolute_path)[:height]
+      minimagick[:height]
     end
+    
+    def minimagick
+      MiniMagick::Image.from_file(absolute_path)
+    end
+    private :minimagick
     
     def image_size
       [width, height] * 'x'
