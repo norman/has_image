@@ -5,6 +5,8 @@ require 'rake/rdoctask'
 desc 'Default: run unit tests.'
 task :default => :test
 
+task :all_tests  => [:test, :test_rails]
+
 desc 'Test the non-Rails part of has_image.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
