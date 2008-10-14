@@ -35,24 +35,40 @@ module HasImage
     end
     
     # Create the resized image, and transforms it to the desired output
-    # format if necessary. The size should be a valid ImageMagick {geometry
-    # string}[http://www.imagemagick.org/script/command-line-options.php#resize].
-    def resize(file, size)
+    # format if necessary. 
+    # 
+    # +size+ should be a valid ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize].
+    # +format+ should be an image format supported by ImageMagick, e.g. "PNG", "JPEG"
+    # yields the processed Image file as a file-like
+    def process(file, size=options[:resize_to], format=options[:convert_to])
       unless size.blank? || Processor.geometry_string_valid?(size)
         raise InvalidGeometryError.new('"%s" is not a valid ImageMagick geometry string' % size)
       end
-      silence_stderr do
-        path = file.respond_to?(:path) ? file.path : file
-        file.close if file.respond_to?(:close) && !file.closed?
-        @image = MiniMagick::Image.from_file(path)
-        convert_image if @options[:convert_to]
-        resize_image(size) unless size.blank?
-        return @image
+      with_image(file) do |image|
+        convert_image(image, format) if format
+        resize_image(image, size) if size
+        yield IO.read(image.path) if block_given?
+        image
       end
     rescue MiniMagick::MiniMagickError
       raise ProcessorError.new("That doesn't look like an image file.")
     end
+    alias_method :resize, :process #Backwards-compat
     
+  private
+    # operate on the image with MiniMagick
+    # yields a MiniMagick::Image object
+    def with_image(file)
+      path = file.respond_to?(:path) ? file.path : file
+      file.close if file.respond_to?(:close) && !file.closed?
+      silence_stderr do
+        image = MiniMagick::Image.from_file(path)
+        yield image
+        image.tempfile.close!
+      end
+    end
+  
+    # +image+ should be a MiniMagick::Image and +size+ a Geometry String
     # Image resizing is placed in a separate method for easy monkey-patching.
     # This is intended to be invoked from resize, rather than directly.
     # By default, the following ImageMagick functionality is invoked:
@@ -62,8 +78,8 @@ module HasImage
     # * gravity[http://www.imagemagick.org/script/command-line-options.php#gravity]
     # * extent[http://www.imagemagick.org/script/command-line-options.php#extent]
     # * quality[http://www.imagemagick.org/script/command-line-options.php#quality]
-    def resize_image(size)
-      @image.combine_options do |commands|
+    def resize_image(image, size)
+      image.combine_options do |commands|
         commands.send("auto-orient".to_sym)
         commands.strip
         # Fixed-dimension images
@@ -79,13 +95,8 @@ module HasImage
       end
     end
 
-    private
-    
-    # This was placed in a separate method largely to facilitate debugging
-    # and profiling.
-    def convert_image
-      return if @image[:format] == options[:convert_to]
-      @image.format(options[:convert_to])
+    def convert_image(image, format=options[:convert_to])
+      image.format(format) unless image[:format] == format
     end
     
   end

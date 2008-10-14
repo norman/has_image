@@ -145,15 +145,18 @@ module HasImage
     # RAILS_ROOT/public.
     def install_main_image(id, name)
       FileUtils.mkdir_p path_for(id)
-      File.open(File.join(path_for(id), file_name_for(name)), "w") do |file|
-        if @options[:resize_to] || @options[:convert_to]
-          main = processor.resize(@temp_file, @options[:resize_to])
-          file.write IO.read(main.path)
-          main.tempfile.close!
-        else
-          @temp_file.open if @temp_file.closed?
-          file.write @temp_file.read
+      File.open(File.join(path_for(id), file_name_for(name)), "w") do |final_destination|
+        processor.process(@temp_file) do |processed_image|
+          final_destination.write processed_image
         end
+        # if @options[:resize_to] || @options[:convert_to]
+        #   main = processor.resize(@temp_file, @options[:resize_to])
+        #   file.write IO.read(main.path)
+        #   main.tempfile.close!
+        # else
+        #   @temp_file.open if @temp_file.closed?
+        #   file.write @temp_file.read
+        # end
       end
     end
     
@@ -163,12 +166,11 @@ module HasImage
       FileUtils.mkdir_p path_for(id)
       path = File.join(path_for(id), file_name_for(name))
       options[:thumbnails].each do |thumb_name, size|
-        thumb = processor.resize(path, size)
-        thumb.tempfile.close
-        file = File.open(File.join(path_for(id), file_name_for(name, thumb_name)), "w")
-        file.write(IO.read(thumb.tempfile.path))
-        file.close
-        thumb.tempfile.close!
+        File.open(File.join(path_for(id), file_name_for(name, thumb_name)), "w") do |thumbnail_destination|
+          processor.process(path, size) do |processed_image|
+            thumbnail_destination.write processed_image
+          end
+        end
       end
     end
 
