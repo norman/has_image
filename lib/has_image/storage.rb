@@ -65,12 +65,6 @@ module HasImage
       @temp_file.size > options[:max_size]
     end
     
-    # A tip of the hat to attachment_fu.
-    alias uploaded_data= image_data=
-    
-    # A tip of the hat to attachment_fu.
-    alias uploaded_data image_data
-    
     # Invokes the processor to resize the image(s) and the installs them to
     # the appropriate directory.
     def install_images(object)

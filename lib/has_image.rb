@@ -119,10 +119,18 @@ module HasImage
     
     # Sets the uploaded image data. Image data can be an instance of Tempfile,
     # or an instance of any class than inherits from IO.
+    # aliased as uploaded_data= for compatibility with attachment_fu
     def image_data=(image_data)
       return if image_data.blank?
       storage.image_data = image_data
     end
+    alias_method :uploaded_data=, :image_data=
+    
+    # Aliased as uploaded_data for compatibility with attachment_fu
+    def image_data
+      storage.image_data
+    end
+    alias_method :uploaded_data, :image_data
     
     # Is the image data a file that ImageMagick can process, and is it within
     # the allowed minimum and maximum sizes?
@@ -138,9 +146,11 @@ module HasImage
     end
     
     # Gets the "web path" for the image, or optionally, its thumbnail.
+    # Aliased as +public_filename+ for compatibility with attachment-Fu
     def public_path(thumbnail = nil)
       storage.public_path_for(self, thumbnail)
     end
+    alias_method :public_filename, :public_path
 
     # Gets the absolute filesystem path for the image, or optionally, its
     # thumbnail.
