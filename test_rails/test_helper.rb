@@ -1,9 +1,8 @@
-$:.unshift(File.dirname(__FILE__) + '/../lib')
-
 ENV['RAILS_ENV'] = 'test'
 
 require 'test/unit'
 require File.expand_path(File.join(File.dirname(__FILE__), '/../../../../config/environment.rb'))
+$LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 require 'active_record/fixtures'
 require 'action_controller/test_process'
 
