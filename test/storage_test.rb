@@ -83,7 +83,7 @@ class StorageTest < Test::Unit::TestCase
       :one => "100x100", :two => "200x200"}))
     @storage.image_data = temp_file("image.jpg")
     @name = @storage.install_images(stub(:has_image_id => 1))
-    assert @storage.remove_images(stub(:has_image_id => 1), @name)    
+    assert @storage.remove_images(stub(:has_image_id => 1), @name)
   end
 
   def test_image_not_too_small
