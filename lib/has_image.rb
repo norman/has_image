@@ -213,19 +213,12 @@ module HasImage
     end
     
     def width
-      identify :w
+      MiniMagick::Image.from_file(absolute_path)[:width]
     end
     
     def height
-      identify :h
+      MiniMagick::Image.from_file(absolute_path)[:height]
     end
-    
-    def identify(attribute)
-      silence_stderr do
-        `identify -format "%#{attribute}" #{absolute_path}`.to_i
-      end
-    end
-    private :identify
     
     def image_size
       [width, height] * 'x'
