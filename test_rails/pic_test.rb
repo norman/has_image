@@ -1,6 +1,9 @@
 require 'test_helper'
 
 class PicTest < Test::Unit::TestCase
+  class Pic < ActiveRecord::Base
+    has_image
+  end
   
   def setup
     Pic.has_image_options = HasImage.default_options_for(Pic)
@@ -54,7 +57,6 @@ class PicTest < Test::Unit::TestCase
     @pic.save!
     assert @pic.regenerate_thumbnails
   end
-
 
   def test_create_model_without_setting_image_data
     assert Pic.new.save!
