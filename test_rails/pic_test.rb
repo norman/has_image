@@ -87,6 +87,14 @@ class PicTest < Test::Unit::TestCase
     @pic.valid?
     assert @pic.valid?
   end
-
+  
+  def test_dimension_getters
+    Pic.has_image_options[:resize_to] = "100x200"
+    pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+    assert_equal 100, pic.width
+    assert_equal 200, pic.height
+    assert_equal '100x200', pic.image_size
+  end
+  
 end
 
