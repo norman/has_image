@@ -104,5 +104,15 @@ class PicTest < Test::Unit::TestCase
     assert_equal 1990, pic.height
   end
   
+  def test_image_isnt_resized_but_converted_when_resize_to_set_to_nil
+    Pic.has_image_options[:resize_to] = nil
+    Pic.has_image_options[:convert_to] = 'PNG'
+    pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+
+    assert_equal 'PNG', MiniMagick::Image.from_file(pic.absolute_path)[:format]
+    assert_equal 1916, pic.width
+    assert_equal 1990, pic.height
+  end
+  
 end
 
