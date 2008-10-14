@@ -111,6 +111,13 @@ module HasImage
     def regenerate_thumbnails(id, name)
       install_thumbnails(id, name)
     end
+    
+    # Gets the full local filesystem path for an image. For example:
+    #
+    #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
+    def filesystem_path_for(object, thumbnail = nil)
+      File.join(path_for(object.has_image_id), file_name_for(object.has_image_file, thumbnail))
+    end
 
     protected
 
@@ -134,13 +141,6 @@ module HasImage
       "%s.%s" % [args.compact.join("_"), extension]
     end
 
-    # Gets the full local filesystem path for an image. For example:
-    #
-    #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
-    def filesystem_path_for(object, thumbnail = nil)
-      File.join(path_for(object.has_image_id), file_name_for(object.has_image_file, thumbnail))
-    end
-    
     # Write the main image to the install directory - probably somewhere under
     # RAILS_ROOT/public.
     def install_main_image(id, name)
