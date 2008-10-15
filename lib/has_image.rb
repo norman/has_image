@@ -42,6 +42,7 @@ module HasImage
     # * :min_size => 4.kilobytes,
     # * :path_prefix => klass.to_s.tableize,
     # * :base_path => File.join(RAILS_ROOT, 'public'),
+    # * :column => :has_image_file,
     # * :convert_to => "JPEG",
     # * :output_quality => "85",
     # * :invalid_image_message => "Can't process the image.",
@@ -55,6 +56,7 @@ module HasImage
         :min_size => 4.kilobytes,
         :path_prefix => klass.to_s.tableize,
         :base_path => File.join(RAILS_ROOT, 'public'),
+        :column => :has_image_file,
         :convert_to => "JPEG",
         :output_quality => "85",
         :invalid_image_message => "Can't process the image.",
@@ -90,9 +92,7 @@ module HasImage
     #   has_image :resize_to "100x150", :max_size => 500.kilobytes
     #   has_image :invalid_image_message => "No se puede procesar la imagen."
     def has_image(options = {})
-      options.assert_valid_keys(:resize_to, :thumbnails, :max_size, :min_size,
-        :path_prefix, :base_path, :convert_to, :output_quality,
-        :invalid_image_message, :image_too_big_message, :image_too_small_message)
+      options.assert_valid_keys(HasImage.default_options_for(self).keys)
       options = HasImage.default_options_for(self).merge(options)
       class_inheritable_accessor :has_image_options
       write_inheritable_attribute(:has_image_options, options)
@@ -114,7 +114,7 @@ module HasImage
     
     # Does the object have an image?
     def has_image?
-      !has_image_file.blank?
+      !send(has_image_options[:column]).blank?
     end
     
     # Sets the uploaded image data. Image data can be an instance of Tempfile,
@@ -160,7 +160,7 @@ module HasImage
     
     # Regenerates the thumbails from the main image.
     def regenerate_thumbnails
-      storage.regenerate_thumbnails(has_image_id, has_image_file)
+      storage.regenerate_thumbnails(has_image_id, send(has_image_options[:column]))
     end
     
     def width
@@ -182,16 +182,16 @@ module HasImage
     
     # Deletes the image from the storage.
     def remove_images
-      return if has_image_file.blank?
+      return if send(has_image_options[:column]).blank?
       self.class.transaction do
         begin
-          storage.remove_images(self, has_image_file)
+          storage.remove_images(self, send(has_image_options[:column]))
           # The record will be frozen if we're being called after destroy.
           unless frozen?
             # Resorting to SQL here to avoid triggering callbacks. There must be
             # a better way to do this.
-            self.connection.execute("UPDATE #{self.class.table_name} SET has_image_file = NULL WHERE id = #{id}")          
-            self.has_image_file = nil
+            self.connection.execute("UPDATE #{self.class.table_name} SET #{has_image_options[:column]} = NULL WHERE id = #{id}")          
+            self.send("#{has_image_options[:column]}=", nil)
           end
         rescue Errno::ENOENT
           logger.warn("Could not delete files for #{self.class.to_s} #{to_param}")
@@ -204,13 +204,13 @@ module HasImage
     def update_images
       return if storage.temp_file.blank?
       remove_images
-      update_attribute(:has_image_file, storage.install_images(self))      
+      update_attribute(has_image_options[:column], storage.install_images(self))
     end
 
     # Processes and installs the image and its thumbnails.
     def install_images
       return if !storage.temp_file
-      update_attribute(:has_image_file, storage.install_images(self))
+      update_attribute(has_image_options[:column], storage.install_images(self))
     end
     
     # Gets an instance of the underlying storage functionality. See

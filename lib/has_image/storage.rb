@@ -49,7 +49,7 @@ module HasImage
       else
         image_data.rewind
         @temp_file = Tempfile.new 'has_image_data_%s' % Storage.generated_file_name
-        @temp_file.write(image_data.read)        
+        @temp_file.write(image_data.read)
       end
     end
 
@@ -110,7 +110,7 @@ module HasImage
     #
     #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
     def filesystem_path_for(object, thumbnail = nil)
-      File.join(path_for(object.has_image_id), file_name_for(object.has_image_file, thumbnail))
+      File.join(path_for(object.has_image_id), file_name_for(object.send(options[:column]), thumbnail))
     end
 
     protected
