@@ -21,10 +21,17 @@ module HasImage
       # to this problem fails with high ids, such as those created by
       # db:fixture:load. This version scales to large ids more gracefully.
       # Thanks to Adrian Mugnolo for the fix.
+      #++
+      # FIXME: collides with IDs with more than 8 digits
+      #--
       def partitioned_path(id, *args)
         ["%04d" % ((id.to_i / 1e4) % 1e4), "%04d" % (id.to_i % 1e4)].concat(args)
       end
-
+      
+      def id_from_partitioned_path(partitioned_path)
+        partitioned_path.join.to_i
+      end
+      
       # By default, simply accepts and returns the id of the object. This is
       # here to allow you to monkey patch this method, for example, if you
       # wish instead to generate and return a UUID.
