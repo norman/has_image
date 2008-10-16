@@ -23,6 +23,17 @@ class StorageTest < Test::Unit::TestCase
   def test_partitioned_path_doesnt_collide_with_high_ids
     assert_not_equal HasImage::Storage.partitioned_path(867792732),
       HasImage::Storage.partitioned_path(867792731)
+    # FIXME: collisions when IDs have more than 8 digits
+    # assert_not_equal HasImage::Storage.partitioned_path(967792731),
+    #   HasImage::Storage.partitioned_path(967792731)  
+  end
+  
+  def test_reverse_partitioned_path
+    assert_equal 123, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(123))
+    assert_equal 56, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(56))
+    assert_equal 67792732, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(67792732))
+    # FIXME: for IDs with more than 8 digits partitioned path is destructive
+    # assert_equal 867792731, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(867792731))
   end
   
   def test_generated_file_name
