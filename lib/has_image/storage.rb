@@ -32,13 +32,18 @@ module HasImage
         partitioned_path.join.to_i
       end
       
+      def id_from_path(path)
+        path = path.split('/') if path.is_a?(String)
+        path_partitions = 2
+        id_from_partitioned_path(path.first(path_partitions))
+      end
+      
       # By default, simply accepts and returns the id of the object. This is
       # here to allow you to monkey patch this method, for example, if you
       # wish instead to generate and return a UUID.
       def generated_file_name(*args)
         return args.first.to_param.to_s
       end
-          
     end
 
     # The constuctor should be invoked with the options set by has_image.
@@ -145,7 +150,7 @@ module HasImage
     # Write the main image to the install directory - probably somewhere under
     # RAILS_ROOT/public.
     def install_main_image(id, name)
-      FileUtils.mkdir_p path_for(id)
+      ensure_directory_exists!(id)
       File.open(File.join(path_for(id), file_name_for(name)), "w") do |final_destination|
         processor.process(@temp_file) do |processed_image|
           final_destination.write processed_image
@@ -164,7 +169,7 @@ module HasImage
     # Write the thumbnails to the install directory - probably somewhere under
     # RAILS_ROOT/public.
     def install_thumbnails(id, name)
-      FileUtils.mkdir_p path_for(id)
+      ensure_directory_exists!(id)
       path = File.join(path_for(id), file_name_for(name))
       options[:thumbnails].each do |thumb_name, size|
         File.open(File.join(path_for(id), file_name_for(name, thumb_name)), "w") do |thumbnail_destination|
@@ -174,7 +179,7 @@ module HasImage
         end
       end
     end
-
+    
     # Get the full path for the id. For example:
     #
     #  /var/sites/example.org/production/public/photos/0000/0001
@@ -188,7 +193,10 @@ module HasImage
     def processor
       @processor ||= Processor.new(options)
     end
-    
+  
+    def ensure_directory_exists!(id)
+      FileUtils.mkdir_p path_for(id)
+    end
   end
   
 end

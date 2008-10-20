@@ -28,12 +28,20 @@ class StorageTest < Test::Unit::TestCase
     #   HasImage::Storage.partitioned_path(967792731)  
   end
   
-  def test_reverse_partitioned_path
+  def test_id_from_partitioned_path
     assert_equal 123, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(123))
     assert_equal 56, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(56))
     assert_equal 67792732, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(67792732))
     # FIXME: for IDs with more than 8 digits partitioned path is destructive
     # assert_equal 867792731, HasImage::Storage.id_from_partitioned_path(HasImage::Storage.partitioned_path(867792731))
+  end
+  
+  def test_id_from_path_accepts_array
+    assert_equal 123, HasImage::Storage.id_from_path(['0000','0123','image_something.jpg'])
+  end
+  
+  def test_id_from_path_accepts_path
+    assert_equal 12345, HasImage::Storage.id_from_path('0001/2345/0123/image_something.jpg')
   end
   
   def test_generated_file_name
