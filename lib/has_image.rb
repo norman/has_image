@@ -237,7 +237,11 @@ module HasImage
     def thumbnails
       has_image_options[:thumbnails]
     end
-
+    
+    def from_partitioned_path(path)
+      find HasImage::Storage.id_from_path(path)
+    end
+    
   end
 
 end
