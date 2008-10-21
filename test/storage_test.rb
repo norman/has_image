@@ -64,6 +64,17 @@ class StorageTest < Test::Unit::TestCase
     pic = stub(:has_image_file => "my+pic", :has_image_id => 1)
     assert_equal "/tests/0000/0001/my%2Bpic_square.jpg", @storage.public_path_for(pic, :square)
   end
+  
+  def test_name_generation_takes_into_account_thumbnail_separator_constant
+    old_separator = HasImage::Storage.thumbnail_separator
+    
+    @storage = HasImage::Storage.new(default_options.merge(:thumbnails => {:schick => '22x22'}, :base_path => '/public'))
+    HasImage::Storage.thumbnail_separator = '.'
+    pic = stub(:has_image_file => "pic", :has_image_id => 1)
+    assert_equal "/tests/0000/0001/pic.schick.jpg", @storage.public_path_for(pic, :schick)
+    
+    HasImage::Storage.thumbnail_separator = old_separator
+  end
 
   def test_escape_file_name_for_http
     @storage = HasImage::Storage.new(default_options.merge(:base_path => '/public'))
