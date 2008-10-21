@@ -118,6 +118,16 @@ class StorageTest < Test::Unit::TestCase
     assert @storage.remove_images(stub(:has_image_id => 1), @name)
   end
   
+  def test_install_images_doesnt_automatically_generate_thumbnails_if_that_option_is_set
+    @storage = HasImage::Storage.new(default_options.merge(
+      :thumbnails => {:two => "200x200"},
+      :auto_generate_thumbnails => false
+    ))
+    @storage.image_data = temp_file("image.jpg")
+    @storage.expects(:generate_thumbnails).never
+    @storage.install_images(stub(:has_image_id => 1))
+  end
+
   def test_image_not_too_small
     @storage = HasImage::Storage.new(default_options.merge(:min_size => 1.kilobyte))
     @storage.image_data = temp_file("image.jpg")

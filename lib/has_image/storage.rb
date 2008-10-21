@@ -84,7 +84,7 @@ module HasImage
     def install_images(object)
       generated_name = Storage.generated_file_name(object)
       install_main_image(object.has_image_id, generated_name)
-      generate_thumbnails(object.has_image_id, generated_name) unless options[:thumbnails].empty?
+      generate_thumbnails(object.has_image_id, generated_name) if thumbnails_needed?
       return generated_name
     ensure  
       @temp_file.close! if !@temp_file.closed?
@@ -169,6 +169,7 @@ module HasImage
     #
     #  /var/sites/example.org/production/public/photos/0000/0001
     def path_for(id)
+      debugger if $debug
       File.join(options[:base_path], options[:path_prefix], Storage.partitioned_path(id))
     end
     
@@ -189,6 +190,11 @@ module HasImage
           final_destination.write processed_image
         end
       end
+    end
+    
+    # used in #install_images
+    def thumbnails_needed?
+      !options[:thumbnails].empty? && options[:auto_generate_thumbnails]
     end
     
     # Instantiates the processor using the options set in my contructor (if

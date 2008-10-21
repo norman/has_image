@@ -10,8 +10,9 @@ end
 
 class PicTest < Test::Unit::TestCase
   def setup
+    # Note: Be sure to not set the whole options hash in your tests below
     Pic.has_image_options = HasImage.default_options_for(Pic)
-    Pic.has_image_options[:base_path] = File.join(RAILS_ROOT, '/tmp')
+    Pic.has_image_options[:base_path] = File.join(RAILS_ROOT, 'tmp')
   end
   
   def teardown
@@ -64,10 +65,23 @@ class PicTest < Test::Unit::TestCase
   def test_default_options_respect_table_name
     assert_equal 'pics', HasImage.default_options_for(PicWithDifferentTableName)[:path_prefix]
   end
+  
+  def test_generate_thumbnails_on_create
+    Pic.has_image_options[:thumbnails] = {:tiny => "16x16"}
+    @pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+    assert File.exist?(@pic.absolute_path(:tiny))
+  end
+  
+  def test_doesnt_generate_thumbnails_if_option_disabled
+    Pic.has_image_options[:thumbnails] = {:tiny => "16x16"}
+    Pic.has_image_options[:auto_generate_thumbnails] = false
+    @pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+    assert !File.exist?(@pic.absolute_path(:tiny))
+  end
 
   def test_regenerate_thumbnails_succeeds
-    Pic.has_image_options = HasImage.default_options_for(Pic).merge(
-      :thumbnails => {:small => "100x100", :tiny => "16x16"})
+    Pic.has_image_options[:thumbnails] = {:small => "100x100", :tiny => "16x16"}
+    
     @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
     @pic.save!
     assert @pic.regenerate_thumbnails
