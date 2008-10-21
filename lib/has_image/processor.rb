@@ -50,8 +50,6 @@ module HasImage
         yield IO.read(image.path) if block_given?
         image
       end
-    rescue MiniMagick::MiniMagickError
-      raise ProcessorError.new("That doesn't look like an image file.")
     end
     alias_method :resize, :process #Backwards-compat
     
@@ -62,9 +60,14 @@ module HasImage
       path = file.respond_to?(:path) ? file.path : file
       file.close if file.respond_to?(:close) && !file.closed?
       silence_stderr do
-        image = MiniMagick::Image.from_file(path)
-        yield image
-        image.tempfile.close!
+        begin
+          image = MiniMagick::Image.from_file(path)
+          yield image
+        rescue MiniMagick::MiniMagickError
+          raise ProcessorError.new("#{path} doesn't look like an image file.")
+        ensure
+          image.tempfile.close! if defined?(image) && image
+        end
       end
     end
   
