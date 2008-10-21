@@ -49,6 +49,13 @@ class PicTest < Test::Unit::TestCase
     @pic.image_data = fixture_file_upload("/image.png", "image/png")
     assert @pic.save!
   end
+  
+  def test_finding_from_url_path
+    @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+    @pic.save!
+    path = HasImage::Storage.partitioned_path @pic.id
+    assert_equal @pic, Pic.from_partitioned_path(path)
+  end
 
   def test_regenerate_thumbnails
     Pic.has_image_options = HasImage.default_options_for(Pic).merge(
