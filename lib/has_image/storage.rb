@@ -84,7 +84,7 @@ module HasImage
     def install_images(object)
       generated_name = Storage.generated_file_name(object)
       install_main_image(object.has_image_id, generated_name)
-      install_thumbnails(object.has_image_id, generated_name) if !options[:thumbnails].empty?
+      generate_thumbnails(object.has_image_id, generated_name) unless options[:thumbnails].empty?
       return generated_name
     ensure  
       @temp_file.close! if !@temp_file.closed?
@@ -116,17 +116,32 @@ module HasImage
       !(image_too_small? || image_too_big?)
     end
     
-    def regenerate_thumbnails(id, name)
-      install_thumbnails(id, name)
+    # Write the thumbnails to the install directory - probably somewhere under
+    # RAILS_ROOT/public.
+    def generate_thumbnails(id, name)
+      ensure_directory_exists!(id)
+      options[:thumbnails].keys.each { |thumb_name| generate_thumbnail(id, name, thumb_name) }
     end
+    alias_method :regenerate_thumbnails, :generate_thumbnails #Backwards-compat
     
+    def generate_thumbnail(id, name, thumb_name)
+      size_spec = options[:thumbnails][thumb_name.to_sym]
+      raise StorageError unless size_spec
+      ensure_directory_exists!(id)
+      File.open absolute_path(id, name, thumb_name), "w" do |thumbnail_destination|
+        processor.process absolute_path(id, name), size_spec do |thumbnail_data|
+          thumbnail_destination.write thumbnail_data
+        end
+      end
+    end
+     
     # Gets the full local filesystem path for an image. For example:
     #
     #   /var/sites/example.com/production/public/photos/0000/0001/3er0zs.jpg
     def filesystem_path_for(object, thumbnail = nil)
       File.join(path_for(object.has_image_id), file_name_for(object.send(options[:column]), thumbnail))
     end
-
+    
     protected
 
     # Gets the extension to append to the image. Transforms "jpeg" to "jpg."
@@ -150,39 +165,6 @@ module HasImage
       "%s.%s" % [args.compact.join(self.class.thumbnail_separator), extension]
     end
 
-    # Write the main image to the install directory - probably somewhere under
-    # RAILS_ROOT/public.
-    def install_main_image(id, name)
-      ensure_directory_exists!(id)
-      File.open(File.join(path_for(id), file_name_for(name)), "w") do |final_destination|
-        processor.process(@temp_file) do |processed_image|
-          final_destination.write processed_image
-        end
-        # if @options[:resize_to] || @options[:convert_to]
-        #   main = processor.resize(@temp_file, @options[:resize_to])
-        #   file.write IO.read(main.path)
-        #   main.tempfile.close!
-        # else
-        #   @temp_file.open if @temp_file.closed?
-        #   file.write @temp_file.read
-        # end
-      end
-    end
-    
-    # Write the thumbnails to the install directory - probably somewhere under
-    # RAILS_ROOT/public.
-    def install_thumbnails(id, name)
-      ensure_directory_exists!(id)
-      path = File.join(path_for(id), file_name_for(name))
-      options[:thumbnails].each do |thumb_name, size|
-        File.open(File.join(path_for(id), file_name_for(name, thumb_name)), "w") do |thumbnail_destination|
-          processor.process(path, size) do |processed_image|
-            thumbnail_destination.write processed_image
-          end
-        end
-      end
-    end
-    
     # Get the full path for the id. For example:
     #
     #  /var/sites/example.org/production/public/photos/0000/0001
@@ -190,15 +172,30 @@ module HasImage
       File.join(options[:base_path], options[:path_prefix], Storage.partitioned_path(id))
     end
     
+    def absolute_path(id, *args)
+      File.join(path_for(id), file_name_for(*args))
+    end
+    
+    def ensure_directory_exists!(id)
+      FileUtils.mkdir_p path_for(id)
+    end
+    
+    # Write the main image to the install directory - probably somewhere under
+    # RAILS_ROOT/public.
+    def install_main_image(id, name)
+      ensure_directory_exists!(id)
+      File.open absolute_path(id, name), "w" do |final_destination|
+        processor.process(@temp_file) do |processed_image|
+          final_destination.write processed_image
+        end
+      end
+    end
+    
     # Instantiates the processor using the options set in my contructor (if
     # not already instantiated), stores it in an instance variable, and
     # returns it.
     def processor
       @processor ||= Processor.new(options)
-    end
-  
-    def ensure_directory_exists!(id)
-      FileUtils.mkdir_p path_for(id)
     end
   end
   
