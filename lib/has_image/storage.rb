@@ -11,6 +11,8 @@ module HasImage
   # storage mechanism for Amazon AWS, Photobucket, DBFile, SFTP, or whatever
   # you want.  
   class Storage
+    class_inheritable_accessor :thumbnail_separator
+    write_inheritable_attribute :thumbnail_separator, '_'
     
     attr_accessor :image_data, :options, :temp_file
 
@@ -142,9 +144,10 @@ module HasImage
     #
     #   "abc123_thumb.jpg"
     #   
-    #
+    # It uses an underscore to separatore parts by default, but that is configurable
+    # by setting HasImage::Storage.thumbnail_separator
     def file_name_for(*args)
-      "%s.%s" % [args.compact.join("_"), extension]
+      "%s.%s" % [args.compact.join(self.class.thumbnail_separator), extension]
     end
 
     # Write the main image to the install directory - probably somewhere under
