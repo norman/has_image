@@ -159,8 +159,13 @@ module HasImage
     end
     
     # Regenerates the thumbails from the main image.
-    def regenerate_thumbnails
-      storage.regenerate_thumbnails(has_image_id, send(has_image_options[:column]))
+    def regenerate_thumbnails!
+      storage.generate_thumbnails(has_image_id, send(has_image_options[:column]))
+    end
+    alias_method :regenerate_thumbnails, :regenerate_thumbnails! #Backwards compat
+    
+    def generate_thumbnail!(thumb_name)
+      storage.generate_thumbnail(has_image_id, send(has_image_options[:column]), thumb_name)
     end
     
     def width
