@@ -52,6 +52,7 @@ module HasImage
       {
         :resize_to => "200x200",
         :thumbnails => {},
+        :auto_generate_thumbnails => true,
         :max_size => 12.megabytes,
         :min_size => 4.kilobytes,
         :path_prefix => klass.table_name,
