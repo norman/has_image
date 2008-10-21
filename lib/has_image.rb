@@ -54,7 +54,7 @@ module HasImage
         :thumbnails => {},
         :max_size => 12.megabytes,
         :min_size => 4.kilobytes,
-        :path_prefix => klass.to_s.tableize,
+        :path_prefix => klass.table_name,
         :base_path => File.join(RAILS_ROOT, 'public'),
         :column => :has_image_file,
         :convert_to => "JPEG",

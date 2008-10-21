@@ -1,10 +1,14 @@
 require 'test_helper'
 
+class Pic < ActiveRecord::Base
+  has_image
+end
+
+class PicWithDifferentTableName < ActiveRecord::Base
+  set_table_name 'pics'
+end
+
 class PicTest < Test::Unit::TestCase
-  class Pic < ActiveRecord::Base
-    has_image
-  end
-  
   def setup
     Pic.has_image_options = HasImage.default_options_for(Pic)
     Pic.has_image_options[:base_path] = File.join(RAILS_ROOT, '/tmp')
@@ -55,6 +59,10 @@ class PicTest < Test::Unit::TestCase
     @pic.save!
     path = HasImage::Storage.partitioned_path @pic.id
     assert_equal @pic, Pic.from_partitioned_path(path)
+  end
+  
+  def test_default_options_respect_table_name
+    assert_equal 'pics', HasImage.default_options_for(PicWithDifferentTableName)[:path_prefix]
   end
 
   def test_regenerate_thumbnails_succeeds

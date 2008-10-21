@@ -11,7 +11,9 @@ class StorageTest < Test::Unit::TestCase
   end
   
   def default_options
-    HasImage.default_options_for("tests").merge(
+    mock_class = "test"
+    mock_class.stubs(:table_name).returns('tests')
+    HasImage.default_options_for(mock_class).merge(
       :base_path => File.join(File.dirname(__FILE__), '..', 'tmp')
     )
   end
@@ -115,7 +117,7 @@ class StorageTest < Test::Unit::TestCase
     @name = @storage.install_images(stub(:has_image_id => 1))
     assert @storage.remove_images(stub(:has_image_id => 1), @name)
   end
-
+  
   def test_image_not_too_small
     @storage = HasImage::Storage.new(default_options.merge(:min_size => 1.kilobyte))
     @storage.image_data = temp_file("image.jpg")
