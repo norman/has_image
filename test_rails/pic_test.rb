@@ -96,6 +96,13 @@ class PicTest < Test::Unit::TestCase
     @pic.save!
     assert @pic.destroy
   end
+  
+  def test_destroy_should_not_remove_image_file_if_option_is_set
+    Pic.has_image_options[:delete] = false
+    @pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
+    @pic.destroy
+    assert File.exist?(@pic.absolute_path)
+  end
 
   def test_destroy_model_with_images_already_deleted_from_filesystem
     @pic = Pic.new

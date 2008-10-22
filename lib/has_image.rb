@@ -38,21 +38,24 @@ module HasImage
     #
     # * :resize_to => "200x200",
     # * :thumbnails => {},
+    # * :auto_generate_thumbnails => true,
+    # * :delete => true,
     # * :max_size => 12.megabytes,
     # * :min_size => 4.kilobytes,
-    # * :path_prefix => klass.to_s.tableize,
+    # * :path_prefix => klass.table_name,
     # * :base_path => File.join(RAILS_ROOT, 'public'),
     # * :column => :has_image_file,
     # * :convert_to => "JPEG",
     # * :output_quality => "85",
     # * :invalid_image_message => "Can't process the image.",
     # * :image_too_small_message => "The image is too small.",
-    # * :image_too_big_message => "The image is too big.",
+    # * :image_too_big_message => "The image is too big."
     def default_options_for(klass)
       {
         :resize_to => "200x200",
         :thumbnails => {},
         :auto_generate_thumbnails => true,
+        :delete => true,
         :max_size => 12.megabytes,
         :min_size => 4.kilobytes,
         :path_prefix => klass.table_name,
@@ -75,17 +78,19 @@ module HasImage
     # The different setting options are described below.
     # 
     # Options:
-    # *  <tt>:resize_to</tt> - Dimensions to resize to. This should be an ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sizes are recommended.
-    # *  <tt>:thumbnails</tt> - A hash of thumbnail names and dimensions. The dimensions should be ImageMagick {geometry strings}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sized are recommended.
-    # *  <tt>:min_size</tt> - Minimum file size allowed. It's recommended that you set this size in kilobytes.
-    # *  <tt>:max_size</tt> - Maximum file size allowed. It's recommended that you set this size in megabytes.
-    # *  <tt>:base_path</tt> - Where to install the images. You should probably leave this alone, except for tests.
-    # *  <tt>:path_prefix</tt> - Where to install the images, relative to basepath. You should probably leave this alone.
-    # *  <tt>:convert_to</tt> - An ImageMagick format to convert images to. Recommended formats: JPEG, PNG, GIF.
-    # *  <tt>:output_quality</tt> - Image output quality passed to ImageMagick.
-    # *  <tt>:invalid_image_message</tt> - The message that will be shown when the image data can't be processed.
-    # *  <tt>:image_too_small_message</tt> - The message that will be shown when the image file is too small. You should ideally set this to something that tells the user what the minimum is.
-    # *  <tt>:image_too_big_message</tt> - The message that will be shown when the image file is too big. You should ideally set this to something that tells the user what the maximum is.
+    # *  +:resize_to+ - Dimensions to resize to. This should be an aImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sizes are recommended.
+    # *  +:thumbnails</tt> - A hash of thumbnail names and dimensions. The dimensions should be ImageMagick {geometry strings}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sized are recommended.
+    # *  +:auto_generate_thumbnails+ - Flag to indicate whether to automatically generate thumbnails when the image_data changes (e.g. on create). If you set this to false, your application code needs to take care of generating Thumbnails, e.g. using +#generate_thumbnail+
+    # *  +:delete+ - Flag to indicate if the images should be delete from the storage (e.g. the Filesystem) when the record is destroyed
+    # *  +:min_size</tt> - Minimum file size allowed. It's recommended that you set this size in kilobytes.
+    # *  +:max_size</tt> - Maximum file size allowed. It's recommended that you set this size in megabytes.
+    # *  +:base_path</tt> - Where to install the images. You should probably leave this alone, except for tests.
+    # *  +:path_prefix</tt> - Where to install the images, relative to basepath. You should probably leave this alone.
+    # *  +:convert_to</tt> - An ImageMagick format to convert images to. Recommended formats: JPEG, PNG, GIF.
+    # *  +:output_quality</tt> - Image output quality passed to ImageMagick.
+    # *  +:invalid_image_message</tt> - The message that will be shown when the image data can't be processed.
+    # *  +:image_too_small_message</tt> - The message that will be shown when the image file is too small. You should ideally set this to something that tells the user what the minimum is.
+    # *  +:image_too_big_message</tt> - The message that will be shown when the image file is too big. You should ideally set this to something that tells the user what the maximum is.
     #
     # Examples:
     #   has_image # uses all default options
@@ -183,7 +188,7 @@ module HasImage
     
     # Deletes the image from the storage.
     def remove_images
-      return if send(has_image_options[:column]).blank?
+      return if send(has_image_options[:column]).blank? || !has_image_options[:delete]
       self.class.transaction do
         begin
           storage.remove_images(self, send(has_image_options[:column]))
