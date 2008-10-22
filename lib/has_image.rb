@@ -2,6 +2,75 @@ require 'has_image/processor'
 require 'has_image/storage'
 require 'has_image/view_helpers'
 
+# = HasImage
+#
+# HasImage allows you to very easily attach images to a Rails model. For some
+# more basic info on what it does, please see its {project
+# page}[http://github.com/norman/has_image] on GitHub.
+#
+# Install HasImage by using Ruby Gems:
+#
+#  sudo gem install has_image
+#
+# To use HasImage in your project, you must add a varchar column to your
+# model. By default, this column should be named "has_image_file," though you
+# may easily change this. For option defaults, see
+# HasImage#default_options_for and ClassMethods#has_image.
+#
+# == Basic Examples
+##
+# Uses all default options. This works, but is likely not what you need.
+#
+#  class Photo < ActiveRecord::Base
+#    has_image
+#  end
+#
+# Resize the uploaded image to 800x800 and create a 150x150 thumbnail.
+#
+#   has_image :resize_to "800x800", :thumbnails => {:square => "150x150"}
+#
+# Resize the image and set a max file size to 4 megabytes.
+#
+#   has_image :resize_to "100x150", :max_size => 4.megabytes
+#
+# == Some slightly more advanced examples
+#
+# === Localizing HasImage
+#
+#  has_image :invalid_image_message => "No se puede procesar la imagen."
+#
+# === Using has_image with Capistrano
+#
+# When deploying using Capistrano, you will likely want to keep images
+# under a "system" directory so that newly deployed versions have access
+# to them:
+#
+#   has_image :resize_to => "150x150",
+#     :thumbnails => {
+#       :square => "75x75",
+#     },
+#     :base_path => File.join(Rails.root, 'public', 'system')
+#
+# === Testing with HasImage:
+#
+# If you want your tests to actually run the image processing, you should
+# make sure your tests write the image files somewhere outside your public
+# directory. Add something like this to your config/environments/test.rb:
+#
+#   config.after_initialize do
+#     MyClass.has_image_options[:base_path] = File.join(RAILS_ROOT, "tmp") 
+#   end
+#
+# If you want to stub out calls to has_image so that your tests don't do
+# the (slow) image processing, here's an example using Test::Unit and
+# Mocha:
+#
+#   def setup
+#     Photo.any_instance.stubs(:image_data=).returns(true)
+#     Photo.any_instance.stubs(:install_images).returns(true)
+#     Photo.any_instance.stubs(:image_data_valid?).returns(true)
+#   end
+#
 module HasImage
 
   class ProcessorError < StandardError ; end
@@ -72,14 +141,7 @@ module HasImage
   end
 
   module ClassMethods
-    # == Using HasImage
-    #
-    # To use HasImage with a Rails model, all you have to do is add a column
-    # named "has_image_file." For configuration defaults, you might want to
-    # take a look at the default options specified in
-    # HasImage#default_options_for. The different setting options are
-    # described below.
-    #    
+
     # === Options
     #
     # *  <tt>:resize_to</tt> - Dimensions to resize to. This should be an ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sizes are recommended.
@@ -95,51 +157,6 @@ module HasImage
     # *  <tt>:invalid_image_message</tt> - The message that will be shown when the image data can't be processed.
     # *  <tt>:image_too_small_message</tt> - The message that will be shown when the image file is too small. You should ideally set this to something that tells the user what the minimum is.
     # *  <tt>:image_too_big_message</tt> - The message that will be shown when the image file is too big. You should ideally set this to something that tells the user what the maximum is.
-    #
-    # === Basic Examples
-    #
-    #   has_image # uses all default options
-    #   has_image :resize_to "800x800", :thumbnails => {:square => "150x150"}
-    #   has_image :resize_to "100x150", :max_size => 500.kilobytes
-    #
-    # === Some slightly more advanced examples
-    #
-    # ==== Localizing HasImage
-    #
-    #  has_image :invalid_image_message => "No se puede procesar la imagen."
-    #
-    # ==== Using has_image with Capistrano
-    #
-    # When deploying using Capistrano, you will likely want to keep images
-    # under a "system" directory so that newly deployed versions have access
-    # to them:
-    #
-    #   has_image :resize_to => "150x150",
-    #     :thumbnails => {
-    #       :square => "75x75",
-    #     },
-    #     :base_path => File.join(Rails.root, 'public', 'system')
-    #
-    # ==== Testing with HasImage:
-    #
-    # If you want your tests to actually run the image processing, you should
-    # make sure your tests write the image files somewhere outside your public
-    # directory. Add something like this to your config/environments/test.rb:
-    #
-    #   config.after_initialize do
-    #     MyClass.has_image_options[:base_path] = File.join(RAILS_ROOT, "tmp") 
-    #   end
-    #
-    # If you want to stub out calls to has_image so that your tests don't do
-    # the (slow) image processing, here's an example using Test::Unit and
-    # Mocha:
-    #
-    #   def setup
-    #     Photo.any_instance.stubs(:image_data=).returns(true)
-    #     Photo.any_instance.stubs(:install_images).returns(true)
-    #     Photo.any_instance.stubs(:image_data_valid?).returns(true)
-    #   end
-    #
     def has_image(options = {})
       options.assert_valid_keys(HasImage.default_options_for(self).keys)
       options = HasImage.default_options_for(self).merge(options)
