@@ -1,3 +1,15 @@
+2008-10-22 Gerrit Keiser and Tricycle Developments
+  * Added option to not delete images on destroy
+  * Made thumbnail name separator configurable
+  * Added height/width methods to storage
+  * Allowed regenerating only one thumbnail size
+  * Made has_image column configurable
+  * Added some compatibility with attachment_fu
+  * General refactorings and overall code improvement
+
+2008-10-22 Norman Clarke <norman@randomba.org>
+  * Documentation improvements and minor code cleanups.
+
 2008-10-09 Dima Sabanin <sdmitry@gmail.com>
   * Fixed display of images with special symbols in the name,
     like '2777-nipple-+-apple-napple.jpg'. + is reserved by HTTP.

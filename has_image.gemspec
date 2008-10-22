@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
     "CHANGELOG",
     "FAQ",
     "MIT-LICENSE",
-    "README",
+    "README.textile",
     "init.rb",
     "lib/has_image.rb",
     "lib/has_image/processor.rb",
@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
     "test/processor_test.rb",
     "test/storage_test.rb",
   ]
-  s.rdoc_options = ["--main", "README", "--inline-source", "--line-numbers"]
-  s.extra_rdoc_files = ["README", "CHANGELOG", "FAQ"]
+  s.rdoc_options = ["--main", "--inline-source", "--line-numbers"]
+  # s.extra_rdoc_files = ["CHANGELOG", "FAQ"]
 
 end
