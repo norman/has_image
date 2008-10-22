@@ -170,11 +170,11 @@ module HasImage
     end
     
     def width
-      minimagick[:width]
+      self[:width] || minimagick[:width]
     end
     
     def height
-      minimagick[:height]
+      self[:height] || minimagick[:height]
     end
     
     def minimagick
@@ -210,14 +210,22 @@ module HasImage
     def update_images
       return if storage.temp_file.blank?
       remove_images
-      update_attribute(has_image_options[:column], storage.install_images(self))
+      populate_attributes
     end
 
     # Processes and installs the image and its thumbnails.
     def install_images
       return if !storage.temp_file
-      update_attribute(has_image_options[:column], storage.install_images(self))
+      populate_attributes
     end
+    
+    def populate_attributes
+      send("#{has_image_options[:column]}=", storage.install_images(self))
+      self[:width] = minimagick[:width] if self.class.column_names.include?('width')
+      self[:height] = minimagick[:height] if self.class.column_names.include?('height')
+      save!
+    end
+    private :populate_attributes
     
     # Gets an instance of the underlying storage functionality. See
     # HasImage::Storage.
