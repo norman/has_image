@@ -28,7 +28,6 @@ module HasImage
         end
       end
       
-      
     end
 
     # The constuctor should be invoked with the options set by has_image.
@@ -54,6 +53,11 @@ module HasImage
       end
     end
     alias_method :resize, :process #Backwards-compat
+    
+    # Gets the given +dimension+ (width/height) from the image file at +path+
+    def measure(path, dimension)
+      MiniMagick::Image.from_file(path)[dimension.to_sym]
+    end
     
   private
     # operate on the image with MiniMagick
