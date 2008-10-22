@@ -14,11 +14,11 @@ class PicTest < Test::Unit::TestCase
     Pic.has_image_options = HasImage.default_options_for(Pic)
     Pic.has_image_options[:base_path] = File.join(RAILS_ROOT, 'tmp')
   end
-  
+
   def teardown
     FileUtils.rm_rf(File.join(RAILS_ROOT, 'tmp', 'pics'))
   end
-  
+
   def test_should_be_valid
     @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
     assert @pic.valid? , "#{@pic.errors.full_messages.to_sentence}"
@@ -54,24 +54,24 @@ class PicTest < Test::Unit::TestCase
     @pic.image_data = fixture_file_upload("/image.png", "image/png")
     assert @pic.save!
   end
-  
+
   def test_finding_from_url_path
     @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
     @pic.save!
     path = HasImage::Storage.partitioned_path @pic.id
     assert_equal @pic, Pic.from_partitioned_path(path)
   end
-  
+
   def test_default_options_respect_table_name
     assert_equal 'pics', HasImage.default_options_for(PicWithDifferentTableName)[:path_prefix]
   end
-  
+
   def test_generate_thumbnails_on_create
     Pic.has_image_options[:thumbnails] = {:tiny => "16x16"}
     @pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
     assert File.exist?(@pic.absolute_path(:tiny))
   end
-  
+
   def test_doesnt_generate_thumbnails_if_option_disabled
     Pic.has_image_options[:thumbnails] = {:tiny => "16x16"}
     Pic.has_image_options[:auto_generate_thumbnails] = false
@@ -96,7 +96,7 @@ class PicTest < Test::Unit::TestCase
     @pic.save!
     assert @pic.destroy
   end
-  
+
   def test_destroy_should_not_remove_image_file_if_option_is_set
     Pic.has_image_options[:delete] = false
     @pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
@@ -123,7 +123,7 @@ class PicTest < Test::Unit::TestCase
     @pic.valid?
     assert @pic.valid?
   end
-  
+
   def test_dimension_getters
     Pic.has_image_options[:resize_to] = "100x200"
     pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
@@ -131,7 +131,7 @@ class PicTest < Test::Unit::TestCase
     assert_equal 200, pic.height
     assert_equal '100x200', pic.image_size
   end
-  
+
   def test_image_isnt_resized_when_resize_to_set_to_nil
     Pic.has_image_options[:resize_to] = nil
     pic = Pic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
@@ -139,7 +139,7 @@ class PicTest < Test::Unit::TestCase
     assert_equal 1916, pic.width
     assert_equal 1990, pic.height
   end
-  
+
   def test_image_isnt_resized_but_converted_when_resize_to_set_to_nil
     Pic.has_image_options[:resize_to] = nil
     Pic.has_image_options[:convert_to] = 'PNG'
@@ -149,6 +149,5 @@ class PicTest < Test::Unit::TestCase
     assert_equal 1916, pic.width
     assert_equal 1990, pic.height
   end
-  
-end
 
+end

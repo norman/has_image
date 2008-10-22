@@ -1,6 +1,6 @@
 def imagemagick_installed?
   `which identify`
-   $?.success?
+  $?.success?
 end
 
 require 'has_image'

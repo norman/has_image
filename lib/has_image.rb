@@ -9,9 +9,9 @@ module HasImage
   class FileTooBigError < StorageError ; end
   class FileTooSmallError < StorageError ; end
   class InvalidGeometryError < ProcessorError ; end
-  
+
   class << self
-    
+
     def included(base) # :nodoc:
       base.extend(ClassMethods)
     end
@@ -68,61 +68,104 @@ module HasImage
         :image_too_big_message => "The image is too big."
       }
     end
-    
+
   end
 
   module ClassMethods
-    # To use HasImage with a Rails model, all you have to do is add a column
-    # named "has_image_file." For configuration defaults, you might want to take
-    # a look at the default options specified in HasImage#default_options_for.
-    # The different setting options are described below.
-    # 
-    # Options:
-    # *  +:resize_to+ - Dimensions to resize to. This should be an aImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sizes are recommended.
-    # *  +:thumbnails</tt> - A hash of thumbnail names and dimensions. The dimensions should be ImageMagick {geometry strings}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sized are recommended.
-    # *  +:auto_generate_thumbnails+ - Flag to indicate whether to automatically generate thumbnails when the image_data changes (e.g. on create). If you set this to false, your application code needs to take care of generating Thumbnails, e.g. using +#generate_thumbnail+
-    # *  +:delete+ - Flag to indicate if the images should be delete from the storage (e.g. the Filesystem) when the record is destroyed
-    # *  +:min_size</tt> - Minimum file size allowed. It's recommended that you set this size in kilobytes.
-    # *  +:max_size</tt> - Maximum file size allowed. It's recommended that you set this size in megabytes.
-    # *  +:base_path</tt> - Where to install the images. You should probably leave this alone, except for tests.
-    # *  +:path_prefix</tt> - Where to install the images, relative to basepath. You should probably leave this alone.
-    # *  +:convert_to</tt> - An ImageMagick format to convert images to. Recommended formats: JPEG, PNG, GIF.
-    # *  +:output_quality</tt> - Image output quality passed to ImageMagick.
-    # *  +:invalid_image_message</tt> - The message that will be shown when the image data can't be processed.
-    # *  +:image_too_small_message</tt> - The message that will be shown when the image file is too small. You should ideally set this to something that tells the user what the minimum is.
-    # *  +:image_too_big_message</tt> - The message that will be shown when the image file is too big. You should ideally set this to something that tells the user what the maximum is.
+    # == Using HasImage
     #
-    # Examples:
+    # To use HasImage with a Rails model, all you have to do is add a column
+    # named "has_image_file." For configuration defaults, you might want to
+    # take a look at the default options specified in
+    # HasImage#default_options_for. The different setting options are
+    # described below.
+    #    
+    # === Options
+    #
+    # *  <tt>:resize_to</tt> - Dimensions to resize to. This should be an ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sizes are recommended.
+    # *  <tt>:thumbnails</tt> - A hash of thumbnail names and dimensions. The dimensions should be ImageMagick {geometry strings}[http://www.imagemagick.org/script/command-line-options.php#resize]. Fixed sized are recommended.
+    # *  <tt>:auto_generate_thumbnails</tt> - Flag to indicate whether to automatically generate thumbnails when the image_data changes (e.g. on create). If you set this to false, your application code needs to take care of generating thumbnails, e.g. using +#generate_thumbnail+
+    # *  <tt>:delete</tt> - Flag to indicate if the images should be deleted from the storage (e.g. the filesystem) when the record is destroyed.
+    # *  <tt>:min_size</tt> - Minimum file size allowed. It's recommended that you set this size in kilobytes.
+    # *  <tt>:max_size</tt> - Maximum file size allowed. It's recommended that you set this size in megabytes.
+    # *  <tt>:base_path</tt> - Where to install the images.
+    # *  <tt>:path_prefix</tt> - Where to install the images, relative to basepath.
+    # *  <tt>:convert_to</tt> - An ImageMagick format to convert images to.
+    # *  <tt>:output_quality</tt> - Image output quality passed to ImageMagick.
+    # *  <tt>:invalid_image_message</tt> - The message that will be shown when the image data can't be processed.
+    # *  <tt>:image_too_small_message</tt> - The message that will be shown when the image file is too small. You should ideally set this to something that tells the user what the minimum is.
+    # *  <tt>:image_too_big_message</tt> - The message that will be shown when the image file is too big. You should ideally set this to something that tells the user what the maximum is.
+    #
+    # === Basic Examples
+    #
     #   has_image # uses all default options
     #   has_image :resize_to "800x800", :thumbnails => {:square => "150x150"}
     #   has_image :resize_to "100x150", :max_size => 500.kilobytes
-    #   has_image :invalid_image_message => "No se puede procesar la imagen."
+    #
+    # === Some slightly more advanced examples
+    #
+    # ==== Localizing HasImage
+    #
+    #  has_image :invalid_image_message => "No se puede procesar la imagen."
+    #
+    # ==== Using has_image with Capistrano
+    #
+    # When deploying using Capistrano, you will likely want to keep images
+    # under a "system" directory so that newly deployed versions have access
+    # to them:
+    #
+    #   has_image :resize_to => "150x150",
+    #     :thumbnails => {
+    #       :square => "75x75",
+    #     },
+    #     :base_path => File.join(Rails.root, 'public', 'system')
+    #
+    # ==== Testing with HasImage:
+    #
+    # If you want your tests to actually run the image processing, you should
+    # make sure your tests write the image files somewhere outside your public
+    # directory. Add something like this to your config/environments/test.rb:
+    #
+    #   config.after_initialize do
+    #     MyClass.has_image_options[:base_path] = File.join(RAILS_ROOT, "tmp") 
+    #   end
+    #
+    # If you want to stub out calls to has_image so that your tests don't do
+    # the (slow) image processing, here's an example using Test::Unit and
+    # Mocha:
+    #
+    #   def setup
+    #     Photo.any_instance.stubs(:image_data=).returns(true)
+    #     Photo.any_instance.stubs(:install_images).returns(true)
+    #     Photo.any_instance.stubs(:image_data_valid?).returns(true)
+    #   end
+    #
     def has_image(options = {})
       options.assert_valid_keys(HasImage.default_options_for(self).keys)
       options = HasImage.default_options_for(self).merge(options)
       class_inheritable_accessor :has_image_options
       write_inheritable_attribute(:has_image_options, options)
-      
+
       after_create :install_images
       after_save :update_images
       after_destroy :remove_images
-      
+
       validate_on_create :image_data_valid?
-      
+
       include ModelInstanceMethods
       extend  ModelClassMethods
-    
+
     end
-    
+
   end
 
   module ModelInstanceMethods
-    
+
     # Does the object have an image?
     def has_image?
       !send(has_image_options[:column]).blank?
     end
-    
+
     # Sets the uploaded image data. Image data can be an instance of Tempfile,
     # or an instance of any class than inherits from IO.
     # aliased as uploaded_data= for compatibility with attachment_fu
@@ -137,7 +180,7 @@ module HasImage
       nil
     end
     alias_method :uploaded_data, :image_data
-    
+
     # Is the image data a file that ImageMagick can process, and is it within
     # the allowed minimum and maximum sizes?
     def image_data_valid?
@@ -150,7 +193,7 @@ module HasImage
         errors.add_to_base(self.class.has_image_options[:invalid_image_message])
       end
     end
-    
+
     # Gets the "web path" for the image, or optionally, its thumbnail.
     # Aliased as +public_filename+ for compatibility with attachment-Fu
     def public_path(thumbnail = nil)
@@ -163,29 +206,29 @@ module HasImage
     def absolute_path(thumbnail = nil)
       storage.filesystem_path_for(self, thumbnail)
     end
-    
+
     # Regenerates the thumbails from the main image.
     def regenerate_thumbnails!
       storage.generate_thumbnails(has_image_id, send(has_image_options[:column]))
     end
     alias_method :regenerate_thumbnails, :regenerate_thumbnails! #Backwards compat
-    
+
     def generate_thumbnail!(thumb_name)
       storage.generate_thumbnail(has_image_id, send(has_image_options[:column]), thumb_name)
     end
-    
+
     def width
       self[:width] || storage.measure(absolute_path, :width)
     end
-    
+
     def height
       self[:height] || storage.measure(absolute_path, :height)
     end
-    
+
     def image_size
       [width, height] * 'x'
     end
-    
+
     # Deletes the image from the storage.
     def remove_images
       return if send(has_image_options[:column]).blank? || !has_image_options[:delete]
@@ -204,7 +247,7 @@ module HasImage
         end
       end
     end
-    
+
     # Creates new images and removes the old ones when image_data has been
     # set.
     def update_images
@@ -218,21 +261,13 @@ module HasImage
       return if !storage.temp_file
       populate_attributes
     end
-    
-    def populate_attributes
-      send("#{has_image_options[:column]}=", storage.install_images(self))
-      self[:width] = storage.measure(absolute_path, :width) if self.class.column_names.include?('width')
-      self[:height] = storage.measure(absolute_path, :height) if self.class.column_names.include?('height')
-      save!
-    end
-    private :populate_attributes
-    
+
     # Gets an instance of the underlying storage functionality. See
     # HasImage::Storage.
     def storage
       @storage ||= HasImage::Storage.new(has_image_options)
     end
-    
+
     # By default, just returns the model's id. Since this id is used to divide
     # the images up in directories, you can override this to return a related
     # model's id if you want the images to be grouped differently. For example,
@@ -241,7 +276,17 @@ module HasImage
     def has_image_id
       id
     end
-    
+
+    private
+
+    def populate_attributes
+      send("#{has_image_options[:column]}=", storage.install_images(self))
+      self[:width] = storage.measure(absolute_path, :width) if self.class.column_names.include?('width')
+      self[:height] = storage.measure(absolute_path, :height) if self.class.column_names.include?('height')
+      save!
+    end
+
+
   end
 
   module ModelClassMethods
@@ -251,11 +296,11 @@ module HasImage
     def thumbnails
       has_image_options[:thumbnails]
     end
-    
+
     def from_partitioned_path(path)
       find HasImage::Storage.id_from_path(path)
     end
-    
+
   end
 
 end

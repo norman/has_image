@@ -9,17 +9,24 @@ module HasImage
     
     class << self
       
-      # "The form of an {extended geometry
-      # string}[http://www.imagemagick.org/script/command-line-options.php?#resize] is
-      # <width>x<height>{+-}<xoffset>{+-}<yoffset>{%}{!}{<}{>}"
+      # The form of an {extended geometry string}[http://www.imagemagick.org/script/command-line-options.php?#resize] is:
+      #
+      #   <width>x<height>{+-}<xoffset>{+-}<yoffset>{%}{!}{<}{>}
       def geometry_string_valid?(string)
         string =~ /\A[\d]*x[\d]*([+-][0-9][+-][0-9])?[%@!<>^]?\Z/
       end
       
-      # Arg should be either a file, or a path. This runs ImageMagick's
-      # "identify" command and looks for an exit status indicating an error. If
-      # there is no error, then ImageMagick has identified the file as something
-      # it can work with and it will be converted to the desired output format.
+      # Arg should be either a file or a path. This runs ImageMagick's
+      # "identify" command and looks for an exit status indicating an error.
+      # If there is no error, then ImageMagick has identified the file as
+      # something it can work with and it will be converted to the desired
+      # output format.
+      #
+      # Note that this is used in place of any mimetype checks. HasImage
+      # assumes that is ImageMagick is able to process the file, then it's OK.
+      # Since ImageMagick can be compiled with many different options for
+      # supporting various file types (or not) this is safer and more complete
+      # than checking the mime type.
       def valid?(arg)
         arg.close if arg.respond_to?(:close) && !arg.closed?
         silence_stderr do
@@ -35,13 +42,13 @@ module HasImage
       @options = options
     end
     
-    # Create the resized image, and transforms it to the desired output
+    # Creates the resized image, and transforms it to the desired output
     # format if necessary. 
     # 
     # +size+ should be a valid ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize].
     # +format+ should be an image format supported by ImageMagick, e.g. "PNG", "JPEG"
-    # yields the processed Image file as a file-like
-    def process(file, size=options[:resize_to], format=options[:convert_to])
+    # If a block is given, it yields the processed image file as a file-like object using IO#read.
+    def process(file, size = options[:resize_to], format = options[:convert_to])
       unless size.blank? || Processor.geometry_string_valid?(size)
         raise InvalidGeometryError.new('"%s" is not a valid ImageMagick geometry string' % size)
       end
@@ -54,14 +61,13 @@ module HasImage
     end
     alias_method :resize, :process #Backwards-compat
     
-    # Gets the given +dimension+ (width/height) from the image file at +path+
+    # Gets the given +dimension+ (width/height) from the image file at +path+.
     def measure(path, dimension)
       MiniMagick::Image.from_file(path)[dimension.to_sym]
     end
     
   private
-    # operate on the image with MiniMagick
-    # yields a MiniMagick::Image object
+    # Operates on the image with MiniMagick. Yields a MiniMagick::Image object.
     def with_image(file)
       path = file.respond_to?(:path) ? file.path : file
       file.close if file.respond_to?(:close) && !file.closed?
@@ -77,7 +83,6 @@ module HasImage
       end
     end
   
-    # +image+ should be a MiniMagick::Image and +size+ a Geometry String
     # Image resizing is placed in a separate method for easy monkey-patching.
     # This is intended to be invoked from resize, rather than directly.
     # By default, the following ImageMagick functionality is invoked:
@@ -87,6 +92,8 @@ module HasImage
     # * gravity[http://www.imagemagick.org/script/command-line-options.php#gravity]
     # * extent[http://www.imagemagick.org/script/command-line-options.php#extent]
     # * quality[http://www.imagemagick.org/script/command-line-options.php#quality]
+    #
+    # +image+ should be a MiniMagick::Image. +size+ should be a geometry string.
     def resize_image(image, size)
       image.combine_options do |commands|
         commands.send("auto-orient".to_sym)
