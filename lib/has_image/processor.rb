@@ -26,7 +26,9 @@ module HasImage
           `identify #{arg.respond_to?(:path) ? arg.path : arg.to_s}`
           $? == 0
         end
-      end    
+      end
+      
+      
     end
 
     # The constuctor should be invoked with the options set by has_image.
