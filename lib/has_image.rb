@@ -170,17 +170,12 @@ module HasImage
     end
     
     def width
-      self[:width] || minimagick[:width]
+      self[:width] || storage.measure(absolute_path, :width)
     end
     
     def height
-      self[:height] || minimagick[:height]
+      self[:height] || storage.measure(absolute_path, :height)
     end
-    
-    def minimagick
-      MiniMagick::Image.from_file(absolute_path)
-    end
-    private :minimagick
     
     def image_size
       [width, height] * 'x'
@@ -221,8 +216,8 @@ module HasImage
     
     def populate_attributes
       send("#{has_image_options[:column]}=", storage.install_images(self))
-      self[:width] = minimagick[:width] if self.class.column_names.include?('width')
-      self[:height] = minimagick[:height] if self.class.column_names.include?('height')
+      self[:width] = storage.measure(absolute_path, :width) if self.class.column_names.include?('width')
+      self[:height] = storage.measure(absolute_path, :height) if self.class.column_names.include?('height')
       save!
     end
     private :populate_attributes

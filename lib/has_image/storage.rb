@@ -91,6 +91,11 @@ module HasImage
       @temp_file = nil
     end
     
+    # Measures the given dimension using the processor
+    def measure(path, dimension)
+      processor.measure(path, dimension)
+    end
+    
     # Gets the "web" path for an image. For example:
     #
     #   /photos/0000/0001/3er0zs.jpg
