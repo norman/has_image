@@ -243,7 +243,7 @@ module HasImage
     end
 
     def image_size
-      [width, height] * 'x'
+      self[:image_size] || [width, height].join('x')
     end
 
     # Deletes the image from the storage.
@@ -300,7 +300,7 @@ module HasImage
       send("#{has_image_options[:column]}=", storage.install_images(self))
       self[:width] = storage.measure(absolute_path, :width) if self.class.column_names.include?('width')
       self[:height] = storage.measure(absolute_path, :height) if self.class.column_names.include?('height')
-      self[:dimensions] = [storage.measure(absolute_path, :width), storage.measure(absolute_path, :height)].join('x') if self.class.column_names.include?('dimensions')
+      self[:image_size] = [storage.measure(absolute_path, :width), storage.measure(absolute_path, :height)].join('x') if self.class.column_names.include?('image_size')
       save!
     end
 

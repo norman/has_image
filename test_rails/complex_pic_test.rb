@@ -27,9 +27,9 @@ class ComplexPicTest < Test::Unit::TestCase
     assert_equal 1990, @pic[:height]
   end
 
-  def test_should_save_dimensions_to_db_on_create
+  def test_should_save_image_size_to_db_on_create
     @pic = ComplexPic.create!(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
-    assert_equal '1916x1990', @pic[:dimensions]
+    assert_equal '1916x1990', @pic[:image_size]
   end
 
   def test_should_use_value_from_db_in_height_reader

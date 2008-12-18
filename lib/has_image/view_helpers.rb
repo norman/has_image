@@ -1,9 +1,9 @@
 module HasImage
-  
+
   # Some helpers to make working with HasImage models in views a little
   # easier.
   module ViewHelpers
-  
+
     # Wraps the image_tag helper from Rails. Instead of passing the path to
     # an image, you can pass any object that uses HasImage. The options can
     # include the name of one of your thumbnails, for example:
@@ -31,9 +31,9 @@ module HasImage
           options[:size] = size if size =~ /\A[\d]*x[\d]*\Z/
         end
       end
-  	  image_tag(object.public_path(thumb), options)
+      image_tag(object.public_path(thumb), options)
     end
-  
+
   end
 
 end

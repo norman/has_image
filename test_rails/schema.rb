@@ -9,7 +9,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table 'complex_pics', :force => true do |t|
     t.string :filename
     t.integer :width, :height
-    t.string :dimensions
+    t.string :image_size
     t.timestamps
   end
 
