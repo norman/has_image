@@ -300,6 +300,7 @@ module HasImage
       send("#{has_image_options[:column]}=", storage.install_images(self))
       self[:width] = storage.measure(absolute_path, :width) if self.class.column_names.include?('width')
       self[:height] = storage.measure(absolute_path, :height) if self.class.column_names.include?('height')
+      self[:dimensions] = [storage.measure(absolute_path, :width), storage.measure(absolute_path, :height)].join('x') if self.class.column_names.include?('dimensions')
       save!
     end
 

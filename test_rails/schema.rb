@@ -5,11 +5,12 @@ ActiveRecord::Schema.define(:version => 1) do
     t.datetime :created_at
     t.datetime :updated_at
   end
-  
+
   create_table 'complex_pics', :force => true do |t|
     t.string :filename
     t.integer :width, :height
+    t.string :dimensions
     t.timestamps
   end
-  
+
 end
