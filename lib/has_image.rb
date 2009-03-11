@@ -58,7 +58,7 @@ require 'has_image/view_helpers'
 # directory. Add something like this to your config/environments/test.rb:
 #
 #   config.after_initialize do
-#     MyClass.has_image_options[:base_path] = File.join(RAILS_ROOT, "tmp") 
+#     MyClass.has_image_options[:base_path] = File.join(RAILS_ROOT, "tmp")
 #   end
 #
 # If you want to stub out calls to has_image so that your tests don't do
@@ -254,9 +254,11 @@ module HasImage
           storage.remove_images(self, send(has_image_options[:column]))
           # The record will be frozen if we're being called after destroy.
           unless frozen?
-            # Resorting to SQL here to avoid triggering callbacks. There must be
-            # a better way to do this.
-            self.connection.execute("UPDATE #{self.class.table_name} SET #{has_image_options[:column]} = NULL WHERE id = #{id}")          
+            # FIXME: although this is cleaner now, it introduces a new issue
+            # with partial updates.
+            updates    = "#{connection.quote_column_name(has_image_options[:column])} = NULL"
+            conditions = "#{connection.quote_column_name(self.class.primary_key)} = #{connection.quote(id)}"
+            self.class.update_all(updates, conditions)
             self.send("#{has_image_options[:column]}=", nil)
           end
         rescue Errno::ENOENT
@@ -297,13 +299,18 @@ module HasImage
     private
 
     def populate_attributes
+      # FIXME: this is a quick and dirty work around for image updates
+      # breaking when running with Rails' partial updates. This is originated
+      # by the update_all call in the remove_images method which bypasses
+      # ActiveRecord::Dirty attribute change tracking.
+      attribute_will_change!(has_image_options[:column].to_s) if respond_to?(:attribute_will_change!, true)
+
       send("#{has_image_options[:column]}=", storage.install_images(self))
       self[:width] = storage.measure(absolute_path, :width) if self.class.column_names.include?('width')
       self[:height] = storage.measure(absolute_path, :height) if self.class.column_names.include?('height')
       self[:image_size] = [storage.measure(absolute_path, :width), storage.measure(absolute_path, :height)].join('x') if self.class.column_names.include?('image_size')
       save!
     end
-
 
   end
 

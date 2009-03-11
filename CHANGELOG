@@ -1,3 +1,9 @@
+2009-03-11 Adrian Mugnolo <adrian@randomba.org>
+  * Fix a critical problem with image updates breaking when used together with
+    Rails' partial updates feature (now "on" by default). Thanks to Juan
+    Schwindt <juan@schwindt.org> for the report.
+  * Replaced a raw SQL call with update_all.
+
 2008-10-22 Gerrit Keiser and Tricycle Developments
   * Added option to not delete images on destroy
   * Made thumbnail name separator configurable
