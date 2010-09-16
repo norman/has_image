@@ -1,21 +1,21 @@
 require 'mini_magick'
 
 module HasImage
-  
+
   # Image processing functionality for the HasImage gem.
   class Processor
-    
+
     attr_accessor :options
-    
+
     class << self
-      
+
       # The form of an {extended geometry string}[http://www.imagemagick.org/script/command-line-options.php?#resize] is:
       #
       #   <width>x<height>{+-}<xoffset>{+-}<yoffset>{%}{!}{<}{>}
       def geometry_string_valid?(string)
-        string =~ /\A[\d]*x[\d]*([+-][0-9][+-][0-9])?[%@!<>^]?\Z/
+        string.nil? || string =~ /\A[\d]*x[\d]*([+-][0-9][+-][0-9])?[%@!<>^]?\z/
       end
-      
+
       # Arg should be either a file or a path. This runs ImageMagick's
       # "identify" command and looks for an exit status indicating an error.
       # If there is no error, then ImageMagick has identified the file as
@@ -34,22 +34,22 @@ module HasImage
           $? == 0
         end
       end
-      
+
     end
 
     # The constuctor should be invoked with the options set by has_image.
     def initialize(options) # :nodoc:
       @options = options
     end
-    
+
     # Creates the resized image, and transforms it to the desired output
-    # format if necessary. 
-    # 
+    # format if necessary.
+    #
     # +size+ should be a valid ImageMagick {geometry string}[http://www.imagemagick.org/script/command-line-options.php#resize].
     # +format+ should be an image format supported by ImageMagick, e.g. "PNG", "JPEG"
     # If a block is given, it yields the processed image file as a file-like object using IO#read.
     def process(file, size = options[:resize_to], format = options[:convert_to])
-      unless size.blank? || Processor.geometry_string_valid?(size)
+      unless Processor.geometry_string_valid?(size)
         raise InvalidGeometryError.new('"%s" is not a valid ImageMagick geometry string' % size)
       end
       with_image(file) do |image|
@@ -60,12 +60,12 @@ module HasImage
       end
     end
     alias_method :resize, :process #Backwards-compat
-    
+
     # Gets the given +dimension+ (width/height) from the image file at +path+.
     def measure(path, dimension)
       MiniMagick::Image.from_file(path)[dimension.to_sym]
     end
-    
+
   private
     # Operates on the image with MiniMagick. Yields a MiniMagick::Image object.
     def with_image(file)
@@ -82,7 +82,7 @@ module HasImage
         end
       end
     end
-  
+
     # Image resizing is placed in a separate method for easy monkey-patching.
     # This is intended to be invoked from resize, rather than directly.
     # By default, the following ImageMagick functionality is invoked:
@@ -114,7 +114,7 @@ module HasImage
     def convert_image(image, format=options[:convert_to])
       image.format(format) unless image[:format] == format
     end
-    
+
   end
 
 end
