@@ -15,3 +15,12 @@ Rake::TestTask.new(:test) do |t|
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
+
+begin
+  require "yard"
+  YARD::Rake::YardocTask.new do |t|
+    t.options = ["--output-dir=doc"]
+    t.options << "--files" << ["Changelog.md"].join(",")
+  end
+rescue LoadError
+end
