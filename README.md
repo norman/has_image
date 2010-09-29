@@ -91,6 +91,10 @@ and add it to your Gemfile (Rails 3.0.x) or environment.rb (Rails 2.x).
 
 Then, add a column named `has_image_file` to your model.
 
+## API Docs
+
+[http://norman.github.com/has_image/](http://norman.github.com/has_image/)
+
 ## Source code
 
 [http://github.com/norman/has_image](http://github.com/norman/has_image)
