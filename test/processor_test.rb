@@ -1,18 +1,18 @@
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.expand_path('../test_helper.rb', __FILE__)
 
 class StorageTest < Test::Unit::TestCase
-  
+
   def teardown
     @temp_file.close if @temp_file
     FileUtils.rm_rf(File.dirname(__FILE__) + '/../tmp')
   end
-  
+
   def temp_file(fixture)
     @temp_file = Tempfile.new('test')
     @temp_file.write(File.new(File.dirname(__FILE__) + "/../test_rails/fixtures/#{fixture}", "r").read)
     return @temp_file
   end
-  
+
   def test_detect_valid_image
     assert HasImage::Processor.valid?(File.dirname(__FILE__) + "/../test_rails/fixtures/image.jpg")
   end
@@ -35,7 +35,7 @@ class StorageTest < Test::Unit::TestCase
       @processor.resize(temp_file("image.jpg"), "bad_geometry")
     end
   end
-  
+
   def test_resize_fixed
     @processor = HasImage::Processor.new({:convert_to => "JPEG", :output_quality => "85"})
     assert @processor.resize(temp_file("image.jpg"), "100x100")
@@ -57,5 +57,4 @@ class StorageTest < Test::Unit::TestCase
       @processor.resize(temp_file("bad_image.jpg"), "100x100")
     end
   end
-
 end

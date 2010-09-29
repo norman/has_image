@@ -1,6 +1,11 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require "rake/gempackagetask"
+require "rake/clean"
+
+CLEAN << "pkg" << "doc" << "coverage"
+Rake::GemPackageTask.new(eval(File.read("has_image.gemspec"))) { |pkg| }
 
 desc 'Default: run unit tests.'
 task :default => :test

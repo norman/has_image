@@ -1,3 +1,14 @@
+require "cgi"
+require "active_support"
+
+# AR < 3 would autoload everything
+unless "".respond_to? :blank?
+  require "active_support/core_ext/object/blank"
+  require "active_support/core_ext/object/to_param"
+  require "active_support/core_ext/numeric/bytes"
+  require "active_support/core_ext/class/inheritable_attributes"
+end
+
 require 'has_image/processor'
 require 'has_image/storage'
 require 'has_image/view_helpers'

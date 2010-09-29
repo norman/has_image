@@ -75,7 +75,7 @@ module HasImage
         begin
           image = MiniMagick::Image.from_file(path)
           yield image
-        rescue MiniMagick::MiniMagickError
+        rescue MiniMagick::Invalid
           raise ProcessorError.new("#{path} doesn't look like an image file.")
         ensure
           image.tempfile.close! if defined?(image) && image
@@ -116,5 +116,4 @@ module HasImage
     end
 
   end
-
 end
