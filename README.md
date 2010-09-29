@@ -148,7 +148,7 @@ of Rails.
 
 ## Bugs
 
-Please report them on the Github issue tracker.
+Please report them on the [Github issue tracker](http://github.com/norman/has_image/issues).
 
 Copyright (c) 2008-2010 Norman Clarke and Adrian Mugnolo. Released under the MIT
 License.
