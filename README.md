@@ -77,6 +77,10 @@ Setting up forms for has\_image is simple, too:
       </p>
     <% end %>
 
+## Compatibility
+
+Has\_image is compatible with Rails 2.1.x - 3.0.x.
+
 ## Getting it
 
 Install has_image via RubyGems:

@@ -2,7 +2,7 @@ require "cgi"
 require "active_support"
 
 # AR < 3 would autoload everything
-unless "".respond_to? :blank?
+unless "".respond_to? :to_param
   require "active_support/core_ext/object/blank"
   require "active_support/core_ext/object/to_param"
   require "active_support/core_ext/numeric/bytes"
@@ -101,7 +101,6 @@ module HasImage
     def enable # :nodoc:
       return if ActiveRecord::Base.respond_to? :has_image
       ActiveRecord::Base.send(:include, HasImage)
-      return if ActionView::Base.respond_to? :image_tag_for
       ActionView::Base.send(:include, ViewHelpers)
     end
 
@@ -326,7 +325,6 @@ module HasImage
   end
 
   module ModelClassMethods
-
     # Get the hash of thumbnails set by the options specified when invoking
     # HasImage::ClassMethods#has_image.
     def thumbnails
@@ -336,11 +334,13 @@ module HasImage
     def from_partitioned_path(path)
       find HasImage::Storage.id_from_path(path)
     end
-
   end
-
 end
 
-if defined?(Rails) and defined?(ActiveRecord) and defined?(ActionController)
-  HasImage.enable
+if defined?(Rails)
+  if Rails.version >= "3"
+    require "has_image/railtie"
+  else
+    HasImage.enable
+  end
 end

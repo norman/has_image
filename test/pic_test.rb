@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path('../test_helper', __FILE__)
 
 class Pic < ActiveRecord::Base
   has_image
@@ -9,6 +9,7 @@ class PicWithDifferentTableName < ActiveRecord::Base
 end
 
 class PicTest < Test::Unit::TestCase
+
   def setup
     # Note: Be sure to not set the whole options hash in your tests below
     Pic.has_image_options = HasImage.default_options_for(Pic)
@@ -81,7 +82,7 @@ class PicTest < Test::Unit::TestCase
 
   def test_regenerate_thumbnails_succeeds
     Pic.has_image_options[:thumbnails] = {:small => "100x100", :tiny => "16x16"}
-    
+
     @pic = Pic.new(:image_data => fixture_file_upload("/image.jpg", "image/jpeg"))
     @pic.save!
     assert @pic.regenerate_thumbnails

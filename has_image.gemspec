@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.version           = HasImage::VERSION
 
   s.add_dependency    'mini_magick', '~> 2.1'
-  s.add_dependency    'activesupport', '>= 2.1.0'
-  s.add_dependency    'activerecord', '>= 2.1.0'
+  s.add_dependency    'activesupport', '>= 2.1'
+  s.add_dependency    'activerecord', '>= 2.1'
 
-  s.add_development_dependency "mocha"
+  s.add_development_dependency "mocha", "~> 0.9"
 end

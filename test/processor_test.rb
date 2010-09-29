@@ -9,12 +9,12 @@ class StorageTest < Test::Unit::TestCase
 
   def temp_file(fixture)
     @temp_file = Tempfile.new('test')
-    @temp_file.write(File.new(File.dirname(__FILE__) + "/../test_rails/fixtures/#{fixture}", "r").read)
+    @temp_file.write(File.new(File.expand_path("../fixtures/#{fixture}", __FILE__), "r").read)
     return @temp_file
   end
 
   def test_detect_valid_image
-    assert HasImage::Processor.valid?(File.dirname(__FILE__) + "/../test_rails/fixtures/image.jpg")
+    assert HasImage::Processor.valid?(File.expand_path("../fixtures/image.jpg", __FILE__))
   end
 
   def test_detect_valid_image_from_tmp_file
@@ -22,7 +22,7 @@ class StorageTest < Test::Unit::TestCase
   end
 
   def test_detect_invalid_image
-    assert !HasImage::Processor.valid?(File.dirname(__FILE__) + "/../test_rails/fixtures/bad_image.jpg")
+    assert !HasImage::Processor.valid?(File.expand_path("../fixtures/bad_image.jpg", __FILE__))
   end
 
   def test_detect_invalid_image_from_tmp_file

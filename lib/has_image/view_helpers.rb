@@ -1,5 +1,4 @@
 module HasImage
-
   # Some helpers to make working with HasImage models in views a little
   # easier.
   module ViewHelpers
@@ -23,7 +22,7 @@ module HasImage
     def image_tag_for(object, options = {})
       thumb = options.delete(:thumb)
       if !options[:size]
-        if thumb 
+        if thumb
           size = object.class.thumbnails[thumb.to_sym]
           options[:size] = size if size =~ /\A[\d]*x[\d]*\Z/
         else
@@ -33,7 +32,5 @@ module HasImage
       end
       image_tag(object.public_path(thumb), options)
     end
-
   end
-
 end
