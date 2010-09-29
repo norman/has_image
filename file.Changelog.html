@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>File: Changelog</title>
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html" title="Index">Index</a> &raquo; 
+    <span class="title">File: Changelog</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><div id='filecontents'><h2>0.4.0 (2010-09-29)</h2>
+
+<p>We have picked up maintainence of has_image after a few years of neglect. This
+is a transitional release which adds Rails 3 compatibility and a few small bug
+fixes, as well as the following:</p>
+
+<ul>
+<li>Allow passing <code>nil</code> to avoid resizing.</li>
+</ul>
+
+
+<h2>Older changes</h2>
+
+<h3>2009-03-11</h3>
+
+<ul>
+<li>Fix a critical problem with image updates breaking when used together with
+Rails' partial updates feature (now "on" by default). Thanks to Juan
+Schwindt <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#106;&#x75;&#x61;&#110;&#x40;&#115;&#x63;&#x68;&#119;&#105;&#110;&#100;&#116;&#x2e;&#111;&#x72;&#x67;">&#106;&#117;&#97;&#x6e;&#x40;&#x73;&#x63;&#104;&#119;&#105;&#x6e;&#x64;&#x74;&#46;&#x6f;&#114;&#x67;</a> for the report.</li>
+<li>Replaced a raw SQL call with update_all.</li>
+</ul>
+
+
+<h3>2008-10-22</h3>
+
+<ul>
+<li>Added option to not delete images on destroy</li>
+<li>Made thumbnail name separator configurable</li>
+<li>Added height/width methods to storage</li>
+<li>Allowed regenerating only one thumbnail size</li>
+<li>Made has_image column configurable</li>
+<li>Added some compatibility with attachment_fu</li>
+<li>General refactorings and overall code improvement</li>
+</ul>
+
+
+<h3>2008-10-22</h3>
+
+<ul>
+<li>Documentation improvements and minor code cleanups.</li>
+</ul>
+
+
+<h3>2008-10-09</h3>
+
+<ul>
+<li>Fixed display of images with special symbols in the name,
+like '2777-nipple-+-apple-napple.jpg'. + is reserved by HTTP.
+Now escaping filenames before giving them back in #public_path()</li>
+</ul>
+
+
+<h3>2008-09-10</h3>
+
+<ul>
+<li>Fixed images not being converted to target format.</li>
+</ul>
+
+
+<h3>2008-08-29</h3>
+
+<ul>
+<li>Fixed bad call to has_image_file</li>
+</ul>
+
+
+<h3>2008-08-28</h3>
+
+<ul>
+<li>Added ability to regenerate a model's thumbnails.</li>
+<li>Changed a few methods in storage to accept the model rather than the id.
+This makes storage more hackable as regards generating paths and file names.</li>
+<li>Added "has_image_id" method to model instance methods to facilitate
+grouping the images under a directory structure based on a related model's
+ids.</li>
+<li>Made the generated file name simply by the image object's id - this
+is better adherance to the principle of least surprise.</li>
+</ul>
+
+
+<h3>2008-08-25</h3>
+
+<ul>
+<li>Fixed bad call to resize_to in view helper.</li>
+</ul>
+
+
+<h3>2008-08-19</h3>
+
+<ul>
+<li>Made storage work more correctly with tempfiles.</li>
+</ul>
+
+
+<h3>2008-08-18</h3>
+
+<ul>
+<li>Fixed ability to set the path for storing image files.</li>
+</ul>
+
+
+<h3>2008-08-01</h3>
+
+<ul>
+<li>Improved partitioned path handling to avoid collisions when the id is
+very high, which can happen if you use db:fixtures:load.</li>
+</ul>
+
+
+<h3>2008-08-01</h3>
+
+<ul>
+<li>Fixed a bug where overwriting a previous image triggered callbacks more
+than once, causing errors.</li>
+</ul>
+
+
+<h3>2008-07-29</h3>
+
+<ul>
+<li>Downcased generated file names to avoid potential issues on
+case-insensitive filesystems.</li>
+<li>Added "absolute path" method to model instances.</li>
+<li>Made image deletion nullify the "has_image_file" field.</li>
+<li>Added "has_image?" method to model instances.</li>
+<li>Fixed ENONENT error with record update when there are no images yet.</li>
+<li>Reverted thumbnail sorting feature - it's fast but makes terrible quality
+thumbnails. It's just not worth it.</li>
+</ul>
+
+
+<h3>2008-07-28</h3>
+
+<ul>
+<li>Added sorted thumbnail processing. This improves thumbnail generation
+speed by about 25% for 4.5 meg jpegs with 5 thumbnails.</li>
+<li>Fixed broken resize for non-fixed-width thumbnails.</li>
+<li>Added check for bad geometry strings.</li>
+<li>Added dependencies and Rubyforge project to gemspec, updated docs.</li>
+</ul>
+
+
+<h3>2008-07-25</h3>
+
+<ul>
+<li>First public release.</li>
+</ul>
+</div></div>
+    
+    <div id="footer">
+  Generated on Wed Sep 29 15:48:01 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.1 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

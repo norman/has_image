@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta name="Content-Type" content="text/html; charset=utf-8" />
+<title>Module: HasImage::ViewHelpers</title>
+<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (V)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../HasImage.html" title="HasImage (module)">HasImage</a></span></span>
+     &raquo; 
+    <span class="title">ViewHelpers</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: HasImage::ViewHelpers
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/has_image/view_helpers.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Some helpers to make working with HasImage models in views a little easier.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#image_tag_for-instance_method" title="#image_tag_for (instance method)">- (Object) <strong>image_tag_for</strong>(object, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Wraps the image_tag helper from Rails.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="image_tag_for-instance_method">
+  
+    - (<tt>Object</tt>) <strong>image_tag_for</strong>(object, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Wraps the image_tag helper from Rails. Instead of passing the path to an
+image, you can pass any object that uses HasImage. The options can include
+the name of one of your thumbnails, for example:
+</p>
+<pre class="code">
+ <span class='id image_tag_for'>image_tag_for</span><span class='lparen'>(</span><span class='ivar'>@photo</span><span class='rparen'>)</span>
+ <span class='id image_tag_for'>image_tag_for</span><span class='lparen'>(</span><span class='ivar'>@photo</span><span class='comma'>,</span> <span class='symbol'>:thumb</span> <span class='op'>=&gt;</span> <span class='symbol'>:square</span><span class='rparen'>)</span>
+</pre>
+<p>
+If your object uses fixed dimensions (i.e., &#8220;200x200&#8221; as
+opposed to &#8220;200x200>&#8221;), then the height and width properties
+will automatically be added to the resulting img tag unless you explicitly
+specify the size in the options.
+</p>
+<p>
+All arguments other than :thumb will simply be passed along to the Rails
+image_tag helper without modification.
+</p>
+<p>
+See also: HasImage::ModelInstanceMethods#public_path
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/has_image/view_helpers.rb', line 22</span>
+
+<span class='kw'>def</span> <span class='id image_tag_for'>image_tag_for</span><span class='lparen'>(</span><span class='id object'>object</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id thumb'>thumb</span> <span class='op'>=</span> <span class='id options'>options</span><span class='period'>.</span><span class='id delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:thumb</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:size</span><span class='rbracket'>]</span>
+    <span class='kw'>if</span> <span class='id thumb'>thumb</span>
+      <span class='id size'>size</span> <span class='op'>=</span> <span class='id object'>object</span><span class='period'>.</span><span class='id class'>class</span><span class='period'>.</span><span class='id thumbnails'>thumbnails</span><span class='lbracket'>[</span><span class='id thumb'>thumb</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span>
+      <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:size</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id size'>size</span> <span class='kw'>if</span> <span class='id size'>size</span> <span class='op'>=~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A[\d]*x[\d]*\Z</span><span class='regexp_end'>/</span></span>
+    <span class='kw'>else</span>
+      <span class='id size'>size</span> <span class='op'>=</span> <span class='id object'>object</span><span class='period'>.</span><span class='id class'>class</span><span class='period'>.</span><span class='id has_image_options'>has_image_options</span><span class='lbracket'>[</span><span class='symbol'>:resize_to</span><span class='rbracket'>]</span>
+      <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:size</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id size'>size</span> <span class='kw'>if</span> <span class='id size'>size</span> <span class='op'>=~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A[\d]*x[\d]*\Z</span><span class='regexp_end'>/</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id image_tag'>image_tag</span><span class='lparen'>(</span><span class='id object'>object</span><span class='period'>.</span><span class='id public_path'>public_path</span><span class='lparen'>(</span><span class='id thumb'>thumb</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Wed Sep 29 15:48:01 2010 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.1 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>
