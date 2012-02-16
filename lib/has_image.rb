@@ -69,7 +69,7 @@ require 'has_image/view_helpers'
 # directory. Add something like this to your config/environments/test.rb:
 #
 #   config.after_initialize do
-#     MyClass.has_image_options[:base_path] = File.join(RAILS_ROOT, "tmp")
+#     MyClass.has_image_options[:base_path] = Rails.root.join("tmp")
 #   end
 #
 # If you want to stub out calls to has_image so that your tests don't do
@@ -122,7 +122,7 @@ module HasImage
     # * :max_size => 12.megabytes,
     # * :min_size => 4.kilobytes,
     # * :path_prefix => klass.table_name,
-    # * :base_path => File.join(RAILS_ROOT, 'public'),
+    # * :base_path => Rails.root.join('public'),
     # * :column => :has_image_file,
     # * :convert_to => "JPEG",
     # * :output_quality => "85",
@@ -138,7 +138,7 @@ module HasImage
         :max_size => 12.megabytes,
         :min_size => 4.kilobytes,
         :path_prefix => klass.table_name,
-        :base_path => File.join(RAILS_ROOT, 'public'),
+        :base_path => Rails.root.join('public'),
         :column => :has_image_file,
         :convert_to => "JPEG",
         :output_quality => "85",
@@ -177,7 +177,7 @@ module HasImage
       after_save :update_images
       after_destroy :remove_images
 
-      validate_on_create :image_data_valid?
+      validate :image_data_valid?, :on => :create
 
       include ModelInstanceMethods
       extend  ModelClassMethods

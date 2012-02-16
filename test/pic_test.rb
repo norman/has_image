@@ -13,11 +13,11 @@ class PicTest < Test::Unit::TestCase
   def setup
     # Note: Be sure to not set the whole options hash in your tests below
     Pic.has_image_options = HasImage.default_options_for(Pic)
-    Pic.has_image_options[:base_path] = File.join(RAILS_ROOT, 'tmp')
+    Pic.has_image_options[:base_path] = Rails.root.join('tmp')
   end
 
   def teardown
-    FileUtils.rm_rf(File.join(RAILS_ROOT, 'tmp', 'pics'))
+    FileUtils.rm_rf(Rails.root.join('tmp', 'pics'))
   end
 
   def test_should_be_valid

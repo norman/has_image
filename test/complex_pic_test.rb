@@ -9,12 +9,12 @@ class ComplexPicTest < Test::Unit::TestCase
     # Note: Be sure to not set the whole options hash in your tests below
     ComplexPic.has_image_options = HasImage.default_options_for(ComplexPic)
     ComplexPic.has_image_options[:column] = :filename
-    ComplexPic.has_image_options[:base_path] = File.join(RAILS_ROOT, 'tmp')
+    ComplexPic.has_image_options[:base_path] = Rails.root.join('tmp')
     ComplexPic.has_image_options[:resize_to] = nil
   end
 
   def teardown
-    FileUtils.rm_rf(File.join(RAILS_ROOT, 'tmp', 'complex_pics'))
+    FileUtils.rm_rf(Rails.root.join('tmp', 'complex_pics'))
   end
 
   def test_should_save_width_to_db_on_create
