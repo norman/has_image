@@ -7,11 +7,17 @@ require 'mocha'
 require "active_record"
 require "logger"
 require "rack/test"
+require "pathname"
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require "has_image"
 
-RAILS_ROOT = File.join(File.dirname(__FILE__), '..', 'tmp')
+module Rails
+  extend self
+  def root
+    Pathname(File.join(File.dirname(__FILE__), '..', 'tmp'))
+  end
+end
 
 ActiveRecord::Base.logger = Logger.new($stdout) if ENV["LOG"]
 ActiveRecord::Migration.verbose = false
