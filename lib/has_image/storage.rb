@@ -11,8 +11,8 @@ module HasImage
   # storage mechanism for Amazon AWS, Photobucket, DBFile, SFTP, or whatever
   # you want.
   class Storage
-    class_inheritable_accessor :thumbnail_separator
-    write_inheritable_attribute :thumbnail_separator, '_'
+    class_attribute :thumbnail_separator
+    self.thumbnail_separator = '_'
 
     attr_accessor :image_data, :options, :temp_file
 
