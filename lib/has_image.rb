@@ -170,8 +170,8 @@ module HasImage
     def has_image(options = {})
       options.assert_valid_keys(HasImage.default_options_for(self).keys)
       options = HasImage.default_options_for(self).merge(options)
-      class_inheritable_accessor :has_image_options
-      write_inheritable_attribute(:has_image_options, options)
+      class_attribute :has_image_options
+      self.has_image_options = options
 
       after_create :install_images
       after_save :update_images
