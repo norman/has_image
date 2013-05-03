@@ -62,7 +62,7 @@ module HasImage
         @temp_file = image_data
       else
         image_data.rewind
-        @temp_file = Tempfile.new 'has_image_data_%s' % Storage.generated_file_name
+        @temp_file = Tempfile.new 'has_image_data_%s' % Storage.generated_file_name, :encoding => 'ascii-8bit'
         @temp_file.write(image_data.read)
       end
     end

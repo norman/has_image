@@ -78,7 +78,7 @@ module HasImage
         rescue MiniMagick::Invalid
           raise ProcessorError.new("#{path} doesn't look like an image file.")
         ensure
-          image.tempfile.close! if defined?(image) && image
+          image.tempfile.close! if defined?(image) && image && image.repond_to?(:tempfile)
         end
       end
     end

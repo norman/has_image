@@ -1,5 +1,7 @@
 # has\_image - An Image attachment library for Active Record
 
+** THIS LIBRARY IS NO LONGER MAINTAINED OR SUPPORTED **
+
 The has\_image library extends Active Record to allow Rails applications to have
 attached images. It is very small and lightweight: it only requires one column
 in your model to store the uploaded image's file name.
